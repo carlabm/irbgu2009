@@ -1,0 +1,225 @@
+<top>
+
+<num> Number: 301 
+<title> International Organized Crime 
+
+<desc> Description: 
+Identify organizations that participate in international criminal
+activity, the activity, and, if possible, collaborating organizations
+and the countries involved.
+
+<narr> Narrative: 
+A relevant document must as a minimum identify the organization and the
+type of illegal activity (e.g., Columbian cartel exporting cocaine).
+Vague references to international drug trade without identification of
+the organization(s) involved would not be relevant.
+
+</top>
+
+
+<top>
+
+<num> Number: 304 
+<title> Endangered Species (Mammals) 
+
+<desc> Description: 
+Compile a list of mammals that are considered to be endangered,
+identify their habitat and, if possible, specify what threatens them.
+
+<narr> Narrative: 
+Any document identifying a mammal as endangered is relevant.  
+Statements of authorities disputing the endangered status would also
+be relevant.  A document containing information on habitat and
+populations of a mammal identified elsewhere as endangered would also
+be relevant even if the document at hand did not identify the species
+as endangered.  Generalized statements about endangered species 
+without reference to specific mammals would not be relevant.
+
+</top>
+
+
+<top>
+
+<num> Number: 306
+<title> African Civilian Deaths 
+
+<desc> Description: 
+How many civilian non-combatants have been killed in 
+the various civil wars in Africa?
+ 
+<narr> Narrative: 
+A relevant document will contain specific casualty 
+information for a given area, country, or region.  
+It will cite numbers of civilian deaths caused 
+directly or indirectly by armed conflict.
+
+</top>
+
+
+<top>
+
+<num> Number: 307 
+<title> New Hydroelectric Projects 
+
+<desc> Description: 
+Identify hydroelectric projects proposed or under construction by
+country and location.  Detailed description of nature, extent,
+purpose, problems, and consequences is desirable.
+
+<narr> Narrative: 
+Relevant documents would contain as a minimum a clear statement 
+that a hydroelectric project is planned or construction is under 
+way and the location of the project.  Renovation of existing
+facilities would be judged not relevant unless plans call for a
+significant increase in acre-feet or reservoir or a marked change
+in the environmental impact of the project.  Arguments for and
+against proposed projects are relevant as long as they are supported 
+by specifics, including as a minimum the name or location of the
+project.  A statement that an individual or organization is for or
+against such projects in general would not be relevant.  Proposals
+or projects underway to dismantle existing facilities or drain
+existing reservoirs are not relevant, nor are articles reporting a
+decision to drop a proposed plan.
+
+</top>
+
+
+<top>
+
+<num> Number: 308 
+<title> Implant Dentistry 
+
+<desc> Description: 
+What are the advantages and/or disadvantages of tooth implants?
+
+<narr> Narrative: 
+A tooth replacement procedure, begun in the 1960s by Doctor
+Branemark, is becoming more widely used today.  It involves 
+the replacement of a lost tooth/teeth by an implantation 
+process which secures the fabricated tooth to a titanium post
+with an adhesive resulting in a stable and sturdy denture 
+almost like the original.  A relevant document will include 
+any clinical experiment, report, study, paper, or medical 
+discussion which describes the advantages or disadvantages of 
+tooth implant(s), conditions under which such a procedure is 
+favorable, denture comfort and function compared to false teeth, 
+bridge, or plate and comparative cost differential.
+
+</top>
+
+
+<top>
+
+<num> Number: 311
+<title> Industrial Espionage 
+
+<desc> Description: 
+Document will discuss the theft of trade secrets along with 
+the sources of information:  trade journals, business meetings,
+data from Patent Offices, trade shows, or analysis of a 
+competitor's products.
+
+<narr> Narrative: 
+A relevant document will contain specific information on the
+theft of trade secrets on new or existing technology.  Relevant
+information includes, but is not limited to, espionage in the
+highly competitive fashion industry, toy companies, drug firms,
+and computer companies.  An apparently legal way of stealing
+company secrets is by using the Freedom of Information Act, 
+passed by the U.S. Congress in 1966 to help people and the 
+press get information for the public good.  The law has often
+been used instead by companies for private gain.  Documents
+discussing company counterespionage are also considered to be
+relevant. 
+
+</top>
+
+
+<top>
+
+<num> Number: 313
+<title> Magnetic Levitation-Maglev 
+
+<desc> Description: 
+Commercial uses of Magnetic Levitation.
+
+<narr> Narrative: 
+A relevant document must contain Magnetic Levitation
+or Maglev.  It should be concerned with possible
+commercial applications of this phenomenon to 
+include primarily mass transit, but also other
+commercial applications such as Maglev flywheels 
+for cars.  Discussions of superconductivity when
+linked to Maglev and government support plans when 
+linked to Maglev are also relevant.
+
+</top>
+
+
+<top>
+
+<num> Number: 329
+<title> Mexican Air Pollution 
+
+<desc> Description: 
+Mexico City has the worst air pollution in the
+world.  Pertinent Documents would contain the
+specific steps Mexican authorities have taken
+to combat this deplorable situation.
+ 
+<narr> Narrative: 
+Relevant documents would discuss the steps the
+Mexican Government has taken to alleviate the
+air pollution in Mexico City.  Steps such as 
+reducing the number of automobiles in the city,
+encouraging the use of mass public transportation,
+and creating new mass transportation systems are 
+relevant, among others.  Mention of any new
+methods in the design stage would also be 
+appropriate.
+
+</top>
+
+
+<top>
+
+<num> Number: 330
+<title> Iran-Iraq Cooperation 
+
+<desc> Description: 
+This query is looking for examples of cooperation or
+friendly ties between Iran and Iraq, or ways in which
+the two countries could be considered allies.
+ 
+<narr> Narrative: 
+A relevant document would mention such things as mutually
+beneficial economic, military, religious, or social 
+relations; cooperation on border control or treatment of
+minorities; collaboration in getting around trade sanctions
+placed upon either country, etc.  (Any mention of the 
+possible return of the airplanes Iraq flew to Iran during 
+the Gulf War would also be relevant).
+
+</top>
+
+
+<top>
+
+<num> Number: 331
+<title> World Bank Criticism 
+
+<desc> Description: 
+What criticisms have been made of World Bank policies, 
+activities or personnel?
+ 
+<narr> Narrative: 
+This query is looking for any instances where the 
+World Bank has been accused of things like not being
+responsive to the unique problems of individual countries,
+of being too strict in its policies, of pursuing agendas
+that are biased because of their benefits to western 
+countries, of being no longer useful or practical, of
+its personnel being difficult to work with, etc.
+
+</top>
+
