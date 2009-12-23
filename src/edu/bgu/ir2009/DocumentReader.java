@@ -2,6 +2,7 @@ package edu.bgu.ir2009;
 
 import org.apache.log4j.Logger;
 
+import javax.xml.stream.XMLStreamException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -13,34 +14,41 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class DocumentReader {
     private final static Logger logger = Logger.getLogger(DocumentReader.class);
 
-    private BlockingQueue<Integer> queue = new LinkedBlockingQueue<Integer>();
+    private BlockingQueue<Character> queue = new LinkedBlockingQueue<Character>();
     private boolean finished = false;
     private final Object lock = new Object();
 
-    private final String docNo;
-    private final long date;
-    private final String byLine;
+    private String docNo;
+    private long date;
+    private String byLine;
     private String cn;
     private String in;
     private String tp;
+    private String pub;
     private String page;
-
-    public DocumentReader(String docNo, long date, String byLine) {
-        this.docNo = docNo;
-        this.date = date;
-        this.byLine = byLine;
-    }
 
     public String getDocNo() {
         return docNo;
+    }
+
+    public void setDocNo(String docNo) {
+        this.docNo = docNo;
     }
 
     public long getDate() {
         return date;
     }
 
+    public void setDate(long date) {
+        this.date = date;
+    }
+
     public String getByLine() {
         return byLine;
+    }
+
+    public void setByLine(String byLine) {
+        this.byLine = byLine;
     }
 
     public String getCn() {
@@ -65,6 +73,14 @@ public class DocumentReader {
 
     public void setTp(String tp) {
         this.tp = tp;
+    }
+
+    public String getPub() {
+        return pub;
+    }
+
+    public void setPub(String pub) {
+        this.pub = pub;
     }
 
     public String getPage() {
@@ -94,11 +110,14 @@ public class DocumentReader {
         return res;
     }
 
-    public void put(int character) {
-        try {
-            queue.put(character);
-        } catch (InterruptedException e) {
-            logger.warn(e, e);
+    public void readText(String characters) throws XMLStreamException {
+        char[] chars = characters.toCharArray();
+        for (char aChar : chars) {
+            try {
+                queue.put(aChar);
+            } catch (InterruptedException e) {
+                logger.warn(e, e);
+            }
         }
     }
 }
