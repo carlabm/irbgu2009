@@ -3,13 +3,8 @@
   <component name="ChangeListManager" verified="true">
     <list default="true" readonly="true" id="156d3955-5176-423a-92a9-52a5ff1fd474" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/DocumentInputStream.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/DocumentReader.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/ReadFile.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/ant.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ir2009.iml" afterPath="$PROJECT_DIR$/ir2009.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/project.cfg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/ReadFile.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/ReadFile.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/DocumentReader.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/DocumentReader.java" />
     </list>
     <ignored path=".idea/workspace.xml" />
     <ignored path="ir2009.iws" />
@@ -28,21 +23,6 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
-    <line_breakpoints>
-      <breakpoint url="file://$PROJECT_DIR$/src/Test.java" line="25" class="Test" package="">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="false" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-    </line_breakpoints>
     <breakpoint_any>
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -87,7 +67,7 @@
       <file leaf-file-name="DocumentReader.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/DocumentReader.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="27" column="11" selection-start="725" selection-end="725" vertical-scroll-proportion="0.0">
+            <state line="110" column="33" selection-start="1852" selection-end="2322" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -98,7 +78,7 @@
       <file leaf-file-name="ReadFile.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/ReadFile.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="20" column="8" selection-start="497" selection-end="497" vertical-scroll-proportion="0.5427136">
+            <state line="99" column="59" selection-start="4214" selection-end="4214" vertical-scroll-proportion="0.29447237">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -106,10 +86,19 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="OMElementImpl.class" pinned="false" current="false" current-in-tab="false">
+        <entry file="jar://$PROJECT_DIR$/../../../../Dev/axiom-1.2.8-bin/axiom.jar!/org/apache/axiom/om/impl/llom/OMElementImpl.class">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="103" column="44" selection-start="5895" selection-end="5895" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="FT933_1" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/FT933/FT933_1">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="102" column="28" selection-start="6249" selection-end="6249" vertical-scroll-proportion="0.0">
+            <state line="114" column="6" selection-start="6492" selection-end="6492" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="tag#TEXT#0;tag#DOC#0" expanded="false" />
                 <element signature="tag#DOC#1" expanded="false" />
@@ -4039,7 +4028,7 @@
       <file leaf-file-name="DocumentInputStream.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/DocumentInputStream.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="30" column="0" selection-start="822" selection-end="822" vertical-scroll-proportion="0.0">
+            <state line="34" column="0" selection-start="965" selection-end="965" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -4109,7 +4098,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.last.edited" value="Global Libraries" />
     <property name="OverrideImplement.combined" value="true" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="options.splitter.main.proportions" value="0.3" />
@@ -4126,7 +4115,7 @@
     <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
   </component>
-  <component name="RunManager" selected="Application.Test">
+  <component name="RunManager" selected="Application.ReadFile">
     <configuration default="false" name="Test" type="Application" factoryName="Application" temporary="true">
       <extension name="coverage" enabled="false" merge="false" />
       <extension name="snapshooter" />
@@ -4143,6 +4132,35 @@
       <envs />
       <RunnerSettings RunnerId="Debug">
         <option name="DEBUG_PORT" value="50307" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Debug" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="ReadFile" type="Application" factoryName="Application" temporary="true">
+      <extension name="coverage" enabled="false" merge="false">
+        <pattern>
+          <option name="PATTERN" value="edu.bgu.ir2009.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <extension name="snapshooter" />
+      <option name="MAIN_CLASS_NAME" value="edu.bgu.ir2009.ReadFile" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="ir2009" />
+      <envs />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="52102" />
         <option name="TRANSPORT" value="0" />
         <option name="LOCAL" value="true" />
       </RunnerSettings>
@@ -4293,8 +4311,9 @@
         <option name="Maven.BeforeRunTask" enabled="false" />
       </method>
     </configuration>
-    <list size="1">
+    <list size="2">
       <item index="0" class="java.lang.String" itemvalue="Application.Test" />
+      <item index="1" class="java.lang.String" itemvalue="Application.ReadFile" />
     </list>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
@@ -4381,7 +4400,7 @@
     <option name="PERFORM_ROLLBACK_IN_BACKGROUND" value="false" />
     <option name="CHECK_LOCALLY_CHANGED_CONFLICTS_IN_BACKGROUND" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adding project files for intellij" />
+    <option name="LAST_COMMIT_MESSAGE" value="meanwhile commit&#10;" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -4395,6 +4414,7 @@
     <option name="SHOW_FILE_HISTORY_AS_TREE" value="false" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.6" />
     <MESSAGE value="Adding project files for intellij" />
+    <MESSAGE value="meanwhile commit&#10;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -4411,9 +4431,25 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/DocumentInputStream.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="34" column="0" selection-start="965" selection-end="965" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Test.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="25" column="0" selection-start="1003" selection-end="1003" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/FT933/FT933_1">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="102" column="28" selection-start="6249" selection-end="6249" vertical-scroll-proportion="0.0">
+        <state line="114" column="6" selection-start="6492" selection-end="6492" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="tag#TEXT#0;tag#DOC#0" expanded="false" />
             <element signature="tag#DOC#1" expanded="false" />
@@ -8328,25 +8364,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Test.java">
+    <entry file="jar://$PROJECT_DIR$/../../../../Dev/axiom-1.2.8-bin/axiom.jar!/org/apache/axiom/om/impl/llom/OMElementImpl.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="0" selection-start="1003" selection-end="1003" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/DocumentInputStream.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="0" selection-start="822" selection-end="822" vertical-scroll-proportion="0.0">
+        <state line="103" column="44" selection-start="5895" selection-end="5895" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/DocumentReader.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="11" selection-start="725" selection-end="725" vertical-scroll-proportion="0.0">
+        <state line="110" column="33" selection-start="1852" selection-end="2322" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -8355,7 +8382,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/ReadFile.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="8" selection-start="497" selection-end="497" vertical-scroll-proportion="0.5427136">
+        <state line="99" column="59" selection-start="4214" selection-end="4214" vertical-scroll-proportion="0.29447237">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
