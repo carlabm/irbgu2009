@@ -2,6 +2,7 @@ package edu.bgu.ir2009;
 
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.impl.builder.StAXOMBuilder;
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 import javax.xml.stream.XMLInputFactory;
@@ -22,8 +23,7 @@ public class ReadFile {
 
     private final String dirName;
     private BlockingQueue<DocumentReader> docQueue = new LinkedBlockingQueue<DocumentReader>();
-    private boolean finished = false;
-    private final Object lock = new Object();
+    private DocumentReader emptyDoc = new DocumentReader();
 
     public ReadFile(String dirName) {
         this.dirName = dirName;
@@ -44,9 +44,10 @@ public class ReadFile {
                 if ("DOCNO".equals(localName)) {
                     dr.setDocNo(inDocEl.getText().trim());
                     putDocument(dr);
+                    logger.info("New document ready for parsing: " + dr);
                 } else {
                     if ("TEXT".equals(localName)) {
-                        dr.readText(inDocEl.getText());
+                        dr.setText(inDocEl.getText());
                     } else {
                         if ("DATE".equals(localName)) {
                             dr.setDate(Long.parseLong(inDocEl.getText().trim()));
@@ -91,25 +92,23 @@ public class ReadFile {
 
     public DocumentReader getNextDocument() {
         DocumentReader res = null;
-        if (!finished) {
-            synchronized (lock) {
-                if (!finished) {
-                    try {
-                        res = docQueue.take();
-                        if (res.getDocNo() == null) {
-                            finished = true;
-                            res = null;
-                        }
-                    } catch (InterruptedException e) {
-                        logger.warn(e, e);
-                    }
-                }
+        try {
+            res = docQueue.take();
+            if (res.getDocNo() == null) {
+                res = null;
             }
+        } catch (InterruptedException e) {
+            logger.warn(e, e);
         }
         return res;
     }
 
-    public static void main(String[] args) {
+    public void setReaderFinished() {
+        putDocument(emptyDoc);
+    }
+
+    public static void main(String[] args) throws FileNotFoundException {
+        BasicConfigurator.configure();
         ReadFile readFile = new ReadFile("FT933");
         try {
             readFile.start("FT933_1");
@@ -118,5 +117,11 @@ public class ReadFile {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        /*Parser parser = new Parser("stop-words.txt");
+        DocumentReader dr;
+        while ((dr = readFile.getNextDocument()) != null) {
+            ParsedDocument parsedDocument = parser.parse(dr);
+            int i = 0;
+        }*/
     }
 }
