@@ -27,6 +27,8 @@ public class DocumentReader {
     private String pub;
     private String page;
 
+    private String text;
+
     public String getDocNo() {
         return docNo;
     }
@@ -91,14 +93,14 @@ public class DocumentReader {
         this.page = page;
     }
 
-    public int read() {
-        int res = -1;
+    public char read() {
+        char res = '\0';
         if (!finished) {
             synchronized (lock) {
                 if (!finished) {
                     try {
                         res = queue.take();
-                        if (res == -1) {
+                        if (res == '\0') {
                             finished = true;
                         }
                     } catch (InterruptedException e) {
@@ -110,11 +112,51 @@ public class DocumentReader {
         return res;
     }
 
-    public void readText(String characters) throws XMLStreamException {
-        char[] chars = characters.toCharArray();
-        for (char aChar : chars) {
+    public void setText(String text) throws XMLStreamException {
+        if (this.text != null) {
+            throw new IllegalStateException("Cannot set text for a reader twice");
+        }
+        this.text = text;
+        new Thread(new TextDisassemblerWorker(docNo, text)).start();
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    @Override
+    public String toString() {
+        return "DocumentReader{" +
+                "page='" + page + '\'' +
+                ", pub='" + pub + '\'' +
+                ", tp='" + tp + '\'' +
+                ", in='" + in + '\'' +
+                ", cn='" + cn + '\'' +
+                ", byLine='" + byLine + '\'' +
+                ", date=" + date +
+                ", docNo='" + docNo + '\'' +
+                '}';
+    }
+
+    private class TextDisassemblerWorker implements Runnable {
+        private String docNum;
+        private final String text;
+
+        public TextDisassemblerWorker(String docNum, String text) {
+            this.docNum = docNum;
+            this.text = text;
+        }
+
+        public void run() {
+            char[] chars = text.toCharArray();
             try {
-                queue.put(aChar);
+                for (char aChar : chars) {
+                    if (aChar != '\0') {
+                        queue.put(aChar);
+                    }
+                }
+                queue.put('\0');
+                logger.info("Finished disassembling " + docNum + "...");
             } catch (InterruptedException e) {
                 logger.warn(e, e);
             }
