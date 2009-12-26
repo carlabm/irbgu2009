@@ -103,7 +103,7 @@ public class ReadFile {
         return res;
     }
 
-    public void setReaderFinished() {
+    public void setDoneReading() {
         putDocument(emptyDoc);
     }
 

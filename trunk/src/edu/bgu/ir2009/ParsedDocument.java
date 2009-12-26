@@ -1,9 +1,6 @@
 package edu.bgu.ir2009;
 
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * User: Henry Abravanel 310739693 henrya@bgu.ac.il
@@ -12,8 +9,6 @@ import java.util.Set;
  */
 public class ParsedDocument {
     private Map<String, Set<Long>> terms = new HashMap<String, Set<Long>>();
-    private long originalWordCount;
-    private String originalText;
     private final DocumentReader docReader;
 
     public ParsedDocument(DocumentReader docReader) {
@@ -27,6 +22,10 @@ public class ParsedDocument {
             terms.put(term, posSet);
         }
         posSet.add(pos);
+    }
+
+    public Map<String, Set<Long>> getTerms() {
+        return Collections.unmodifiableMap(terms);
     }
 
     @Override
