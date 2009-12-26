@@ -2,7 +2,6 @@ package edu.bgu.ir2009;
 
 import org.apache.log4j.Logger;
 
-import javax.xml.stream.XMLStreamException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -112,12 +111,18 @@ public class DocumentReader {
         return res;
     }
 
-    public void setText(String text) throws XMLStreamException {
+    public void setText(String text) {
+        setText(text, true);
+    }
+
+    public void setText(String text, boolean disassembleText) {
         if (this.text != null) {
             throw new IllegalStateException("Cannot set text for a reader twice");
         }
         this.text = text;
-        new Thread(new TextDisassemblerWorker(docNo, text)).start();
+        if (disassembleText) {
+            new Thread(new TextDisassemblerWorker(docNo, text)).start();
+        }
     }
 
     public String getText() {
