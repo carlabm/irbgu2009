@@ -32,34 +32,38 @@ public class ReadFile {
         executorService = Executors.newFixedThreadPool(config.getReaderThreadsCount());
     }
 
-    public void readAll() throws XMLStreamException, FileNotFoundException {
-        File file = new File(dirName);
-        String[] files = file.list();
-        for (int i = 0, filesLength = files.length; i < filesLength; i++) {
-            String fileName = files[i];
-            logger.info(fileName + " is being submitted for reading...");
-            if (i == filesLength - 1) {
-                final Future<?> future = executorService.submit(new ReaderWorker(fileName));
-                executorService.execute(new Runnable() {
-                    public void run() {
-                        try {
-                            if (future != null) {
-                                future.get(); //wait for last reading to finish
+    public void start() throws XMLStreamException, FileNotFoundException {
+        executorService.execute(new Runnable() {
+            public void run() {
+                File file = new File(dirName);
+                String[] files = file.list();
+                for (int i = 0, filesLength = files.length; i < filesLength; i++) {
+                    String fileName = files[i];
+                    logger.info(fileName + " is being submitted for reading...");
+                    if (i == filesLength - 1) {
+                        final Future<?> future = executorService.submit(new ReaderWorker(fileName));
+                        executorService.execute(new Runnable() {
+                            public void run() {
+                                try {
+                                    if (future != null) {
+                                        future.get(); //wait for last reading to finish
+                                    }
+                                } catch (InterruptedException e) {
+                                    logger.warn(e, e);
+                                } catch (ExecutionException e) {
+                                    logger.error(e, e);
+                                }
+                                logger.debug("putting empty doc in queue");
+                                putDocument(emptyDoc);
+                                executorService.shutdown();
                             }
-                        } catch (InterruptedException e) {
-                            logger.warn(e, e);
-                        } catch (ExecutionException e) {
-                            logger.error(e, e);
-                        }
-                        logger.debug("putting empty doc in queue");
-                        putDocument(emptyDoc);
-                        executorService.shutdown();
+                        });
+                    } else {
+                        executorService.execute(new ReaderWorker(fileName));
                     }
-                });
-            } else {
-                executorService.execute(new ReaderWorker(fileName));
+                }
             }
-        }
+        });
     }
 
     public UnParsedDocument getNextDocument() {
@@ -158,7 +162,7 @@ public class ReadFile {
     public static void main(String[] args) throws IOException, XMLStreamException {
         BasicConfigurator.configure();
         ReadFile readFile = new ReadFile(new Configuration("project.cfg"));
-        readFile.readAll();
+        readFile.start();
         UnParsedDocument doc;
         while ((doc = readFile.getNextDocument()) != null) {
         }
