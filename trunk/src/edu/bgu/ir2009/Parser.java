@@ -1,9 +1,7 @@
 package edu.bgu.ir2009;
 
-import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
-import javax.xml.stream.XMLStreamException;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -57,28 +55,22 @@ public class Parser {
         executor.execute(new Runnable() {
             public void run() {
                 UnParsedDocument doc;
-                Future<?> future = null;
                 while ((doc = reader.getNextDocument()) != null) {
                     logger.info("Document " + doc.getDocNo() + " is being submitted for parsing...");
-                    future = executor.submit(new ParserWorker(doc));
+                    executor.execute(new ParserWorker(doc));
                 }
-                if (future != null) {
-                    final Future<?> finalFuture = future;
-                    executor.execute(new Runnable() {
-                        public void run() {
-                            try {
-                                finalFuture.get();
-                                logger.debug("putting empty parsed doc in queue");
-                                parsedDocs.put(emptyParsedDoc);
-                            } catch (InterruptedException e) {
-                                logger.warn(e, e);
-                            } catch (ExecutionException e) {
-                                logger.error(e, e);
-                            }
-                            executor.shutdown();
+                new Thread(new Runnable() {
+                    public void run() {
+                        executor.shutdown();
+                        try {
+                            executor.awaitTermination(10, TimeUnit.DAYS);
+                            logger.debug("putting empty parsed doc in queue");
+                            parsedDocs.put(emptyParsedDoc);
+                        } catch (InterruptedException e) {
+                            logger.warn(e, e);
                         }
-                    });
-                }
+                    }
+                }).start();
             }
         });
     }
@@ -140,18 +132,5 @@ public class Parser {
         public void run() {
             parse(doc);
         }
-    }
-
-    public static void main(String[] args) throws IOException, XMLStreamException {
-        BasicConfigurator.configure();
-        Configuration configuration = new Configuration("project.cfg");
-        ReadFile readFile = new ReadFile(configuration);
-        Parser parser = new Parser(readFile, configuration);
-        readFile.start();
-        parser.start();
-        ParsedDocument doc;
-        while ((doc = parser.getNextParsedDocument()) != null) {
-        }
-        int i = 0;
     }
 }

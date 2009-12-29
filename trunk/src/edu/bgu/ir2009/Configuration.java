@@ -46,4 +46,12 @@ public class Configuration {
     public int getParserThreadsCount() {
         return Integer.parseInt(config.getProperty("parser_threads", "1"));
     }
+
+    public int getIndexerThreadsCount() {
+        return Integer.parseInt(config.getProperty("indexer_threads", "1"));
+    }
+
+    public String getIndexFileName() {
+        return config.getProperty("index_file_name", "index");
+    }
 }
