@@ -37,7 +37,7 @@ public class PostingFileUtils {
                 writer.newLine();
                 writer.write(doc.getTp());
                 writer.newLine();
-                writer.write(doc.getOriginalText());
+                writer.write(doc.getText());
             } finally {
                 if (writer != null) {
                     writer.close();
@@ -47,20 +47,20 @@ public class PostingFileUtils {
     }
 
     public ParsedDocument loadParsedDocument(String docNo) {
-        DocumentReader docReader = new DocumentReader();
+        UnParsedDocument unParsedDoc = new UnParsedDocument();
         StringBuilder stringBuilder = new StringBuilder();
         File docFile = new File(docsDir, docNo);
         if (docFile.exists()) {
             BufferedReader reader = null;
             try {
                 reader = new BufferedReader(new FileReader(docFile));
-                docReader.setByLine(reader.readLine());
-                docReader.setCn(reader.readLine());
-                docReader.setDate(Long.parseLong(reader.readLine()));
-                docReader.setIn(reader.readLine());
-                docReader.setPage(reader.readLine());
-                docReader.setPub(reader.readLine());
-                docReader.setTp(reader.readLine());
+                unParsedDoc.setByLine(reader.readLine());
+                unParsedDoc.setCn(reader.readLine());
+                unParsedDoc.setDate(Long.parseLong(reader.readLine()));
+                unParsedDoc.setIn(reader.readLine());
+                unParsedDoc.setPage(reader.readLine());
+                unParsedDoc.setPub(reader.readLine());
+                unParsedDoc.setTp(reader.readLine());
                 String line;
                 while ((line = reader.readLine()) != null) {
                     stringBuilder.append(line).append('\n');
@@ -77,7 +77,7 @@ public class PostingFileUtils {
                 }
             }
         }
-        docReader.setText(stringBuilder.toString(), false);
-        return new ParsedDocument(docReader);
+        unParsedDoc.setText(stringBuilder.toString());
+        return new ParsedDocument(unParsedDoc);
     }
 }

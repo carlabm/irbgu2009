@@ -1,6 +1,7 @@
 package edu.bgu.ir2009;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -37,6 +38,30 @@ public class TermData implements Comparable<TermData> {
                 ", frequency=" + frequency +
                 ", postingsMap=" + postingsMap +
                 '}';
+    }
+
+    public String getSavedString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(term).append(':').append(frequency).append('[');
+        Iterator<String> docNoIterator = postingsMap.keySet().iterator();
+        while (docNoIterator.hasNext()) {
+            String docNo = docNoIterator.next();
+            builder.append(docNo).append('{');
+            Iterator<Long> iterator = postingsMap.get(docNo).iterator();
+            while (iterator.hasNext()) {
+                Long posting = iterator.next();
+                builder.append(posting);
+                if (iterator.hasNext()) {
+                    builder.append(',');
+                }
+            }
+            builder.append("}");
+            if (docNoIterator.hasNext()) {
+                builder.append(',');
+            }
+        }
+        builder.append(']');
+        return builder.toString();
     }
 
     public int compareTo(TermData o) {

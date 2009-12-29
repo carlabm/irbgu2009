@@ -8,11 +8,11 @@ import java.util.*;
  * Time: 19:02:24
  */
 public class ParsedDocument {
-    private Map<String, Set<Long>> terms = new HashMap<String, Set<Long>>();
-    private final DocumentReader docReader;
+    private final UnParsedDocument unParsedDoc;
+    private final Map<String, Set<Long>> terms = new HashMap<String, Set<Long>>();
 
-    public ParsedDocument(DocumentReader docReader) {
-        this.docReader = docReader;
+    public ParsedDocument(UnParsedDocument unParsedDoc) {
+        this.unParsedDoc = unParsedDoc;
     }
 
     public void addTerm(String term, long pos) {
@@ -45,39 +45,39 @@ public class ParsedDocument {
         return getDocNo().hashCode();
     }
 
-    public String getOriginalText() {
-        return docReader.getText();
-    }
-
-    public String getDocNo() {
-        return docReader.getDocNo();
-    }
-
     public long getDate() {
-        return docReader.getDate();
-    }
-
-    public String getByLine() {
-        return docReader.getByLine();
-    }
-
-    public String getCn() {
-        return docReader.getCn();
+        return unParsedDoc.getDate();
     }
 
     public String getIn() {
-        return docReader.getIn();
+        return unParsedDoc.getIn();
     }
 
     public String getTp() {
-        return docReader.getTp();
+        return unParsedDoc.getTp();
     }
 
     public String getPub() {
-        return docReader.getPub();
+        return unParsedDoc.getPub();
+    }
+
+    public String getByLine() {
+        return unParsedDoc.getByLine();
+    }
+
+    public String getCn() {
+        return unParsedDoc.getCn();
+    }
+
+    public String getDocNo() {
+        return unParsedDoc.getDocNo();
     }
 
     public String getPage() {
-        return docReader.getPage();
+        return unParsedDoc.getPage();
+    }
+
+    public String getText() {
+        return unParsedDoc.getText();
     }
 }

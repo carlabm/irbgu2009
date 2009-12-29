@@ -10,8 +10,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.*;
 
 /**
  * User: Henry Abravanel 310739693 henrya@bgu.ac.il
@@ -19,76 +18,68 @@ import java.util.concurrent.LinkedBlockingQueue;
  * Time: 19:00:01
  */
 public class Parser {
-    private static Logger logger = Logger.getLogger(Parser.class);
+    private final static Logger logger = Logger.getLogger(Parser.class);
+    private final static ParsedDocument emptyParsedDoc = new ParsedDocument(new UnParsedDocument());
 
     private final Set<String> stopWordsSet = new HashSet<String>();
-    private BlockingQueue<ParsedDocument> parsedDocs = new LinkedBlockingQueue<ParsedDocument>();
-    private boolean useStemmer;
-    private Stemmer stemmer;
-    private final ParsedDocument emptyParsedDoc = new ParsedDocument(new DocumentReader());
+    private final boolean useStemmer;
+    private final ReadFile reader;
+    private final ExecutorService executor;
 
-    public Parser(Configuration config) throws FileNotFoundException {
-        String stopWordsFileName = config.getStopWordsFileName();
+    private final BlockingQueue<ParsedDocument> parsedDocs = new LinkedBlockingQueue<ParsedDocument>();
+
+    private Stemmer stemmer;
+
+    public Parser(ReadFile reader, Configuration config) throws FileNotFoundException {
+        this.reader = reader;
         useStemmer = config.useStemmer();
         if (useStemmer) {
             stemmer = new Stemmer();
         }
-        BufferedReader reader = new BufferedReader(new FileReader(stopWordsFileName));
-        String stopWord = "";
+        BufferedReader stopWordsReader = new BufferedReader(new FileReader(config.getStopWordsFileName()));
+        String stopWord;
         try {
-            while ((stopWord = reader.readLine()) != null) {
+            while ((stopWord = stopWordsReader.readLine()) != null) {
                 stopWordsSet.add(stopWord.trim());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e, e);
+        } finally {
+            try {
+                stopWordsReader.close();
+            } catch (IOException ignored) {
+            }
         }
+        executor = Executors.newFixedThreadPool(config.getParserThreadsCount());
     }
 
-    public static void main(String[] args) throws IOException {
-        BasicConfigurator.configure();
-        Configuration config = new Configuration("project.cfg");
-        final Parser parser = new Parser(config);
-        final ReadFile readFile = new ReadFile("FT933");
-        new Thread(new Runnable() {
+    public void start() {
+        executor.execute(new Runnable() {
             public void run() {
-                try {
-                    readFile.start("FT933_1");
-                    readFile.setDoneReading();
-                } catch (XMLStreamException e) {
-                    e.printStackTrace();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+                UnParsedDocument doc;
+                Future<?> future = null;
+                while ((doc = reader.getNextDocument()) != null) {
+                    logger.info("Document " + doc.getDocNo() + " is being submitted for parsing...");
+                    future = executor.submit(new ParserWorker(doc));
+                }
+                if (future != null) {
+                    final Future<?> finalFuture = future;
+                    executor.execute(new Runnable() {
+                        public void run() {
+                            try {
+                                finalFuture.get();
+                                logger.debug("putting empty parsed doc in queue");
+                                parsedDocs.put(emptyParsedDoc);
+                            } catch (InterruptedException e) {
+                                logger.warn(e, e);
+                            } catch (ExecutionException e) {
+                                logger.error(e, e);
+                            }
+                        }
+                    });
                 }
             }
-        }).start();
-        final Indexer indexer = new Indexer(config);
-        new Thread(new Runnable() {
-            public void run() {
-                ParsedDocument parsedDoc;
-                while ((parsedDoc = parser.getNextParsedDocument()) != null) {
-                    try {
-                        indexer.addParsedDocument(parsedDoc);
-                    } catch (IOException e) {
-                        logger.error(e, e);
-                    }
-                }
-                int i = 0;
-            }
-        }).start();
-        DocumentReader nextDoc;
-        while ((nextDoc = readFile.getNextDocument()) != null) {
-            parser.parse(nextDoc);
-        }
-        parser.setDoneParsing();
-        int j = 0;
-    }
-
-    public void setDoneParsing() {
-        try {
-            parsedDocs.put(emptyParsedDoc);
-        } catch (InterruptedException e) {
-            logger.warn(e, e);
-        }
+        });
     }
 
     public ParsedDocument getNextParsedDocument() {
@@ -104,26 +95,19 @@ public class Parser {
         return res;
     }
 
-    public void parse(DocumentReader docReader) {
-        try {
-            parsedDocs.put(private_parse(docReader));
-        } catch (InterruptedException e) {
-            logger.warn(e, e);
-        }
-    }
-
-    private ParsedDocument private_parse(DocumentReader docReader) {
-        ParsedDocument res = new ParsedDocument(docReader);
+    private void parse(UnParsedDocument unParsedDoc) {
+        logger.info("Started parsing document " + unParsedDoc.getDocNo());
+        ParsedDocument res = new ParsedDocument(unParsedDoc);
         long pos = 0;
-        char readChar;
         StringBuilder currTerm = new StringBuilder();
-        while ((readChar = docReader.read()) != '\0') {
-            if (!Character.isWhitespace(readChar) && !Character.isSpaceChar(readChar)) {
-                currTerm.append(readChar);
+        char[] docChars = unParsedDoc.getText().toCharArray();
+        for (char readChar : docChars) {
+            if (Character.isLetter(readChar)) {
+                currTerm.append(Character.toLowerCase(readChar));
             } else {
                 if (currTerm.length() > 0) {
-                    String newTerm = buildTerm(currTerm);
-                    if (!"".equals(newTerm) && !stopWordsSet.contains(newTerm)) {
+                    String newTerm = currTerm.toString();
+                    if (!stopWordsSet.contains(newTerm)) {
                         if (useStemmer) {
                             stemmer.add(newTerm.toCharArray(), newTerm.length());
                             stemmer.stem();
@@ -137,16 +121,36 @@ public class Parser {
                 }
             }
         }
-        return res;
+        try {
+            parsedDocs.put(res);
+        } catch (InterruptedException e) {
+            logger.warn(e, e);
+        }
+        logger.info("Finished parsing document " + unParsedDoc.getDocNo());
     }
 
-    private String buildTerm(StringBuilder currTerm) {
-        while (currTerm.length() > 0 && !Character.isLetter(currTerm.charAt(0)) && !Character.isDigit(currTerm.charAt(0))) {
-            currTerm.deleteCharAt(0);
+    private class ParserWorker implements Runnable {
+        private final UnParsedDocument doc;
+
+        public ParserWorker(UnParsedDocument doc) {
+            this.doc = doc;
         }
-        while (currTerm.length() > 0 && !Character.isLetter(currTerm.charAt(currTerm.length() - 1)) && !Character.isDigit(currTerm.charAt(currTerm.length() - 1))) {
-            currTerm.deleteCharAt(currTerm.length() - 1);
+
+        public void run() {
+            parse(doc);
         }
-        return currTerm.toString().toLowerCase();
+    }
+
+    public static void main(String[] args) throws IOException, XMLStreamException {
+        BasicConfigurator.configure();
+        Configuration configuration = new Configuration("project.cfg");
+        ReadFile readFile = new ReadFile(configuration);
+        Parser parser = new Parser(readFile, configuration);
+        readFile.readAll();
+        parser.start();
+        ParsedDocument doc;
+        while ((doc = parser.getNextParsedDocument()) != null) {
+            int i = 0;
+        }
     }
 }

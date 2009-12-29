@@ -1,7 +1,10 @@
 package edu.bgu.ir2009;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,9 +15,12 @@ import java.util.Set;
  */
 public class Indexer {
     private Map<String, TermData> index = new HashMap<String, TermData>();
+    private Set<ParsedDocument> docs = new HashSet<ParsedDocument>();
     private PostingFileUtils postingFileUtils;
+    private Configuration config;
 
     public Indexer(Configuration config) {
+        this.config = config;
         postingFileUtils = new PostingFileUtils(config);
     }
 
@@ -29,6 +35,18 @@ public class Indexer {
             }
             termData.addPosting(docNo, docTerms.get(term));
         }
-        postingFileUtils.saveParsedDocument(doc);
+        docs.add(doc);
+    }
+
+    public void saveIndex() throws IOException {
+        File file = new File("index.txt");
+        if (file.exists()) {
+            file.delete();
+        }
+        FileWriter writer = new FileWriter(file);
+        for (TermData td : index.values()) {
+            writer.write(td.getSavedString() + "\n");
+        }
+        writer.close();
     }
 }
