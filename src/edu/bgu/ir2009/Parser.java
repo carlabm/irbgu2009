@@ -75,6 +75,7 @@ public class Parser {
                             } catch (ExecutionException e) {
                                 logger.error(e, e);
                             }
+                            executor.shutdown();
                         }
                     });
                 }
@@ -146,11 +147,11 @@ public class Parser {
         Configuration configuration = new Configuration("project.cfg");
         ReadFile readFile = new ReadFile(configuration);
         Parser parser = new Parser(readFile, configuration);
-        readFile.readAll();
+        readFile.start();
         parser.start();
         ParsedDocument doc;
         while ((doc = parser.getNextParsedDocument()) != null) {
-            int i = 0;
         }
+        int i = 0;
     }
 }
