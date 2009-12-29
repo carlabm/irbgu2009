@@ -3,6 +3,7 @@ package edu.bgu.ir2009;
 import org.apache.log4j.Logger;
 
 import java.io.*;
+import java.util.Map;
 
 /**
  * User: Henry Abravanel 310739693 henrya@bgu.ac.il
@@ -12,9 +13,11 @@ import java.io.*;
 public class PostingFileUtils {
     private static final Logger logger = Logger.getLogger(PostingFileUtils.class);
     private File docsDir;
+    private String indexFileName;
 
     public PostingFileUtils(Configuration config) {
         docsDir = new File(config.getParsedDocsDir());
+        indexFileName = config.getIndexFileName();
     }
 
     public void saveParsedDocument(ParsedDocument doc) throws IOException {
@@ -79,5 +82,19 @@ public class PostingFileUtils {
         }
         unParsedDoc.setText(stringBuilder.toString());
         return new ParsedDocument(unParsedDoc);
+    }
+
+    public void saveIndex(Map<String, TermData> index) throws IOException {
+        logger.info("Saving index to file: " + indexFileName);
+        File file = new File(indexFileName);
+        if (file.exists()) {
+            file.delete();
+        }
+        FileWriter writer = new FileWriter(file);
+        for (TermData td : index.values()) {
+            writer.write(td.getSavedString() + "\n");
+        }
+        writer.close();
+        logger.info("Finished saving index...");
     }
 }
