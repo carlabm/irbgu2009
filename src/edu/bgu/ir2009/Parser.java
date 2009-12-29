@@ -88,7 +88,15 @@ public class Parser {
         return res;
     }
 
-    private void parse(UnParsedDocument unParsedDoc) {
+    public ParsedDocument parse(String docNo, String text) {
+        UnParsedDocument doc = new UnParsedDocument();
+        doc.setDocNo(docNo);
+        doc.setText(text);
+        return parse(doc, false);
+    }
+
+
+    private ParsedDocument parse(UnParsedDocument unParsedDoc, boolean addToQueue) {
         logger.info("Started parsing document " + unParsedDoc.getDocNo());
         ParsedDocument res = new ParsedDocument(unParsedDoc);
         long pos = 0;
@@ -114,12 +122,15 @@ public class Parser {
                 }
             }
         }
-        try {
-            parsedDocs.put(res);
-        } catch (InterruptedException e) {
-            logger.warn(e, e);
+        if (addToQueue) {
+            try {
+                parsedDocs.put(res);
+            } catch (InterruptedException e) {
+                logger.warn(e, e);
+            }
         }
         logger.info("Finished parsing document " + unParsedDoc.getDocNo());
+        return res;
     }
 
     private class ParserWorker implements Runnable {
@@ -130,7 +141,7 @@ public class Parser {
         }
 
         public void run() {
-            parse(doc);
+            parse(doc, true);
         }
     }
 }
