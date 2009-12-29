@@ -24,7 +24,7 @@ public class Configuration {
     }
 
     public boolean useStemmer() {
-        return Boolean.parseBoolean(config.getProperty("use_stemmer"));
+        return Boolean.parseBoolean(config.getProperty("use_stemmer", "true"));
     }
 
     public String getDocumentsDir() {
@@ -37,5 +37,13 @@ public class Configuration {
 
     public String getParsedDocsDir() {
         return config.getProperty("saved_docs_dir");
+    }
+
+    public int getReaderThreadsCount() {
+        return Integer.parseInt(config.getProperty("reader_threads", "1"));
+    }
+
+    public int getParserThreadsCount() {
+        return Integer.parseInt(config.getProperty("parser_threads", "1"));
     }
 }

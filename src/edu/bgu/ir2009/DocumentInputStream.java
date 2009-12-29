@@ -30,7 +30,9 @@ public class DocumentInputStream extends InputStream {
             res = HEADER[headerPos];
             headerPos++;
         } else {
-            while ((res = is.read()) == 10) {
+            res = is.read();
+            if (res == '\n' || res == '\r') {
+                res = ' ';
             }
             if (res == -1) {
                 if (footerPos < FOOTER.length) {
