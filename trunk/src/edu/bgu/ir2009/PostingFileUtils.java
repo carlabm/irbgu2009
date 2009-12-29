@@ -12,16 +12,14 @@ import java.util.Map;
  */
 public class PostingFileUtils {
     private static final Logger logger = Logger.getLogger(PostingFileUtils.class);
-    private File docsDir;
-    private String indexFileName;
+    private Configuration config;
 
     public PostingFileUtils(Configuration config) {
-        docsDir = new File(config.getParsedDocsDir());
-        indexFileName = config.getIndexFileName();
+        this.config = config;
     }
 
     public void saveParsedDocument(ParsedDocument doc) throws IOException {
-        File docFile = new File(docsDir, doc.getDocNo());
+        File docFile = new File(config.getParsedDocsDir(), doc.getDocNo());
         if (!docFile.exists()) {
             BufferedWriter writer = null;
             try {
@@ -52,7 +50,7 @@ public class PostingFileUtils {
     public ParsedDocument loadParsedDocument(String docNo) {
         UnParsedDocument unParsedDoc = new UnParsedDocument();
         StringBuilder stringBuilder = new StringBuilder();
-        File docFile = new File(docsDir, docNo);
+        File docFile = new File(config.getParsedDocsDir(), docNo);
         if (docFile.exists()) {
             BufferedReader reader = null;
             try {
@@ -85,8 +83,8 @@ public class PostingFileUtils {
     }
 
     public void saveIndex(Map<String, TermData> index) throws IOException {
-        logger.info("Saving index to file: " + indexFileName);
-        File file = new File(indexFileName);
+        logger.info("Saving index to file: " + config.getIndexFileName());
+        File file = new File(config.getIndexFileName());
         if (file.exists()) {
             file.delete();
         }
@@ -96,5 +94,11 @@ public class PostingFileUtils {
         }
         writer.close();
         logger.info("Finished saving index...");
+    }
+
+    public InMemoryIndex loadInMemoryIndex() throws IOException {
+        InMemoryIndex res = new InMemoryIndex(config);
+        res.load();
+        return res;
     }
 }
