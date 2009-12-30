@@ -25,8 +25,12 @@ public class ReadFile {
     private final ExecutorService executor;
     private final BlockingQueue<UnParsedDocument> docQueue = new LinkedBlockingQueue<UnParsedDocument>();
 
+    public ReadFile(String docsDir, String srcStopWordsFileName, boolean useStemmer) {
+        this(new Configuration(docsDir, srcStopWordsFileName, useStemmer));
+    }
+
     public ReadFile(Configuration config) {
-        this.dirName = config.getDocumentsDir();
+        this.dirName = config.getDocsDir();
         executor = Executors.newFixedThreadPool(config.getReaderThreadsCount());
     }
 

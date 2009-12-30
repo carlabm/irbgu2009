@@ -28,25 +28,35 @@ public class Parser {
 
     private Stemmer stemmer;
 
-    public Parser(ReadFile reader, Configuration config) throws FileNotFoundException {
+    public Parser(Configuration config) {
+        this(new ReadFile(config), config);
+    }
+
+    public Parser(ReadFile reader, Configuration config) {
         this.reader = reader;
         useStemmer = config.useStemmer();
         if (useStemmer) {
             stemmer = new Stemmer();
         }
-        BufferedReader stopWordsReader = new BufferedReader(new FileReader(config.getStopWordsFileName()));
-        String stopWord;
+        BufferedReader stopWordsReader;
+        String stopWordsFileName = config.getSrcStopWordsFileName();
         try {
-            while ((stopWord = stopWordsReader.readLine()) != null) {
-                stopWordsSet.add(stopWord.trim());
-            }
-        } catch (IOException e) {
-            logger.error(e, e);
-        } finally {
+            stopWordsReader = new BufferedReader(new FileReader(stopWordsFileName));
+            String stopWord;
             try {
-                stopWordsReader.close();
-            } catch (IOException ignored) {
+                while ((stopWord = stopWordsReader.readLine()) != null) {
+                    stopWordsSet.add(stopWord.trim());
+                }
+            } catch (IOException e) {
+                logger.error(e, e);
+            } finally {
+                try {
+                    stopWordsReader.close();
+                } catch (IOException ignored) {
+                }
             }
+        } catch (FileNotFoundException e) {
+            logger.warn("The stop-words file '" + stopWordsFileName + "' not found! Using non!");
         }
         executor = Executors.newFixedThreadPool(config.getParserThreadsCount());
     }

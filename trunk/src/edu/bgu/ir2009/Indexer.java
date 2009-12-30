@@ -28,6 +28,14 @@ public class Indexer {
     private final Configuration config;
     private final Object lock = new Object();
 
+    public Indexer(String docsDir, String srcStopWordsFileName, boolean useStemmer) {
+        this(new Configuration(docsDir, srcStopWordsFileName, useStemmer));
+    }
+
+    public Indexer(Configuration config) {
+        this(new Parser(config), config);
+    }
+
     public Indexer(Parser parser, Configuration config) {
         this.parser = parser;
         this.config = config;
