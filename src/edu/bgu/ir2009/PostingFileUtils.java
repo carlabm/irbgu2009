@@ -19,7 +19,7 @@ public class PostingFileUtils {
     }
 
     public void saveParsedDocument(ParsedDocument doc) throws IOException {
-        File docFile = new File(config.getParsedDocsDir(), doc.getDocNo());
+        File docFile = new File(config.getSavedDocsDir(), doc.getDocNo());
         if (!docFile.exists()) {
             BufferedWriter writer = null;
             try {
@@ -50,7 +50,7 @@ public class PostingFileUtils {
     public ParsedDocument loadParsedDocument(String docNo) {
         UnParsedDocument unParsedDoc = new UnParsedDocument();
         StringBuilder stringBuilder = new StringBuilder();
-        File docFile = new File(config.getParsedDocsDir(), docNo);
+        File docFile = new File(config.getSavedDocsDir(), docNo);
         if (docFile.exists()) {
             BufferedReader reader = null;
             try {
