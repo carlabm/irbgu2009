@@ -2,20 +2,12 @@
 <project version="4">
   <component name="ChangeListManager" verified="true">
     <list default="true" readonly="true" id="156d3955-5176-423a-92a9-52a5ff1fd474" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/PostingFileUtils.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/PostingFileUtils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/project.cfg" afterPath="$PROJECT_DIR$/project.cfg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexingDialog.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexingDialog.form" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/gui" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/gui/MainForm.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/Configuration.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/Configuration.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/Parser.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/Parser.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/ReadFile.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/ReadFile.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/Indexer.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/Indexer.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ir2009.iml" afterPath="$PROJECT_DIR$/ir2009.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/gui/MainForm.form" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/Configuration.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/Configuration.java" />
     </list>
     <ignored path=".idea/workspace.xml" />
     <ignored path="ir2009.iws" />
@@ -48,7 +40,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/edu/bgu/ir2009/Configuration.java" line="148" class="edu.bgu.ir2009.Configuration" package="edu.bgu.ir2009">
+      <breakpoint url="file://$PROJECT_DIR$/src/edu/bgu/ir2009/Indexer.java" line="117" class="edu.bgu.ir2009.Indexer" package="edu.bgu.ir2009">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -106,7 +98,7 @@
       <file leaf-file-name="Indexer.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/Indexer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="32" column="72" selection-start="1162" selection-end="1162" vertical-scroll-proportion="0.0">
+            <state line="68" column="69" selection-start="2457" selection-end="2457" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -114,10 +106,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Configuration.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="Configuration.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/Configuration.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="137" column="49" selection-start="5390" selection-end="5390" vertical-scroll-proportion="0.5115578">
+            <state line="71" column="28" selection-start="2800" selection-end="2800" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -130,17 +122,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state line="6" column="21" selection-start="147" selection-end="147" vertical-scroll-proportion="0.0">
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ReadFile.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/ReadFile.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="28" column="72" selection-start="1014" selection-end="1014" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -159,7 +140,18 @@
       <file leaf-file-name="Parser.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/Parser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="41" column="67" selection-start="1283" selection-end="1283" vertical-scroll-proportion="0.0">
+            <state line="29" column="12" selection-start="904" selection-end="904" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ReadFile.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/ReadFile.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="17" column="11" selection-start="482" selection-end="482" vertical-scroll-proportion="0.08140703">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -224,12 +216,12 @@
         <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/gui/MainForm.java" />
         <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexingDialog.form" />
         <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexingDialog.java" />
-        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/Parser.java" />
-        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/Indexer.java" />
-        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/ReadFile.java" />
         <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/PostingFileUtils.java" />
         <option value="$PROJECT_DIR$/project.cfg" />
         <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/Configuration.java" />
+        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/Parser.java" />
+        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/ReadFile.java" />
+        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/Indexer.java" />
       </list>
     </option>
   </component>
@@ -284,7 +276,7 @@
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="recentsLimit" value="5" />
     <property name="MemberChooser.sorted" value="false" />
-    <property name="options.lastSelected" value="project.propGUI" />
+    <property name="options.lastSelected" value="preferences.editor" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="GoToClass.includeJavaFiles" value="false" />
     <property name="MemberChooser.copyJavadoc" value="false" />
@@ -304,7 +296,7 @@
       <recent name="edu.bgu.ir2009.gui" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Configuration">
+  <component name="RunManager" selected="Application.Indexer">
     <configuration default="false" name="Indexer" type="Application" factoryName="Application" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -676,7 +668,7 @@
     <option name="PERFORM_ROLLBACK_IN_BACKGROUND" value="false" />
     <option name="CHECK_LOCALLY_CHANGED_CONFLICTS_IN_BACKGROUND" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added deserialization with random access file of term data" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added a bunch of shit" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -699,6 +691,7 @@
     <MESSAGE value="Added main functins of reader/parser as first executor job" />
     <MESSAGE value="Fixed bug on indexing" />
     <MESSAGE value="Added deserialization with random access file of term data" />
+    <MESSAGE value="Added a bunch of shit" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -754,52 +747,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/Indexer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="32" column="72" selection-start="1162" selection-end="1162" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/ReadFile.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="72" selection-start="1014" selection-end="1014" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/PostingFileUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="52" column="56" selection-start="1745" selection-end="1745" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/Parser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="41" column="67" selection-start="1283" selection-end="1283" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/gui/MainForm.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="22" selection-start="607" selection-end="607" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <marker date="1262124822639" expanded="true" signature="1028:1601" placeholder="UI Designer generated code" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexingDialog.form">
       <provider selected="true" editor-type-id="ui-designer">
         <state />
@@ -819,6 +766,34 @@
         <state />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/gui/MainForm.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="26" column="22" selection-start="607" selection-end="607" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <marker date="1262124822639" expanded="true" signature="1028:1601" placeholder="UI Designer generated code" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/Parser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="29" column="12" selection-start="904" selection-end="904" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/PostingFileUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="52" column="56" selection-start="1745" selection-end="1745" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/project.cfg">
       <provider selected="true" editor-type-id="text-editor">
         <state line="6" column="21" selection-start="147" selection-end="147" vertical-scroll-proportion="0.0">
@@ -828,7 +803,25 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/Configuration.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="137" column="49" selection-start="5390" selection-end="5390" vertical-scroll-proportion="0.5115578">
+        <state line="71" column="28" selection-start="2800" selection-end="2800" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/Indexer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="68" column="69" selection-start="2457" selection-end="2457" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/ReadFile.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="11" selection-start="482" selection-end="482" vertical-scroll-proportion="0.08140703">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

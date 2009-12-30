@@ -4,6 +4,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 import javax.xml.stream.XMLStreamException;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,6 +29,8 @@ public class Indexer {
     private final Configuration config;
     private final Object lock = new Object();
 
+    private boolean isStarted = false;
+
     public Indexer(String docsDir, String srcStopWordsFileName, boolean useStemmer) {
         this(new Configuration(docsDir, srcStopWordsFileName, useStemmer));
     }
@@ -43,7 +46,15 @@ public class Indexer {
         executor = Executors.newFixedThreadPool(config.getIndexerThreadsCount());
     }
 
-    public void start() {
+    public void start() throws XMLStreamException, FileNotFoundException {
+        synchronized (this) {
+            if (!isStarted) {
+                parser.start();
+                isStarted = true;
+            } else {
+                throw new IllegalStateException("cannot start same indexer twice");
+            }
+        }
         executor.execute(new Runnable() {
             public void run() {
                 ParsedDocument doc;
@@ -104,12 +115,7 @@ public class Indexer {
 
     public static void main(String[] args) throws IOException, XMLStreamException {
         BasicConfigurator.configure();
-        Configuration configuration = new Configuration("project.cfg");
-        ReadFile readFile = new ReadFile(configuration);
-        Parser parser = new Parser(readFile, configuration);
-        readFile.start();
-        parser.start();
-        Indexer indexer = new Indexer(parser, configuration);
+        Indexer indexer = new Indexer("tmp", "stop-words.txt", true);
         indexer.start();
         int i = 0;
     }
