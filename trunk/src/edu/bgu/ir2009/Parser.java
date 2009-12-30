@@ -2,6 +2,7 @@ package edu.bgu.ir2009;
 
 import org.apache.log4j.Logger;
 
+import javax.xml.stream.XMLStreamException;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -26,6 +27,7 @@ public class Parser {
 
     private final BlockingQueue<ParsedDocument> parsedDocs = new LinkedBlockingQueue<ParsedDocument>();
 
+    private boolean isStarted = false;
     private Stemmer stemmer;
 
     public Parser(Configuration config) {
@@ -61,7 +63,15 @@ public class Parser {
         executor = Executors.newFixedThreadPool(config.getParserThreadsCount());
     }
 
-    public void start() {
+    public void start() throws XMLStreamException, FileNotFoundException {
+        synchronized (this) {
+            if (!isStarted) {
+                reader.start();
+                isStarted = true;
+            } else {
+                throw new IllegalStateException("cannot start same parser twice");
+            }
+        }
         executor.execute(new Runnable() {
             public void run() {
                 UnParsedDocument doc;

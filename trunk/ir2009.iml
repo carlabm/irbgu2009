@@ -11,6 +11,7 @@
     <orderEntry type="library" name="log4j 1.2.15" level="application" />
     <orderEntry type="library" name="commons-logging" level="application" />
     <orderEntry type="library" name="jgoodies-forms" level="application" />
+    <orderEntry type="library" name="commons-io" level="application" />
   </component>
 </module>
 

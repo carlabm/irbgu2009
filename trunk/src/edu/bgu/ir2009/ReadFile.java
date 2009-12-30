@@ -25,6 +25,8 @@ public class ReadFile {
     private final ExecutorService executor;
     private final BlockingQueue<UnParsedDocument> docQueue = new LinkedBlockingQueue<UnParsedDocument>();
 
+    private boolean isStarted = false;
+
     public ReadFile(String docsDir, String srcStopWordsFileName, boolean useStemmer) {
         this(new Configuration(docsDir, srcStopWordsFileName, useStemmer));
     }
@@ -35,6 +37,13 @@ public class ReadFile {
     }
 
     public void start() throws XMLStreamException, FileNotFoundException {
+        synchronized (this) {
+            if (!isStarted) {
+                isStarted = true;
+            } else {
+                throw new IllegalStateException("cannot start same reader twice");
+            }
+        }
         executor.execute(new Runnable() {
             public void run() {
                 File file = new File(dirName);
@@ -57,6 +66,10 @@ public class ReadFile {
                 }).start();
             }
         });
+    }
+
+    public boolean isStarted() {
+        return isStarted;
     }
 
     public UnParsedDocument getNextDocument() {
