@@ -7,11 +7,11 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Axiom 1.2.8" level="application" />
-    <orderEntry type="library" name="log4j 1.2.15" level="application" />
-    <orderEntry type="library" name="commons-logging" level="application" />
-    <orderEntry type="library" name="jgoodies-forms" level="application" />
-    <orderEntry type="library" name="commons-io" level="application" />
+    <orderEntry type="library" name="jgoodies-form" level="project" />
+    <orderEntry type="library" name="axiom" level="project" />
+    <orderEntry type="library" name="commons-io" level="project" />
+    <orderEntry type="library" name="commons-logging" level="project" />
+    <orderEntry type="library" name="log4j" level="project" />
   </component>
 </module>
 
