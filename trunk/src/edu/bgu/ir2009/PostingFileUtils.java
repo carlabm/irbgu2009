@@ -89,8 +89,12 @@ public class PostingFileUtils {
             file.delete();
         }
         FileWriter writer = new FileWriter(file);
+        int saved = 0;
+        int totalToSave = index.size();
         for (TermData td : index.values()) {
             writer.write(td.getSavedString() + "\n");
+            saved++;
+            UpFacade.getInstance().addIndexSavingEvent(saved, totalToSave);
         }
         writer.close();
         logger.info("Finished saving index...");

@@ -1,13 +1,21 @@
 package edu.bgu.ir2009.gui;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+import edu.bgu.ir2009.*;
 
-public class IndexingDialog extends JDialog {
+import javax.swing.*;
+import java.awt.event.*;
+import java.util.Observable;
+import java.util.Observer;
+
+public class IndexingDialog extends JDialog implements Observer {
     private JPanel contentPane;
-    private JButton buttonCancel;
+    private JProgressBar readerProgressBar;
+    private JProgressBar parsingProgressBar;
     private JProgressBar indexingProgressBar;
+    private JButton buttonCancel;
+    private JProgressBar savingProgressBar;
 
     public IndexingDialog() {
         setTitle("Indexing...");
@@ -35,6 +43,7 @@ public class IndexingDialog extends JDialog {
                 onCancel();
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        UpFacade.getInstance().addObserver(this);
     }
 
     private void onCancel() {
@@ -47,6 +56,35 @@ public class IndexingDialog extends JDialog {
         dialog.pack();
         dialog.setVisible(true);
         System.exit(0);
+    }
+
+    public void update(Observable o, final Object arg) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                if (arg instanceof ReaderEvent) {
+                    ReaderEvent readerEvent = (ReaderEvent) arg;
+                    readerProgressBar.setValue((int) (((double) readerEvent.getFilesRead()) / readerEvent.getTotalFiles() * 100));
+                    readerProgressBar.setString(readerEvent.getFilesRead() + "/" + readerEvent.getTotalFiles());
+                } else {
+                    if (arg instanceof ParserEvent) {
+                        ParserEvent parserEvent = (ParserEvent) arg;
+                        parsingProgressBar.setValue((int) (((double) parserEvent.getParsedDocs()) / parserEvent.getTotalParsedDocs() * 100));
+                        parsingProgressBar.setString(parserEvent.getParsedDocs() + "/" + parserEvent.getTotalParsedDocs());
+                    } else {
+                        if (arg instanceof IndexerEvent) {
+                            IndexerEvent indexerEvent = (IndexerEvent) arg;
+                            indexingProgressBar.setValue((int) (((double) indexerEvent.getIndexedDocs()) / indexerEvent.getTotalToIndexDocs() * 100));
+                            indexingProgressBar.setString(indexerEvent.getIndexedDocs() + "/" + indexerEvent.getTotalToIndexDocs());
+                        } else {
+                            SavingEvent savingEvent = (SavingEvent) arg;
+                            int percent = (int) (((double) savingEvent.getSavedTerm()) / savingEvent.getTotalTerms() * 100);
+                            savingProgressBar.setValue(percent);
+                            savingProgressBar.setString(percent + "%");
+                        }
+                    }
+                }
+            }
+        });
     }
 
     {
@@ -65,23 +103,39 @@ public class IndexingDialog extends JDialog {
      */
     private void $$$setupUI$$$() {
         contentPane = new JPanel();
-        contentPane.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 1, new Insets(10, 10, 10, 10), -1, -1));
-        final JPanel panel1 = new JPanel();
-        panel1.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-        contentPane.add(panel1, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, 1, null, null, null, 0, false));
-        final JPanel panel2 = new JPanel();
-        panel2.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-        panel1.add(panel2, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        buttonCancel = new JButton();
-        buttonCancel.setText("Cancel");
-        panel2.add(buttonCancel, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JPanel panel3 = new JPanel();
-        panel3.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
-        contentPane.add(panel3, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        contentPane.setLayout(new FormLayout("fill:d:noGrow,left:4dlu:noGrow,fill:d:grow", "center:d:noGrow,top:4dlu:noGrow,center:max(d;4px):noGrow,top:4dlu:noGrow,center:max(d;4px):noGrow,top:4dlu:noGrow,center:max(d;4px):noGrow,top:4dlu:noGrow,center:max(d;4px):grow"));
+        final JLabel label1 = new JLabel();
+        label1.setText("Reading Progress:");
+        CellConstraints cc = new CellConstraints();
+        contentPane.add(label1, cc.xy(1, 1));
+        readerProgressBar = new JProgressBar();
+        readerProgressBar.setString("");
+        readerProgressBar.setStringPainted(true);
+        contentPane.add(readerProgressBar, cc.xy(3, 1, CellConstraints.FILL, CellConstraints.DEFAULT));
+        final JLabel label2 = new JLabel();
+        label2.setText("Parsing Progress:");
+        contentPane.add(label2, cc.xy(1, 3));
+        parsingProgressBar = new JProgressBar();
+        parsingProgressBar.setString("");
+        parsingProgressBar.setStringPainted(true);
+        contentPane.add(parsingProgressBar, cc.xy(3, 3, CellConstraints.FILL, CellConstraints.DEFAULT));
+        final JLabel label3 = new JLabel();
+        label3.setText("Indexing Progress:");
+        contentPane.add(label3, cc.xy(1, 5));
         indexingProgressBar = new JProgressBar();
-        panel3.add(indexingProgressBar, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final com.intellij.uiDesigner.core.Spacer spacer1 = new com.intellij.uiDesigner.core.Spacer();
-        panel3.add(spacer1, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, 1, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        indexingProgressBar.setString("");
+        indexingProgressBar.setStringPainted(true);
+        contentPane.add(indexingProgressBar, cc.xy(3, 5, CellConstraints.FILL, CellConstraints.DEFAULT));
+        buttonCancel = new JButton();
+        buttonCancel.setEnabled(false);
+        buttonCancel.setText("Cancel");
+        contentPane.add(buttonCancel, cc.xyw(1, 9, 3, CellConstraints.CENTER, CellConstraints.BOTTOM));
+        final JLabel label4 = new JLabel();
+        label4.setText("Saving Progress:");
+        contentPane.add(label4, cc.xy(1, 7));
+        savingProgressBar = new JProgressBar();
+        savingProgressBar.setStringPainted(true);
+        contentPane.add(savingProgressBar, cc.xy(3, 7, CellConstraints.FILL, CellConstraints.DEFAULT));
     }
 
     /**
