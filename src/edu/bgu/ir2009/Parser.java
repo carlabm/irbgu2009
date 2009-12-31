@@ -1,5 +1,9 @@
 package edu.bgu.ir2009;
 
+import edu.bgu.ir2009.auxiliary.Configuration;
+import edu.bgu.ir2009.auxiliary.ParsedDocument;
+import edu.bgu.ir2009.auxiliary.UnParsedDocument;
+import edu.bgu.ir2009.auxiliary.UpFacade;
 import org.apache.log4j.Logger;
 
 import javax.xml.stream.XMLStreamException;
@@ -23,12 +27,11 @@ public class Parser {
 
     private final Set<String> stopWordsSet = new HashSet<String>();
     private final boolean useStemmer;
-    private final ReadFile reader;
     private final ExecutorService executor;
-
     private final BlockingQueue<ParsedDocument> parsedDocs = new LinkedBlockingQueue<ParsedDocument>();
 
     private boolean isStarted = false;
+    private ReadFile reader;
     private Stemmer stemmer;
     private int totalUnParsedDocuments = 0;
     private int totalParsedDocuments = 0;
@@ -79,13 +82,14 @@ public class Parser {
         executor.execute(new Runnable() {
             public void run() {
                 UnParsedDocument doc;
-                while ((doc = reader.getNextDocument()) != null) {
+                while (!executor.isShutdown() && (doc = reader.getNextDocument()) != null) {
                     synchronized (lock) {
                         totalUnParsedDocuments++;
                     }
                     logger.info("Document " + doc.getDocNo() + " is being submitted for parsing...");
                     executor.execute(new ParserWorker(doc));
                 }
+                reader = null;
                 new Thread(new Runnable() {
                     public void run() {
                         executor.shutdown();
@@ -158,6 +162,12 @@ public class Parser {
         }
         logger.info("Finished parsing document " + unParsedDoc.getDocNo());
         return res;
+    }
+
+    public void stop() {
+        executor.shutdownNow();
+        reader.stop();
+        reader = null;
     }
 
     private class ParserWorker implements Runnable {

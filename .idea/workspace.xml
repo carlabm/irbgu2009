@@ -2,10 +2,34 @@
 <project version="4">
   <component name="ChangeListManager" verified="true">
     <list default="true" readonly="true" id="156d3955-5176-423a-92a9-52a5ff1fd474" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/Parser.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/Parser.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexingDialog.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexingDialog.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/Indexer.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/Indexer.java" />
+      <change type="MOVED" beforePath="E:\Henry\study\ir\src\edu\bgu\ir2009\IndexerEvent.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/IndexerEvent.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexDialog.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexDialog.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexingDialog.form" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexingDialog.form" />
+      <change type="MOVED" beforePath="E:\Henry\study\ir\src\edu\bgu\ir2009\PostingFileUtils.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/PostingFileUtils.java" />
+      <change type="MOVED" beforePath="E:\Henry\study\ir\src\edu\bgu\ir2009\UnParsedDocument.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/UnParsedDocument.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ir2009.iml" afterPath="$PROJECT_DIR$/ir2009.iml" />
+      <change type="MOVED" beforePath="E:\Henry\study\ir\src\edu\bgu\ir2009\TermData.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/TermData.java" />
+      <change type="MOVED" beforePath="E:\Henry\study\ir\src\edu\bgu\ir2009\DownFacade.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/DownFacade.java" />
+      <change type="MOVED" beforePath="E:\Henry\study\ir\src\edu\bgu\ir2009\Configuration.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/Configuration.java" />
+      <change type="MOVED" beforePath="E:\Henry\study\ir\src\edu\bgu\ir2009\ParsedDocument.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/ParsedDocument.java" />
+      <change type="MOVED" beforePath="E:\Henry\study\ir\src\edu\bgu\ir2009\SavingEvent.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/SavingEvent.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/gui/MainForm.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/gui/MainForm.java" />
+      <change type="MOVED" beforePath="E:\Henry\study\ir\src\edu\bgu\ir2009\DocumentInputStream.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/DocumentInputStream.java" />
+      <change type="MOVED" beforePath="E:\Henry\study\ir\src\edu\bgu\ir2009\ReaderEvent.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/ReaderEvent.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/DocumentsSavingEvent.java" />
+      <change type="MOVED" beforePath="E:\Henry\study\ir\src\edu\bgu\ir2009\InMemoryIndex.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/InMemoryIndex.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/ReadFile.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/ReadFile.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/IndexEvent.java" />
+      <change type="MOVED" beforePath="E:\Henry\study\ir\src\edu\bgu\ir2009\UpFacade.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/UpFacade.java" />
+      <change type="MOVED" beforePath="E:\Henry\study\ir\src\edu\bgu\ir2009\ParserEvent.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/ParserEvent.java" />
     </list>
-    <ignored path=".idea/workspace.xml" />
     <ignored path="ir2009.iws" />
+    <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,7 +46,33 @@
   </component>
   <component name="DebuggerManager">
     <line_breakpoints>
-      <breakpoint url="file://$PROJECT_DIR$/src/edu/bgu/ir2009/InMemoryIndex.java" line="61" class="edu.bgu.ir2009.InMemoryIndex" package="edu.bgu.ir2009">
+      <breakpoint url="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/InMemoryIndex.java" line="65" class="edu.bgu.ir2009.auxiliary.InMemoryIndex" package="edu.bgu.ir2009.auxiliary">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/PostingFileUtils.java" line="25" class="edu.bgu.ir2009.auxiliary.PostingFileUtils" package="edu.bgu.ir2009.auxiliary">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="doc.getByLine()==null" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexDialog.java" line="77" class="edu.bgu.ir2009.gui.IndexDialog" package="edu.bgu.ir2009.gui">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -69,7 +119,24 @@
       </breakpoint>
     </breakpoint_any>
     <breakpoint_rules />
-    <ui_properties />
+    <ui_properties>
+      <property name="line_breakpoints_groupByMethods" value="false" />
+      <property name="line_breakpoints_viewId" value="TABLE" />
+      <property name="exception_breakpoints_flattenPackages" value="true" />
+      <property name="method_breakpoints_flattenPackages" value="true" />
+      <property name="field_breakpoints_flattenPackages" value="true" />
+      <property name="exception_breakpoints_groupByMethods" value="false" />
+      <property name="line_breakpoints_groupByClasses" value="true" />
+      <property name="method_breakpoints_viewId" value="TABLE" />
+      <property name="field_breakpoints_groupByMethods" value="false" />
+      <property name="line_breakpoints_flattenPackages" value="true" />
+      <property name="field_breakpoints_groupByClasses" value="true" />
+      <property name="method_breakpoints_groupByClasses" value="true" />
+      <property name="exception_breakpoints_viewId" value="TABLE" />
+      <property name="exception_breakpoints_groupByClasses" value="true" />
+      <property name="field_breakpoints_viewId" value="TABLE" />
+      <property name="method_breakpoints_groupByMethods" value="false" />
+    </ui_properties>
   </component>
   <component name="FavoritesManager">
     <favorites_list name="ir2009" />
@@ -80,7 +147,68 @@
       <file leaf-file-name="Indexer.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/Indexer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="78" column="49" selection-start="2757" selection-end="2757" vertical-scroll-proportion="0.0">
+            <state line="93" column="34" selection-start="3469" selection-end="3469" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="IndexDialog.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexDialog.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="78" column="55" selection-start="2931" selection-end="2931" vertical-scroll-proportion="0.0">
+              <folding>
+                <marker date="1356978923593" expanded="false" signature="3568:6407" placeholder="UI Designer generated code" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DownFacade.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/DownFacade.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="45" column="9" selection-start="1306" selection-end="1306" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="IndexingDialog.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexingDialog.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="27" column="0" selection-start="841" selection-end="841" vertical-scroll-proportion="0.0">
+              <folding>
+                <marker date="1356985148890" expanded="true" signature="745:1851" placeholder="{...}" />
+                <marker date="1356985148890" expanded="true" signature="956:1066" placeholder="{...}" />
+                <marker date="1356985148890" expanded="true" signature="1013:1056" placeholder="{...}" />
+                <marker date="1356985148890" expanded="true" signature="1212:1320" placeholder="{...}" />
+                <marker date="1356985148890" expanded="true" signature="1267:1310" placeholder="{...}" />
+                <marker date="1356985148890" expanded="true" signature="1417:1527" placeholder="{...}" />
+                <marker date="1356985148890" expanded="true" signature="1474:1517" placeholder="{...}" />
+                <marker date="1356985148890" expanded="true" signature="1733:1843" placeholder="{...}" />
+                <marker date="1356985148890" expanded="true" signature="1790:1833" placeholder="{...}" />
+                <marker date="1356985148890" expanded="true" signature="1881:2061" placeholder="{...}" />
+                <marker date="1356985148890" expanded="true" signature="2106:2247" placeholder="{...}" />
+                <marker date="1356985148890" expanded="true" signature="2304:5317" placeholder="{...}" />
+                <marker date="1356985148890" expanded="true" signature="2356:5309" placeholder="{...}" />
+                <marker date="1356985148890" expanded="true" signature="2388:5299" placeholder="{...}" />
+                <marker date="1356985148890" expanded="true" signature="5323:8780" placeholder="UI Designer generated code" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="IndexingDialog.form" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexingDialog.form">
+          <provider selected="true" editor-type-id="ui-designer">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UpFacade.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/UpFacade.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="56" column="50" selection-start="1590" selection-end="1590" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -89,106 +217,28 @@
         </entry>
       </file>
       <file leaf-file-name="PostingFileUtils.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/PostingFileUtils.java">
+        <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/PostingFileUtils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="96" column="73" selection-start="3551" selection-end="3551" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UpFacade.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/UpFacade.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="44" column="34" selection-start="1209" selection-end="1209" vertical-scroll-proportion="0.0">
+            <state line="139" column="89" selection-start="5422" selection-end="5422" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SavingEvent.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/SavingEvent.java">
+      <file leaf-file-name="ParsedDocument.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/ParsedDocument.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="16" column="31" selection-start="386" selection-end="386" vertical-scroll-proportion="0.0">
+            <state line="64" column="31" selection-start="1513" selection-end="1513" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ReadFile.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/ReadFile.java">
+      <file leaf-file-name="UnParsedDocument.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/UnParsedDocument.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="54" column="67" selection-start="1927" selection-end="1927" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="IndexDialog.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexDialog.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="83" column="22" selection-start="3178" selection-end="3178" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-                <marker date="1262226331782" expanded="false" signature="3558:6397" placeholder="UI Designer generated code" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="IndexingDialog.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexingDialog.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="81" column="66" selection-start="3531" selection-end="3531" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-                <marker date="1262227357716" expanded="true" signature="594:1528" placeholder="{...}" />
-                <marker date="1262227357716" expanded="true" signature="805:915" placeholder="{...}" />
-                <marker date="1262227357716" expanded="true" signature="862:905" placeholder="{...}" />
-                <marker date="1262227357716" expanded="true" signature="1061:1169" placeholder="{...}" />
-                <marker date="1262227357716" expanded="true" signature="1116:1159" placeholder="{...}" />
-                <marker date="1262227357716" expanded="true" signature="1266:1376" placeholder="{...}" />
-                <marker date="1262227357716" expanded="true" signature="1323:1366" placeholder="{...}" />
-                <marker date="1262227357716" expanded="true" signature="1558:1619" placeholder="{...}" />
-                <marker date="1262227357716" expanded="true" signature="1664:1805" placeholder="{...}" />
-                <marker date="1262227357716" expanded="true" signature="1862:3528" placeholder="{...}" />
-                <marker date="1262227357716" expanded="true" signature="1914:3528" placeholder="{...}" />
-                <marker date="1262227357716" expanded="true" signature="1946:3528" placeholder="{...}" />
-                <marker date="1262227357716" expanded="false" signature="6076:6210" placeholder="UI Designer generated code" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="IndexingDialog.form" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexingDialog.form">
-          <provider selected="true" editor-type-id="ui-designer">
-            <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Configuration.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/Configuration.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="78" column="24" selection-start="3026" selection-end="3026" vertical-scroll-proportion="0.4723618">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Parser.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/Parser.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="173" column="98" selection-start="6140" selection-end="6140" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state line="11" column="27" selection-start="306" selection-end="306" vertical-scroll-proportion="0.0">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -203,22 +253,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/project.cfg" />
-        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/DownFacade.java" />
-        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexDialog.form" />
-        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/ReaderEvent.java" />
-        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/ParserEvent.java" />
-        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/IndexerEvent.java" />
-        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/Indexer.java" />
-        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/ReadFile.java" />
-        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexDialog.java" />
-        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/Parser.java" />
-        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexingDialog.form" />
-        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/PostingFileUtils.java" />
         <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/UpFacade.java" />
         <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/SavingEvent.java" />
-        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexingDialog.java" />
         <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/Configuration.java" />
+        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/Configuration.java" />
+        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/InMemoryIndex.java" />
+        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/DocumentsSavingEvent.java" />
+        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/UnParsedDocument.java" />
+        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/PostingFileUtils.java" />
+        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/IndexEvent.java" />
+        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/UpFacade.java" />
+        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/DownFacade.java" />
+        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/Parser.java" />
+        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/ReadFile.java" />
+        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/Indexer.java" />
+        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexingDialog.java" />
+        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexingDialog.form" />
       </list>
     </option>
   </component>
@@ -257,29 +307,95 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="Favorites" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="irbgu2009" />
+              <option name="myItemId" value="ir" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="irbgu2009" />
+              <option name="myItemId" value="ir" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="irbgu2009" />
+              <option name="myItemId" value="ir" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ir" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ir" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ir2009" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ir" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ir" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ir2009" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="gui" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ir" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ir" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ir2009" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="gui" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="IndexingDialog" />
+              <option name="myItemType" value="com.intellij.uiDesigner.projectView.FormNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -298,15 +414,17 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="dynamic.classpath" value="false" />
-    <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
+    <property name="dynamic.classpath" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
+      <recent name="edu.bgu.ir2009.auxiliary" />
       <recent name="edu.bgu.ir2009" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="edu.bgu.ir2009.auxiliary" />
       <recent name="edu.bgu.ir2009.gui" />
     </key>
   </component>
@@ -319,7 +437,7 @@
         </pattern>
       </extension>
       <extension name="snapshooter" />
-      <option name="MAIN_CLASS_NAME" value="edu.bgu.ir2009.InMemoryIndex" />
+      <option name="MAIN_CLASS_NAME" value="edu.bgu.ir2009.auxiliary.InMemoryIndex" />
       <option name="VM_PARAMETERS" value="-Xms512m -Xmx1024m" />
       <option name="PROGRAM_PARAMETERS" value="" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
@@ -394,7 +512,7 @@
         </pattern>
       </extension>
       <extension name="snapshooter" />
-      <option name="MAIN_CLASS_NAME" value="edu.bgu.ir2009.Configuration" />
+      <option name="MAIN_CLASS_NAME" value="edu.bgu.ir2009.auxiliary.Configuration" />
       <option name="VM_PARAMETERS" value="" />
       <option name="PROGRAM_PARAMETERS" value="" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
@@ -614,7 +732,7 @@
     <option name="DETECT_NESTED_COPIES" value="false" />
     <option name="IGNORE_SPACES_IN_ANNOTATE" value="true" />
     <option name="SHOW_MERGE_SOURCES_IN_ANNOTATE" value="true" />
-    <configuration useDefault="true">C:\Users\henrya\AppData\Roaming\Subversion</configuration>
+    <configuration useDefault="true">C:\Documents and Settings\user\Application Data\Subversion</configuration>
     <myIsUseDefaultProxy>false</myIsUseDefaultProxy>
     <supportedVersion>125</supportedVersion>
   </component>
@@ -622,16 +740,16 @@
     <option name="myMappingRoots">
       <list>
         <SvnCopyRootSimple>
-          <option name="myVcsRoot" value="H:\old_e\Study\dr\project\irbgu2009" />
-          <option name="myCopyRoot" value="H:\old_e\Study\dr\project\irbgu2009" />
+          <option name="myVcsRoot" value="E:\Henry\study\ir" />
+          <option name="myCopyRoot" value="E:\Henry\study\ir" />
         </SvnCopyRootSimple>
       </list>
     </option>
     <option name="myMoreRealMappingRoots">
       <list>
         <SvnCopyRootSimple>
-          <option name="myVcsRoot" value="H:\old_e\Study\dr\project\irbgu2009" />
-          <option name="myCopyRoot" value="H:\old_e\Study\dr\project\irbgu2009" />
+          <option name="myVcsRoot" value="E:\Henry\study\ir" />
+          <option name="myCopyRoot" value="E:\Henry\study\ir" />
         </SvnCopyRootSimple>
       </list>
     </option>
@@ -645,30 +763,30 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1176" extended-state="6" />
-    <editor active="true" />
+    <frame x="-4" y="-4" width="1928" height="1178" extended-state="6" />
+    <editor active="false" />
     <layout>
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16044776" sideWeight="0.5670911" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16044776" sideWeight="0.56790125" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33432835" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29371002" sideWeight="0.5670911" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32908913" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.29371002" sideWeight="0.56790125" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4289912" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.42830008" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32908913" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.328585" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.19807795" sideWeight="0.7580803" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19807795" sideWeight="0.5641528" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.19807795" sideWeight="0.5650522" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39960822" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4260529" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24986653" sideWeight="0.56790125" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4254511" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32908913" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39960822" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="VcsManagerConfiguration">
@@ -718,79 +836,93 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://C:/Program Files/Java/jdk1.6.0_17/src.zip!/java/util/Observable.java">
+    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/InMemoryIndex.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="44" column="13" selection-start="1887" selection-end="1887" vertical-scroll-proportion="-2.8896925">
+        <state line="40" column="38" selection-start="1243" selection-end="1243" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/ReaderEvent.java">
+    <entry file="jar://C:/Program Files/Java/jdk1.6.0_14/src.zip!/java/lang/Object.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="31" selection-start="419" selection-end="419" vertical-scroll-proportion="0.65822786">
+        <state line="19" column="13" selection-start="508" selection-end="508" vertical-scroll-proportion="0.33300877">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/ParserEvent.java">
+    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/DocumentsSavingEvent.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="18" selection-start="202" selection-end="202" vertical-scroll-proportion="0.41410488">
+        <state line="16" column="31" selection-start="393" selection-end="393" vertical-scroll-proportion="0.3960396">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/ParsedDocument.java">
+    <entry file="jar://C:/Program Files/Java/jdk1.6.0_14/src.zip!/java/io/Writer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="34" selection-start="695" selection-end="695" vertical-scroll-proportion="0.33273056">
+        <state line="139" column="0" selection-start="3643" selection-end="3643" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/IndexerEvent.java">
+    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/ParsedDocument.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="33" selection-start="422" selection-end="422" vertical-scroll-proportion="0.755877">
+        <state line="64" column="31" selection-start="1513" selection-end="1513" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexDialog.form">
-      <provider selected="true" editor-type-id="ui-designer">
-        <state />
+    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/IndexEvent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="33" selection-start="323" selection-end="323" vertical-scroll-proportion="0.38948393">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/DownFacade.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="45" column="9" selection-start="1306" selection-end="1306" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/Parser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="173" column="98" selection-start="6140" selection-end="6140" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state line="84" column="24" selection-start="2931" selection-end="2931" vertical-scroll-proportion="0.24537487">
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexingDialog.form">
-      <provider selected="true" editor-type-id="ui-designer">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/Indexer.java">
+    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/UnParsedDocument.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="78" column="49" selection-start="2757" selection-end="2757" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/SavingEvent.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="31" selection-start="386" selection-end="386" vertical-scroll-proportion="0.0">
+        <state line="11" column="27" selection-start="306" selection-end="306" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/ReadFile.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="54" column="67" selection-start="1927" selection-end="1927" vertical-scroll-proportion="0.0">
+        <state line="32" column="20" selection-start="1120" selection-end="1120" vertical-scroll-proportion="-0.7137293">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/Indexer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="93" column="34" selection-start="3469" selection-end="3469" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/PostingFileUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="139" column="89" selection-start="5422" selection-end="5422" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/UpFacade.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="56" column="50" selection-start="1590" selection-end="1590" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -799,59 +931,39 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexDialog.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="83" column="22" selection-start="3178" selection-end="3178" vertical-scroll-proportion="0.0">
+        <state line="78" column="55" selection-start="2931" selection-end="2931" vertical-scroll-proportion="0.0">
           <folding>
-            <element signature="imports" expanded="true" />
-            <marker date="1262226331782" expanded="false" signature="3558:6397" placeholder="UI Designer generated code" />
+            <marker date="1356978923593" expanded="false" signature="3568:6407" placeholder="UI Designer generated code" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexingDialog.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="81" column="66" selection-start="3531" selection-end="3531" vertical-scroll-proportion="0.0">
+        <state line="27" column="0" selection-start="841" selection-end="841" vertical-scroll-proportion="0.0">
           <folding>
-            <element signature="imports" expanded="true" />
-            <marker date="1262227357716" expanded="true" signature="594:1528" placeholder="{...}" />
-            <marker date="1262227357716" expanded="true" signature="805:915" placeholder="{...}" />
-            <marker date="1262227357716" expanded="true" signature="862:905" placeholder="{...}" />
-            <marker date="1262227357716" expanded="true" signature="1061:1169" placeholder="{...}" />
-            <marker date="1262227357716" expanded="true" signature="1116:1159" placeholder="{...}" />
-            <marker date="1262227357716" expanded="true" signature="1266:1376" placeholder="{...}" />
-            <marker date="1262227357716" expanded="true" signature="1323:1366" placeholder="{...}" />
-            <marker date="1262227357716" expanded="true" signature="1558:1619" placeholder="{...}" />
-            <marker date="1262227357716" expanded="true" signature="1664:1805" placeholder="{...}" />
-            <marker date="1262227357716" expanded="true" signature="1862:3528" placeholder="{...}" />
-            <marker date="1262227357716" expanded="true" signature="1914:3528" placeholder="{...}" />
-            <marker date="1262227357716" expanded="true" signature="1946:3528" placeholder="{...}" />
-            <marker date="1262227357716" expanded="false" signature="6076:6210" placeholder="UI Designer generated code" />
+            <marker date="1356985148890" expanded="true" signature="745:1851" placeholder="{...}" />
+            <marker date="1356985148890" expanded="true" signature="956:1066" placeholder="{...}" />
+            <marker date="1356985148890" expanded="true" signature="1013:1056" placeholder="{...}" />
+            <marker date="1356985148890" expanded="true" signature="1212:1320" placeholder="{...}" />
+            <marker date="1356985148890" expanded="true" signature="1267:1310" placeholder="{...}" />
+            <marker date="1356985148890" expanded="true" signature="1417:1527" placeholder="{...}" />
+            <marker date="1356985148890" expanded="true" signature="1474:1517" placeholder="{...}" />
+            <marker date="1356985148890" expanded="true" signature="1733:1843" placeholder="{...}" />
+            <marker date="1356985148890" expanded="true" signature="1790:1833" placeholder="{...}" />
+            <marker date="1356985148890" expanded="true" signature="1881:2061" placeholder="{...}" />
+            <marker date="1356985148890" expanded="true" signature="2106:2247" placeholder="{...}" />
+            <marker date="1356985148890" expanded="true" signature="2304:5317" placeholder="{...}" />
+            <marker date="1356985148890" expanded="true" signature="2356:5309" placeholder="{...}" />
+            <marker date="1356985148890" expanded="true" signature="2388:5299" placeholder="{...}" />
+            <marker date="1356985148890" expanded="true" signature="5323:8780" placeholder="UI Designer generated code" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/UpFacade.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="44" column="34" selection-start="1209" selection-end="1209" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/PostingFileUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="96" column="73" selection-start="3551" selection-end="3551" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/Configuration.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="78" column="24" selection-start="3026" selection-end="3026" vertical-scroll-proportion="0.4723618">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
+    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexingDialog.form">
+      <provider selected="true" editor-type-id="ui-designer">
+        <state />
       </provider>
     </entry>
   </component>

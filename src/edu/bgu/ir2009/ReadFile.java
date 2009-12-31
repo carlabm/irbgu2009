@@ -1,5 +1,9 @@
 package edu.bgu.ir2009;
 
+import edu.bgu.ir2009.auxiliary.Configuration;
+import edu.bgu.ir2009.auxiliary.DocumentInputStream;
+import edu.bgu.ir2009.auxiliary.UnParsedDocument;
+import edu.bgu.ir2009.auxiliary.UpFacade;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.impl.builder.StAXOMBuilder;
 import org.apache.log4j.Logger;
@@ -53,7 +57,7 @@ public class ReadFile {
                 String[] files = file.list();
                 totalFiles = files.length;
                 UpFacade.getInstance().addReaderEvent(0, totalFiles);
-                for (int i = 0, filesLength = files.length; i < filesLength; i++) {
+                for (int i = 0, filesLength = files.length; !executor.isShutdown() && i < filesLength; i++) {
                     String fileName = files[i];
                     logger.info(fileName + " is being submitted for reading...");
                     executor.execute(new ReaderWorker(fileName));
@@ -147,6 +151,10 @@ public class ReadFile {
             }
         }
         logger.info("Finished reading file: " + fileName);
+    }
+
+    public void stop() {
+        executor.shutdownNow();
     }
 
 

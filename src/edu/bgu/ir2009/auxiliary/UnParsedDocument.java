@@ -1,4 +1,4 @@
-package edu.bgu.ir2009;
+package edu.bgu.ir2009.auxiliary;
 
 import org.apache.log4j.Logger;
 
@@ -11,12 +11,12 @@ public class UnParsedDocument {
     private final static Logger logger = Logger.getLogger(UnParsedDocument.class);
     private String docNo;
     private long date;
-    private String byLine;
-    private String cn;
-    private String in;
-    private String tp;
-    private String pub;
-    private String page;
+    private String byLine = "";
+    private String cn = "";
+    private String in = "";
+    private String tp = "";
+    private String pub = "";
+    private String page = "";
 
     private String text;
 

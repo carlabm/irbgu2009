@@ -1,4 +1,4 @@
-package edu.bgu.ir2009;
+package edu.bgu.ir2009.auxiliary;
 
 /**
  * User: Henry Abravanel 310739693 henrya@bgu.ac.il

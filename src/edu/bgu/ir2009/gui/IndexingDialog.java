@@ -2,7 +2,8 @@ package edu.bgu.ir2009.gui;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import edu.bgu.ir2009.*;
+import edu.bgu.ir2009.Indexer;
+import edu.bgu.ir2009.auxiliary.*;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -16,6 +17,9 @@ public class IndexingDialog extends JDialog implements Observer {
     private JProgressBar indexingProgressBar;
     private JButton buttonCancel;
     private JProgressBar savingProgressBar;
+    private JProgressBar savingDocsProgressBar;
+    private JButton closeButton;
+    private Indexer indexer;
 
     public IndexingDialog() {
         setTitle("Indexing...");
@@ -44,11 +48,21 @@ public class IndexingDialog extends JDialog implements Observer {
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         UpFacade.getInstance().addObserver(this);
+        closeButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                onCancel();
+            }
+        });
     }
 
     private void onCancel() {
-// add your code here if necessary
-        dispose();
+        if (buttonCancel.isEnabled()) {
+            indexer.stop();
+            dispose();
+        }
+        if (closeButton.isEnabled()) {
+            dispose();
+        }
     }
 
     public static void main(String[] args) {
@@ -61,25 +75,43 @@ public class IndexingDialog extends JDialog implements Observer {
     public void update(Observable o, final Object arg) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                if (arg instanceof ReaderEvent) {
-                    ReaderEvent readerEvent = (ReaderEvent) arg;
-                    readerProgressBar.setValue((int) (((double) readerEvent.getFilesRead()) / readerEvent.getTotalFiles() * 100));
-                    readerProgressBar.setString(readerEvent.getFilesRead() + "/" + readerEvent.getTotalFiles());
+                if (arg instanceof IndexEvent) {
+                    IndexEvent indexEvent = (IndexEvent) arg;
+                    indexer = indexEvent.getIndexer();
+                    buttonCancel.setEnabled(true);
                 } else {
-                    if (arg instanceof ParserEvent) {
-                        ParserEvent parserEvent = (ParserEvent) arg;
-                        parsingProgressBar.setValue((int) (((double) parserEvent.getParsedDocs()) / parserEvent.getTotalParsedDocs() * 100));
-                        parsingProgressBar.setString(parserEvent.getParsedDocs() + "/" + parserEvent.getTotalParsedDocs());
+                    if (arg instanceof ReaderEvent) {
+                        ReaderEvent readerEvent = (ReaderEvent) arg;
+                        readerProgressBar.setValue((int) (((double) readerEvent.getFilesRead()) / readerEvent.getTotalFiles() * 100));
+                        readerProgressBar.setString(readerEvent.getFilesRead() + "/" + readerEvent.getTotalFiles());
                     } else {
-                        if (arg instanceof IndexerEvent) {
-                            IndexerEvent indexerEvent = (IndexerEvent) arg;
-                            indexingProgressBar.setValue((int) (((double) indexerEvent.getIndexedDocs()) / indexerEvent.getTotalToIndexDocs() * 100));
-                            indexingProgressBar.setString(indexerEvent.getIndexedDocs() + "/" + indexerEvent.getTotalToIndexDocs());
+                        if (arg instanceof ParserEvent) {
+                            ParserEvent parserEvent = (ParserEvent) arg;
+                            parsingProgressBar.setValue((int) (((double) parserEvent.getParsedDocs()) / parserEvent.getTotalParsedDocs() * 100));
+                            parsingProgressBar.setString(parserEvent.getParsedDocs() + "/" + parserEvent.getTotalParsedDocs());
                         } else {
-                            SavingEvent savingEvent = (SavingEvent) arg;
-                            int percent = (int) (((double) savingEvent.getSavedTerm()) / savingEvent.getTotalTerms() * 100);
-                            savingProgressBar.setValue(percent);
-                            savingProgressBar.setString(percent + "%");
+                            if (arg instanceof IndexerEvent) {
+                                IndexerEvent indexerEvent = (IndexerEvent) arg;
+                                indexingProgressBar.setValue((int) (((double) indexerEvent.getIndexedDocs()) / indexerEvent.getTotalToIndexDocs() * 100));
+                                indexingProgressBar.setString(indexerEvent.getIndexedDocs() + "/" + indexerEvent.getTotalToIndexDocs());
+                            } else {
+                                if (arg instanceof SavingEvent) {
+                                    buttonCancel.setEnabled(false);
+                                    SavingEvent savingEvent = (SavingEvent) arg;
+                                    int percent = (int) (((double) savingEvent.getSavedTerm()) / savingEvent.getTotalTerms() * 100);
+                                    savingProgressBar.setValue(percent);
+                                    savingProgressBar.setString(percent + "%");
+                                } else {
+                                    buttonCancel.setEnabled(false);
+                                    DocumentsSavingEvent savingEvent = (DocumentsSavingEvent) arg;
+                                    int percent = (int) (((double) savingEvent.getSavedDocs()) / savingEvent.getTotalDocs() * 100);
+                                    savingDocsProgressBar.setValue(percent);
+                                    savingDocsProgressBar.setString(percent + "%");
+                                    if (savingEvent.getSavedDocs() == savingEvent.getTotalDocs()) {
+                                        closeButton.setEnabled(true);
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -103,7 +135,7 @@ public class IndexingDialog extends JDialog implements Observer {
      */
     private void $$$setupUI$$$() {
         contentPane = new JPanel();
-        contentPane.setLayout(new FormLayout("fill:d:noGrow,left:4dlu:noGrow,fill:d:grow", "center:d:noGrow,top:4dlu:noGrow,center:max(d;4px):noGrow,top:4dlu:noGrow,center:max(d;4px):noGrow,top:4dlu:noGrow,center:max(d;4px):noGrow,top:4dlu:noGrow,center:max(d;4px):grow"));
+        contentPane.setLayout(new FormLayout("fill:d:noGrow,left:4dlu:noGrow,fill:d:grow", "center:d:noGrow,top:4dlu:noGrow,center:max(d;4px):noGrow,top:4dlu:noGrow,center:max(d;4px):noGrow,top:4dlu:noGrow,center:max(d;4px):noGrow,top:4dlu:noGrow,center:max(d;4px):noGrow,top:4dlu:noGrow,center:m:grow"));
         final JLabel label1 = new JLabel();
         label1.setText("Reading Progress:");
         CellConstraints cc = new CellConstraints();
@@ -126,16 +158,29 @@ public class IndexingDialog extends JDialog implements Observer {
         indexingProgressBar.setString("");
         indexingProgressBar.setStringPainted(true);
         contentPane.add(indexingProgressBar, cc.xy(3, 5, CellConstraints.FILL, CellConstraints.DEFAULT));
-        buttonCancel = new JButton();
-        buttonCancel.setEnabled(false);
-        buttonCancel.setText("Cancel");
-        contentPane.add(buttonCancel, cc.xyw(1, 9, 3, CellConstraints.CENTER, CellConstraints.BOTTOM));
         final JLabel label4 = new JLabel();
-        label4.setText("Saving Progress:");
+        label4.setText("Saving Progress (Index):");
         contentPane.add(label4, cc.xy(1, 7));
         savingProgressBar = new JProgressBar();
         savingProgressBar.setStringPainted(true);
         contentPane.add(savingProgressBar, cc.xy(3, 7, CellConstraints.FILL, CellConstraints.DEFAULT));
+        final JLabel label5 = new JLabel();
+        label5.setText("Saving Progress (Documents):");
+        contentPane.add(label5, cc.xy(1, 9));
+        savingDocsProgressBar = new JProgressBar();
+        savingDocsProgressBar.setStringPainted(true);
+        contentPane.add(savingDocsProgressBar, cc.xy(3, 9, CellConstraints.FILL, CellConstraints.DEFAULT));
+        final JPanel panel1 = new JPanel();
+        panel1.setLayout(new FormLayout("fill:d:grow,left:4dlu:noGrow,fill:d:noGrow,left:4dlu:noGrow,fill:max(d;4px):noGrow", "top:d:noGrow"));
+        contentPane.add(panel1, cc.xyw(1, 11, 3, CellConstraints.DEFAULT, CellConstraints.BOTTOM));
+        buttonCancel = new JButton();
+        buttonCancel.setEnabled(false);
+        buttonCancel.setText("Cancel");
+        panel1.add(buttonCancel, cc.xy(3, 1, CellConstraints.RIGHT, CellConstraints.BOTTOM));
+        closeButton = new JButton();
+        closeButton.setEnabled(false);
+        closeButton.setText("Close");
+        panel1.add(closeButton, cc.xy(5, 1, CellConstraints.DEFAULT, CellConstraints.BOTTOM));
     }
 
     /**
