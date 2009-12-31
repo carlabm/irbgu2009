@@ -2,22 +2,18 @@
 <project version="4">
   <component name="ChangeListManager" verified="true">
     <list default="true" readonly="true" id="156d3955-5176-423a-92a9-52a5ff1fd474" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/SavingEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexingDialog.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexingDialog.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/ReaderEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/PostingFileUtils.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/PostingFileUtils.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexDialog.form" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/UpFacade.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/Configuration.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/Configuration.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexingDialog.form" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexingDialog.form" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/Parser.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/Parser.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/ParserEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/ReadFile.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/ReadFile.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/commons-logging-1.1.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/commons-logging-1.1.1-javadoc.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/forms-1.2.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/commons-io-1.4-javadoc.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/axiom.jar" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/DownFacade.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/IndexerEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/Indexer.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/Indexer.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexDialog.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/commons-io-1.4.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/commons-logging-api-1.1.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/log4j-1.2.15.jar" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ir2009.iml" afterPath="$PROJECT_DIR$/ir2009.iml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/commons-logging-adapters-1.1.1.jar" />
     </list>
     <ignored path=".idea/workspace.xml" />
     <ignored path="ir2009.iws" />
