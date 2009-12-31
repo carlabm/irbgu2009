@@ -1,5 +1,6 @@
 package edu.bgu.ir2009;
 
+import edu.bgu.ir2009.auxiliary.*;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
@@ -24,15 +25,15 @@ public class Indexer {
     private static final Object eventsLock = new Object();
     private final Map<String, TermData> index = new HashMap<String, TermData>();
     private final Set<ParsedDocument> docsCache = new HashSet<ParsedDocument>();
-    private final PostingFileUtils postingFileUtils;
     private final ExecutorService executor;
-    private final Parser parser;
+    private Parser parser;
     private final Configuration config;
     private final Object lock = new Object();
 
     private boolean isStarted = false;
     private int indexedDocs = 0;
     private int totalIndexedDocs = 0;
+    private InMemoryIndex memoryIndex;
 
     public Indexer(String docsDir, String srcStopWordsFileName, boolean useStemmer) {
         this(new Configuration(docsDir, srcStopWordsFileName, useStemmer));
@@ -45,7 +46,6 @@ public class Indexer {
     public Indexer(Parser parser, Configuration config) {
         this.parser = parser;
         this.config = config;
-        postingFileUtils = new PostingFileUtils(config);
         executor = Executors.newFixedThreadPool(config.getIndexerThreadsCount());
     }
 
@@ -65,27 +65,46 @@ public class Indexer {
         executor.execute(new Runnable() {
             public void run() {
                 ParsedDocument doc;
-                while ((doc = parser.getNextParsedDocument()) != null) {
+                while (!executor.isShutdown() && (doc = parser.getNextParsedDocument()) != null) {
                     synchronized (eventsLock) {
                         totalIndexedDocs++;
                     }
                     executor.execute(new IndexerWorker(doc));
                 }
-                new Thread(new Runnable() {
-                    public void run() {
-                        executor.shutdown();
-                        try {
-                            executor.awaitTermination(10, TimeUnit.DAYS);
-                            postingFileUtils.saveIndex(index);
-                        } catch (InterruptedException e) {
-                            logger.warn(e, e);
-                        } catch (Exception e) {
-                            logger.error(e, e);
+                parser = null;
+                if (!executor.isShutdown()) {
+                    new Thread(new Runnable() {
+                        public void run() {
+                            executor.shutdown();
+                            try {
+                                executor.awaitTermination(10, TimeUnit.DAYS);
+                                memoryIndex = PostingFileUtils.saveIndex(index, config);
+                                PostingFileUtils.saveParsedDocuments(docsCache, config);
+                                docsCache.clear();
+                                index.clear();
+                            } catch (InterruptedException e) {
+                                logger.warn(e, e);
+                            } catch (Exception e) {
+                                logger.error(e, e);
+                            }
                         }
-                    }
-                }).start();
+                    }).start();
+                } else {
+                    docsCache.clear();
+                    index.clear();
+                }
             }
         });
+    }
+
+    public InMemoryIndex getMemoryIndex() {
+        return memoryIndex;
+    }
+
+    public void stop() {
+        executor.shutdownNow();
+        parser.stop();
+        parser = null;
     }
 
     private void indexParsedDocument(ParsedDocument doc) throws IOException {

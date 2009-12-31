@@ -1,4 +1,6 @@
-package edu.bgu.ir2009;
+package edu.bgu.ir2009.auxiliary;
+
+import edu.bgu.ir2009.Indexer;
 
 import java.util.Observable;
 
@@ -43,5 +45,15 @@ public class UpFacade extends Observable {
     public void addIndexSavingEvent(int savedTerm, int totalTerms) {
         setChanged();
         notifyObservers(new SavingEvent(savedTerm, totalTerms));
+    }
+
+    public void addDocumentsSavingEvent(int savedDocs, int totalDocs) {
+        setChanged();
+        notifyObservers(new DocumentsSavingEvent(savedDocs, totalDocs));
+    }
+
+    public void addIndexBindEvent(Indexer indexEvent) {
+        setChanged();
+        notifyObservers(new IndexEvent(indexEvent));
     }
 }

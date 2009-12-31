@@ -2,7 +2,7 @@ package edu.bgu.ir2009.gui;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import edu.bgu.ir2009.DownFacade;
+import edu.bgu.ir2009.auxiliary.DownFacade;
 import org.apache.log4j.BasicConfigurator;
 
 import javax.swing.*;

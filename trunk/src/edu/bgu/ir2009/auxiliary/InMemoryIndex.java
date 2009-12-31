@@ -1,4 +1,4 @@
-package edu.bgu.ir2009;
+package edu.bgu.ir2009.auxiliary;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
@@ -35,6 +35,10 @@ public class InMemoryIndex {
             offset += line.length() + 1;
         }
         reader.close();
+    }
+
+    public void addTerm(String term, long offset) {
+        termOffsets.put(term, offset);
     }
 
     public TermData getTermData(String term) throws IOException {

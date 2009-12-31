@@ -1,4 +1,4 @@
-package edu.bgu.ir2009;
+package edu.bgu.ir2009.auxiliary;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

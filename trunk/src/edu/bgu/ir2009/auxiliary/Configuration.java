@@ -1,4 +1,4 @@
-package edu.bgu.ir2009;
+package edu.bgu.ir2009.auxiliary;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -70,8 +70,8 @@ public class Configuration {
         indexFileName = newDirName + "/" + INDEX_FILE_NAME;
         this.srcStopWordsFileName = newDirName + "/" + STOP_WORDS_FILE_NAME;
         copyStopWordsFile(stopWordsFile, this.srcStopWordsFileName);
-        readerThreadsCount = 3;
-        parserThreadsCount = 1;
+        readerThreadsCount = 2;
+        parserThreadsCount = 2;
         indexerThreadsCount = 2;
         saveConfFile(newDirName + "/" + CONF_FILE_NAME);
     }
