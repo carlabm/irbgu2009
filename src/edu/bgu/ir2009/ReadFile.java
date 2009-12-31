@@ -20,12 +20,15 @@ import java.util.concurrent.*;
 public class ReadFile {
     private final static Logger logger = Logger.getLogger(ReadFile.class);
     private final static UnParsedDocument emptyDoc = new UnParsedDocument();
+    private final static Object lock = new Object();
 
     private final String dirName;
     private final ExecutorService executor;
     private final BlockingQueue<UnParsedDocument> docQueue = new LinkedBlockingQueue<UnParsedDocument>();
 
     private boolean isStarted = false;
+    private int totalFiles;
+    private int filesRead = 0;
 
     public ReadFile(String docsDir, String srcStopWordsFileName, boolean useStemmer) {
         this(new Configuration(docsDir, srcStopWordsFileName, useStemmer));
@@ -48,6 +51,8 @@ public class ReadFile {
             public void run() {
                 File file = new File(dirName);
                 String[] files = file.list();
+                totalFiles = files.length;
+                UpFacade.getInstance().addReaderEvent(0, totalFiles);
                 for (int i = 0, filesLength = files.length; i < filesLength; i++) {
                     String fileName = files[i];
                     logger.info(fileName + " is being submitted for reading...");
@@ -155,6 +160,10 @@ public class ReadFile {
         public void run() {
             try {
                 read(fileName);
+                synchronized (lock) {
+                    filesRead++;
+                    UpFacade.getInstance().addReaderEvent(filesRead, totalFiles);
+                }
             } catch (Exception e) {
                 logger.error(e, e);
             }

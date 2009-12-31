@@ -70,8 +70,8 @@ public class Configuration {
         indexFileName = newDirName + "/" + INDEX_FILE_NAME;
         this.srcStopWordsFileName = newDirName + "/" + STOP_WORDS_FILE_NAME;
         copyStopWordsFile(stopWordsFile, this.srcStopWordsFileName);
-        readerThreadsCount = 2;
-        parserThreadsCount = 2;
+        readerThreadsCount = 3;
+        parserThreadsCount = 1;
         indexerThreadsCount = 2;
         saveConfFile(newDirName + "/" + CONF_FILE_NAME);
     }

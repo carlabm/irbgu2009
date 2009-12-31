@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class Indexer {
     private static final Logger logger = Logger.getLogger(Indexer.class);
+    private static final Object eventsLock = new Object();
     private final Map<String, TermData> index = new HashMap<String, TermData>();
     private final Set<ParsedDocument> docsCache = new HashSet<ParsedDocument>();
     private final PostingFileUtils postingFileUtils;
@@ -30,6 +31,8 @@ public class Indexer {
     private final Object lock = new Object();
 
     private boolean isStarted = false;
+    private int indexedDocs = 0;
+    private int totalIndexedDocs = 0;
 
     public Indexer(String docsDir, String srcStopWordsFileName, boolean useStemmer) {
         this(new Configuration(docsDir, srcStopWordsFileName, useStemmer));
@@ -46,6 +49,10 @@ public class Indexer {
         executor = Executors.newFixedThreadPool(config.getIndexerThreadsCount());
     }
 
+    public Configuration getConfig() {
+        return config;
+    }
+
     public void start() throws XMLStreamException, FileNotFoundException {
         synchronized (this) {
             if (!isStarted) {
@@ -59,6 +66,9 @@ public class Indexer {
             public void run() {
                 ParsedDocument doc;
                 while ((doc = parser.getNextParsedDocument()) != null) {
+                    synchronized (eventsLock) {
+                        totalIndexedDocs++;
+                    }
                     executor.execute(new IndexerWorker(doc));
                 }
                 new Thread(new Runnable() {
@@ -107,6 +117,10 @@ public class Indexer {
         public void run() {
             try {
                 indexParsedDocument(doc);
+                synchronized (eventsLock) {
+                    indexedDocs++;
+                    UpFacade.getInstance().addIndexerEvent(indexedDocs, totalIndexedDocs);
+                }
             } catch (IOException e) {
                 logger.error(e, e);
             }

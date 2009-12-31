@@ -19,6 +19,7 @@ import java.util.concurrent.*;
 public class Parser {
     private final static Logger logger = Logger.getLogger(Parser.class);
     private final static ParsedDocument emptyParsedDoc = new ParsedDocument(new UnParsedDocument());
+    private final static Object lock = new Object();
 
     private final Set<String> stopWordsSet = new HashSet<String>();
     private final boolean useStemmer;
@@ -29,6 +30,9 @@ public class Parser {
 
     private boolean isStarted = false;
     private Stemmer stemmer;
+    private int totalUnParsedDocuments = 0;
+    private int totalParsedDocuments = 0;
+
 
     public Parser(Configuration config) {
         this(new ReadFile(config), config);
@@ -76,6 +80,9 @@ public class Parser {
             public void run() {
                 UnParsedDocument doc;
                 while ((doc = reader.getNextDocument()) != null) {
+                    synchronized (lock) {
+                        totalUnParsedDocuments++;
+                    }
                     logger.info("Document " + doc.getDocNo() + " is being submitted for parsing...");
                     executor.execute(new ParserWorker(doc));
                 }
@@ -162,6 +169,10 @@ public class Parser {
 
         public void run() {
             parse(doc, true);
+            synchronized (lock) {
+                totalParsedDocuments++;
+                UpFacade.getInstance().addParserEvent(totalParsedDocuments, totalUnParsedDocuments);
+            }
         }
     }
 }
