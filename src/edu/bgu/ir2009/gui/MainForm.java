@@ -1,5 +1,7 @@
 package edu.bgu.ir2009.gui;
 
+import com.jgoodies.forms.layout.FormLayout;
+
 import javax.swing.*;
 
 /**
@@ -54,7 +56,7 @@ public class MainForm {
      */
     private void $$$setupUI$$$() {
         root = new JPanel();
-        root.setLayout(new com.jgoodies.forms.layout.FormLayout("", ""));
+        root.setLayout(new FormLayout("", ""));
     }
 
     /**

@@ -13,14 +13,14 @@ import java.util.Properties;
  */
 public class Configuration {
     private static final Logger logger = Logger.getLogger(Configuration.class);
-    private static final String SAVED_DOCS_DIR = "saved_docs";
+    private static final String SAVED_DOCS_FILE_NAME = "saved_docs";
     private static final String INDEX_FILE_NAME = "index";
     private static final String STOP_WORDS_FILE_NAME = "stop_words.txt";
     private static final String CONF_FILE_NAME = "conf.txt";
 
     private final Properties config = new Properties();
     private final String docsDir;
-    private final String savedDocsDir;
+    private final String savedDocsFileName;
     private final String indexFileName;
     private final Boolean useStemmer;
     private final String srcStopWordsFileName;
@@ -64,9 +64,8 @@ public class Configuration {
             throw new RuntimeException("Could not create directory for current configuration!");
         }
         String newDirName = newDir.getName();
-        savedDocsDir = newDirName + "/" + SAVED_DOCS_DIR;
+        savedDocsFileName = newDirName + "/" + SAVED_DOCS_FILE_NAME;
         //noinspection ResultOfMethodCallIgnored
-        new File(savedDocsDir).mkdir();
         indexFileName = newDirName + "/" + INDEX_FILE_NAME;
         this.srcStopWordsFileName = newDirName + "/" + STOP_WORDS_FILE_NAME;
         copyStopWordsFile(stopWordsFile, this.srcStopWordsFileName);
@@ -86,7 +85,7 @@ public class Configuration {
 
     private void saveConfFile(String confFileName) {
         config.setProperty("docsDir", docsDir);
-        config.setProperty("savedDocsDir", savedDocsDir);
+        config.setProperty("savedDocsFileName", savedDocsFileName);
         config.setProperty("indexFileName", indexFileName);
         config.setProperty("useStemmer", String.valueOf(useStemmer));
         config.setProperty("srcStopWordsFileName", srcStopWordsFileName);
@@ -110,7 +109,7 @@ public class Configuration {
             exceptionThrown = true;
         }
         docsDir = config.getProperty("docsDir", "src_docs");
-        savedDocsDir = config.getProperty("savedDocsDir", "docs");
+        savedDocsFileName = config.getProperty("savedDocsFileName", "docs");
         indexFileName = config.getProperty("indexFileName", "index");
         useStemmer = Boolean.parseBoolean(config.getProperty("useStemmer", "true"));
         srcStopWordsFileName = config.getProperty("srcStopWordsFileName", "stop_words.txt");
@@ -142,8 +141,8 @@ public class Configuration {
         return readerThreadsCount;
     }
 
-    public String getSavedDocsDir() {
-        return savedDocsDir;
+    public String getSavedDocsFileName() {
+        return savedDocsFileName;
     }
 
     public String getSrcStopWordsFileName() {
