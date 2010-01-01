@@ -34,6 +34,7 @@ public class Indexer {
     private int indexedDocs = 0;
     private int totalIndexedDocs = 0;
     private InMemoryIndex memoryIndex;
+    private InMemoryDocs inMemoryDocs;
 
     public Indexer(String docsDir, String srcStopWordsFileName, boolean useStemmer) {
         this(new Configuration(docsDir, srcStopWordsFileName, useStemmer));
@@ -79,9 +80,10 @@ public class Indexer {
                             try {
                                 executor.awaitTermination(10, TimeUnit.DAYS);
                                 memoryIndex = PostingFileUtils.saveIndex(index, config);
-                                PostingFileUtils.saveParsedDocuments(docsCache, config);
+                                inMemoryDocs = PostingFileUtils.saveParsedDocuments(docsCache, config);
                                 docsCache.clear();
                                 index.clear();
+                                System.gc();
                             } catch (InterruptedException e) {
                                 logger.warn(e, e);
                             } catch (Exception e) {
@@ -99,6 +101,10 @@ public class Indexer {
 
     public InMemoryIndex getMemoryIndex() {
         return memoryIndex;
+    }
+
+    public InMemoryDocs getInMemoryDocs() {
+        return inMemoryDocs;
     }
 
     public void stop() {

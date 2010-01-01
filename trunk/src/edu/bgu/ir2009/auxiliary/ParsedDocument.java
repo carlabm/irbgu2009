@@ -8,11 +8,56 @@ import java.util.*;
  * Time: 19:02:24
  */
 public class ParsedDocument {
-    private final UnParsedDocument unParsedDoc;
     private final Map<String, Set<Long>> terms = new HashMap<String, Set<Long>>();
+    private final String docNo;
+    private final long date;
+    private final String byLine;
+    private final String cn;
+    private final String in;
+    private final String tp;
+    private final String pub;
+    private final String page;
+    private final String text;
 
     public ParsedDocument(UnParsedDocument unParsedDoc) {
-        this.unParsedDoc = unParsedDoc;
+        docNo = unParsedDoc.getDocNo();
+        date = unParsedDoc.getDate();
+        byLine = unParsedDoc.getByLine();
+        cn = unParsedDoc.getCn();
+        in = unParsedDoc.getIn();
+        tp = unParsedDoc.getTp();
+        pub = unParsedDoc.getPub();
+        page = unParsedDoc.getPage();
+        text = unParsedDoc.getText();
+    }
+
+    public ParsedDocument(String serialized) {
+        int start = 0;
+        int end = serialized.indexOf('|');
+        docNo = serialized.substring(start, end);
+        start = end + 1;
+        end = serialized.indexOf('|', start);
+        date = Long.parseLong(serialized.substring(start, end));
+        start = end + 1;
+        end = serialized.indexOf('|', start);
+        byLine = serialized.substring(start, end);
+        start = end + 1;
+        end = serialized.indexOf('|', start);
+        cn = serialized.substring(start, end);
+        start = end + 1;
+        end = serialized.indexOf('|', start);
+        in = serialized.substring(start, end);
+        start = end + 1;
+        end = serialized.indexOf('|', start);
+        tp = serialized.substring(start, end);
+        start = end + 1;
+        end = serialized.indexOf('|', start);
+        pub = serialized.substring(start, end);
+        start = end + 1;
+        end = serialized.indexOf('|', start);
+        page = serialized.substring(start, end);
+        start = end + 1;
+        text = serialized.substring(start);
     }
 
     public void addTerm(String term, long pos) {
@@ -28,6 +73,19 @@ public class ParsedDocument {
         return Collections.unmodifiableMap(terms);
     }
 
+    public String serialize() {
+        StringBuilder builder = new StringBuilder();
+        return builder.append(docNo.replace('|', ' ')).append('|')
+                .append(date).append('|')
+                .append(byLine.replace('|', ' ')).append('|')
+                .append(cn.replace('|', ' ')).append('|')
+                .append(in.replace('|', ' ')).append('|')
+                .append(tp.replace('|', ' ')).append('|')
+                .append(pub.replace('|', ' ')).append('|')
+                .append(page.replace('|', ' ')).append('|')
+                .append(text).toString();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -35,49 +93,49 @@ public class ParsedDocument {
 
         ParsedDocument that = (ParsedDocument) o;
 
-        if (!getDocNo().equals(that.getDocNo())) return false;
+        if (!docNo.equals(that.docNo)) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return getDocNo().hashCode();
-    }
-
-    public long getDate() {
-        return unParsedDoc.getDate();
-    }
-
-    public String getIn() {
-        return unParsedDoc.getIn();
-    }
-
-    public String getTp() {
-        return unParsedDoc.getTp();
-    }
-
-    public String getPub() {
-        return unParsedDoc.getPub();
-    }
-
-    public String getByLine() {
-        return unParsedDoc.getByLine();
-    }
-
-    public String getCn() {
-        return unParsedDoc.getCn();
+        return docNo.hashCode();
     }
 
     public String getDocNo() {
-        return unParsedDoc.getDocNo();
+        return docNo;
+    }
+
+    public long getDate() {
+        return date;
+    }
+
+    public String getByLine() {
+        return byLine;
+    }
+
+    public String getCn() {
+        return cn;
+    }
+
+    public String getIn() {
+        return in;
+    }
+
+    public String getTp() {
+        return tp;
+    }
+
+    public String getPub() {
+        return pub;
     }
 
     public String getPage() {
-        return unParsedDoc.getPage();
+        return page;
     }
 
     public String getText() {
-        return unParsedDoc.getText();
+        return text;
     }
 }
