@@ -18,20 +18,9 @@ public class TermData implements Comparable<TermData> {
         this.frequency = 0;
     }
 
-    public TermData(String term, String serialized) throws ParseException {
+    public TermData(String term, String serialized)  {
         this.term = term;
         extractFrequency(serialized);
-        validate(serialized);
-    }
-
-    private void validate(String originalSerialized) throws ParseException {
-        long calculatedFreq = 0;
-        for (Set<Long> postings : postingsMap.values()) {
-            calculatedFreq += postings.size();
-        }
-        if (calculatedFreq != frequency) {
-            throw new ParseException("parsing term data for " + term + " failed! Original serialized: " + originalSerialized, 0);
-        }
     }
 
     private void extractFrequency(String serialized) {
