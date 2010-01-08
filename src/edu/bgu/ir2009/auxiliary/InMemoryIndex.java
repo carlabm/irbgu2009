@@ -7,7 +7,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,12 +46,7 @@ public class InMemoryIndex {
         if (termOffset != null) {
             RandomAccessFile file = new RandomAccessFile(config.getIndexFileName(), "r");
             file.seek(termOffset);
-            try {
-                res = new TermData(term, file.readLine());
-            } catch (ParseException e) {
-                logger.error(e, e);
-                res = null;
-            }
+            res = new TermData(term, file.readLine());
             file.close();
         }
         return res;

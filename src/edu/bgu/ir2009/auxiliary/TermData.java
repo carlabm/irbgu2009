@@ -1,6 +1,5 @@
 package edu.bgu.ir2009.auxiliary;
 
-import java.text.ParseException;
 import java.util.*;
 
 /**
@@ -10,46 +9,18 @@ import java.util.*;
  */
 public class TermData implements Comparable<TermData> {
     private final String term;
-    private long frequency;
     private Map<String, Set<Long>> postingsMap = new HashMap<String, Set<Long>>();
+    private long frequency;
+    private double idf = -1D;
 
     public TermData(String term) {
         this.term = term;
         this.frequency = 0;
     }
 
-    public TermData(String term, String serialized)  {
+    public TermData(String term, String serialized) {
         this.term = term;
         extractFrequency(serialized);
-    }
-
-    private void extractFrequency(String serialized) {
-        int startIndex = serialized.indexOf(':') + 1;
-        int endIndex = serialized.indexOf('[');
-        frequency = Long.parseLong(serialized.substring(startIndex, endIndex));
-        extractPostings(serialized.substring(endIndex + 1));
-    }
-
-    private void extractPostings(String serialized) {
-        int endIndex;
-        while ((endIndex = serialized.indexOf('|')) != -1 || (endIndex = serialized.indexOf(']')) != -1) {
-            String working = serialized.substring(0, endIndex);
-            extractPosting(working);
-            serialized = serialized.substring(endIndex + 1);
-        }
-    }
-
-    private void extractPosting(String working) {
-        int docNameIndex = working.indexOf('{');
-        String docNo = working.substring(0, docNameIndex);
-        working = working.substring(docNameIndex + 1);
-        Set<Long> postings = new LinkedHashSet<Long>();
-        int endIndex;
-        while ((endIndex = working.indexOf(',')) != -1 || (endIndex = working.indexOf('}')) != -1) {
-            postings.add(Long.parseLong(working.substring(0, endIndex)));
-            working = working.substring(endIndex + 1);
-        }
-        postingsMap.put(docNo, postings);
     }
 
     public void addPosting(String docNo, Set<Long> postings) {
@@ -98,5 +69,42 @@ public class TermData implements Comparable<TermData> {
 
     public int compareTo(TermData o) {
         return (int) (frequency - o.frequency);
+    }
+
+    public void setTotalDocs(long totalDocs) {
+        idf = Math.log10((double) totalDocs / postingsMap.size());
+    }
+
+    public double getIdf() {
+        return idf;
+    }
+
+    private void extractFrequency(String serialized) {
+        int startIndex = serialized.indexOf(':') + 1;
+        int endIndex = serialized.indexOf('[');
+        frequency = Long.parseLong(serialized.substring(startIndex, endIndex));
+        extractPostings(serialized.substring(endIndex + 1));
+    }
+
+    private void extractPostings(String serialized) {
+        int endIndex;
+        while ((endIndex = serialized.indexOf('|')) != -1 || (endIndex = serialized.indexOf(']')) != -1) {
+            String working = serialized.substring(0, endIndex);
+            extractPosting(working);
+            serialized = serialized.substring(endIndex + 1);
+        }
+    }
+
+    private void extractPosting(String working) {
+        int docNameIndex = working.indexOf('{');
+        String docNo = working.substring(0, docNameIndex);
+        working = working.substring(docNameIndex + 1);
+        Set<Long> postings = new LinkedHashSet<Long>();
+        int endIndex;
+        while ((endIndex = working.indexOf(',')) != -1 || (endIndex = working.indexOf('}')) != -1) {
+            postings.add(Long.parseLong(working.substring(0, endIndex)));
+            working = working.substring(endIndex + 1);
+        }
+        postingsMap.put(docNo, postings);
     }
 }
