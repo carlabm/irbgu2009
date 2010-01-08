@@ -1,5 +1,6 @@
 package edu.bgu.ir2009.auxiliary;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedWriter;
@@ -21,7 +22,7 @@ public class PostingFileUtils {
         logger.info("Saving index to file: " + config.getIndexFileName());
         File file = new File(config.getIndexFileName());
         if (file.exists()) {
-            file.delete();
+            FileUtils.deleteQuietly(file);
         }
         InMemoryIndex res = new InMemoryIndex(config);
         FileWriter writer = new FileWriter(file);

@@ -2,7 +2,12 @@
 <project version="4">
   <component name="ChangeListManager" verified="true">
     <list default="true" readonly="true" id="156d3955-5176-423a-92a9-52a5ff1fd474" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/ParsedDocument.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/ParsedDocument.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/PostingFileUtils.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/PostingFileUtils.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/InMemoryIndex.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/InMemoryIndex.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/TermData.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/TermData.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/Indexer.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/Indexer.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="ir2009.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -22,7 +27,7 @@
   </component>
   <component name="DebuggerManager">
     <line_breakpoints>
-      <breakpoint url="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/InMemoryIndex.java" line="65" class="edu.bgu.ir2009.auxiliary.InMemoryIndex" package="edu.bgu.ir2009.auxiliary">
+      <breakpoint url="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/InMemoryIndex.java" line="59" class="edu.bgu.ir2009.auxiliary.InMemoryIndex" package="edu.bgu.ir2009.auxiliary">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -36,6 +41,32 @@
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
       <breakpoint url="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/InMemoryDocs.java" line="59" class="edu.bgu.ir2009.auxiliary.InMemoryDocs" package="edu.bgu.ir2009.auxiliary">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/src/edu/bgu/ir2009/Indexer.java" line="81" class="edu.bgu.ir2009.Indexer$1$1" package="edu.bgu.ir2009">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/src/edu/bgu/ir2009/Indexer.java" line="107" class="edu.bgu.ir2009.Indexer" package="edu.bgu.ir2009">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -96,8 +127,8 @@
       <property name="field_breakpoints_groupByClasses" value="true" />
       <property name="method_breakpoints_groupByClasses" value="true" />
       <property name="exception_breakpoints_viewId" value="TABLE" />
-      <property name="field_breakpoints_viewId" value="TABLE" />
       <property name="exception_breakpoints_groupByClasses" value="true" />
+      <property name="field_breakpoints_viewId" value="TABLE" />
       <property name="method_breakpoints_groupByMethods" value="false" />
     </ui_properties>
   </component>
@@ -110,7 +141,25 @@
       <file leaf-file-name="Indexer.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/Indexer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="105" column="43" selection-start="3742" selection-end="3742" vertical-scroll-proportion="0.0">
+            <state line="108" column="0" selection-start="3897" selection-end="3897" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ParsedDocument.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/ParsedDocument.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="92" column="43" selection-start="3140" selection-end="3140" vertical-scroll-proportion="0.33333334">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TermData.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/TermData.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="75" column="0" selection-start="2426" selection-end="2426" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -120,9 +169,7 @@
         <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexDialog.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="77" column="0" selection-start="2864" selection-end="2864" vertical-scroll-proportion="0.0">
-              <folding>
-                <marker date="1356978923593" expanded="false" signature="3568:6407" placeholder="UI Designer generated code" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -130,18 +177,7 @@
       <file leaf-file-name="PostingFileUtils.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/PostingFileUtils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="19" column="3" selection-start="437" selection-end="437" vertical-scroll-proportion="0.0">
-              <folding>
-                <marker date="1262349928125" expanded="false" signature="42:218" placeholder="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ParsedDocument.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/ParsedDocument.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="59" column="41" selection-start="2020" selection-end="2020" vertical-scroll-proportion="0.0">
+            <state line="27" column="42" selection-start="899" selection-end="899" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -160,9 +196,7 @@
         <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/InMemoryDocs.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="59" column="0" selection-start="1927" selection-end="1927" vertical-scroll-proportion="0.0">
-              <folding>
-                <marker date="1262349928140" expanded="true" signature="42:277" placeholder="..." />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -170,17 +204,10 @@
       <file leaf-file-name="InMemoryIndex.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/InMemoryIndex.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="50" column="29" selection-start="1601" selection-end="1601" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TermData.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/TermData.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="20" column="52" selection-start="534" selection-end="534" vertical-scroll-proportion="0.43936732">
-              <folding />
+            <state line="48" column="54" selection-start="1575" selection-end="1575" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -213,7 +240,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/InMemoryIndex.java" />
         <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/DocumentsSavingEvent.java" />
         <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/UnParsedDocument.java" />
         <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/IndexEvent.java" />
@@ -224,11 +250,12 @@
         <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexingDialog.java" />
         <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexingDialog.form" />
         <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/Configuration.java" />
+        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/InMemoryDocs.java" />
+        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/TermData.java" />
+        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/InMemoryIndex.java" />
         <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/PostingFileUtils.java" />
         <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/Indexer.java" />
-        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/InMemoryDocs.java" />
         <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/ParsedDocument.java" />
-        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/TermData.java" />
       </list>
     </option>
   </component>
@@ -255,7 +282,7 @@
     <option name="STATE" value="0" />
   </component>
   <component name="ProjectView">
-    <navigator currentView="ProjectPane" proportions="" version="1" splitterProportion="0.5">
+    <navigator proportions="" version="1" splitterProportion="0.5">
       <flattenPackages />
       <showMembers />
       <showModules />
@@ -267,12 +294,12 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="Favorites" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane />
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="Favorites" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -291,9 +318,9 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="dynamic.classpath" value="false" />
-    <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
+    <property name="dynamic.classpath" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
@@ -305,7 +332,7 @@
       <recent name="edu.bgu.ir2009.gui" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.InMemoryDocs">
+  <component name="RunManager" selected="Application.IndexDialog">
     <configuration default="false" name="MainForm" type="Application" factoryName="Application" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -640,14 +667,14 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-4" y="-4" width="1928" height="1178" extended-state="7" />
+    <frame x="-4" y="-4" width="1288" height="1002" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16044776" sideWeight="0.56790125" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33432835" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3340935" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29371002" sideWeight="0.56790125" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.59749144" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.42830008" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.42759407" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -660,8 +687,8 @@
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4254511" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16044776" sideWeight="0.56790125" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.328585" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24986653" sideWeight="0.56790125" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39960822" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -745,76 +772,64 @@
         <state />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexDialog.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="77" column="0" selection-start="2864" selection-end="2864" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/Parser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="148" column="28" selection-start="5491" selection-end="5491" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/PostingFileUtils.java">
+    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/InMemoryDocs.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="3" selection-start="437" selection-end="437" vertical-scroll-proportion="0.0">
-          <folding>
-            <marker date="1262349928125" expanded="false" signature="42:218" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexDialog.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="77" column="0" selection-start="2864" selection-end="2864" vertical-scroll-proportion="0.0">
-          <folding>
-            <marker date="1356978923593" expanded="false" signature="3568:6407" placeholder="UI Designer generated code" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/Indexer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="105" column="43" selection-start="3742" selection-end="3742" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/lib/log4j-1.2.15.jar!/org/apache/log4j/Logger.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="42" selection-start="469" selection-end="469" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="59" column="0" selection-start="1927" selection-end="1927" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/Configuration.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="121" column="0" selection-start="5304" selection-end="5304" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="121" column="0" selection-start="5304" selection-end="5304" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/ParsedDocument.java">
+    <entry file="jar://$PROJECT_DIR$/lib/log4j-1.2.15.jar!/org/apache/log4j/Logger.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="59" column="41" selection-start="2020" selection-end="2020" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/InMemoryDocs.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="59" column="0" selection-start="1927" selection-end="1927" vertical-scroll-proportion="0.0">
-          <folding>
-            <marker date="1262349928140" expanded="true" signature="42:277" placeholder="..." />
-          </folding>
-        </state>
+        <state line="12" column="42" selection-start="469" selection-end="469" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/InMemoryIndex.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="50" column="29" selection-start="1601" selection-end="1601" vertical-scroll-proportion="0.0">
+        <state line="48" column="54" selection-start="1575" selection-end="1575" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/PostingFileUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="27" column="42" selection-start="899" selection-end="899" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/TermData.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="52" selection-start="534" selection-end="534" vertical-scroll-proportion="0.43936732">
+        <state line="75" column="0" selection-start="2426" selection-end="2426" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/Indexer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="108" column="0" selection-start="3897" selection-end="3897" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/ParsedDocument.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="92" column="43" selection-start="3140" selection-end="3140" vertical-scroll-proportion="0.33333334">
           <folding />
         </state>
       </provider>

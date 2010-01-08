@@ -79,6 +79,7 @@ public class Indexer {
                             executor.shutdown();
                             try {
                                 executor.awaitTermination(10, TimeUnit.DAYS);
+                                doPreProcessing();
                                 memoryIndex = PostingFileUtils.saveIndex(index, config);
                                 inMemoryDocs = PostingFileUtils.saveParsedDocuments(docsCache, config);
                                 docsCache.clear();
@@ -97,6 +98,16 @@ public class Indexer {
                 }
             }
         });
+    }
+
+    private void doPreProcessing() {
+        long totalDocs = docsCache.size();
+        for (TermData term : index.values()) {
+            term.setTotalDocs(totalDocs);
+        }
+        for (ParsedDocument doc : docsCache) {
+            doc.finalizeDocument(index);
+        }
     }
 
     public InMemoryIndex getMemoryIndex() {

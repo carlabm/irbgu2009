@@ -9,6 +9,7 @@ import java.util.*;
  */
 public class ParsedDocument {
     private final Map<String, Set<Long>> terms = new HashMap<String, Set<Long>>();
+    private final Map<String, Double> documentVector = new HashMap<String, Double>();
     private final String docNo;
     private final long date;
     private final String byLine;
@@ -69,8 +70,27 @@ public class ParsedDocument {
         posSet.add(pos);
     }
 
+    public void finalizeDocument(Map<String, TermData> termsData) {
+        double docLength = 0D;
+        for (String term : terms.keySet()) {
+            TermData termData = termsData.get(term);
+            int termFreq = terms.get(term).size();
+            double td_idf = termData.getIdf() * termFreq;
+            docLength += td_idf * td_idf;
+        }
+        docLength = Math.sqrt(docLength);
+        for (String term : terms.keySet()) {
+            int termFreq = terms.get(term).size();
+            documentVector.put(term, termFreq / docLength);
+        }
+    }
+
     public Map<String, Set<Long>> getTerms() {
         return Collections.unmodifiableMap(terms);
+    }
+
+    public Map<String, Double> getDocumentVector() {
+        return Collections.unmodifiableMap(documentVector);
     }
 
     public String serialize() {
