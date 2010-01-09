@@ -93,7 +93,7 @@ public class InMemoryIndex {
 
     public static void main(String[] args) throws IOException {
         BasicConfigurator.configure();
-        InMemoryIndex memoryIndex = new InMemoryIndex(new Configuration("2/conf.txt"));
+        InMemoryIndex memoryIndex = new InMemoryIndex(new Configuration("1/conf.txt"));
         memoryIndex.load();
         TermData termData = memoryIndex.getTermData("justif");
         for (String doc : termData.getPostingsMap().keySet()) {

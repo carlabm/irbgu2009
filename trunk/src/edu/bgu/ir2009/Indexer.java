@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -55,7 +56,8 @@ public class Indexer {
         return config;
     }
 
-    public void start() throws XMLStreamException, FileNotFoundException {
+    public CountDownLatch start() throws XMLStreamException, FileNotFoundException {
+        final CountDownLatch res = new CountDownLatch(1);
         synchronized (this) {
             if (!isStarted) {
                 parser.start();
@@ -82,10 +84,13 @@ public class Indexer {
                                 executor.awaitTermination(10, TimeUnit.DAYS);
                                 doPreProcessing();
                                 memoryIndex = PostingFileUtils.saveIndex(index, documentsVectors, config);
+                                index.clear();
+                                documentsVectors.clear();
+                                System.gc();
                                 inMemoryDocs = PostingFileUtils.saveParsedDocuments(docsCache, config);
                                 docsCache.clear();
-                                index.clear();
                                 System.gc();
+                                res.countDown();
                             } catch (InterruptedException e) {
                                 logger.warn(e, e);
                             } catch (Exception e) {
@@ -99,6 +104,7 @@ public class Indexer {
                 }
             }
         });
+        return res;
     }
 
     private void doPreProcessing() {
@@ -107,11 +113,12 @@ public class Indexer {
             term.setTotalDocs(totalDocs);
         }
         for (ParsedDocument doc : docsCache) {
-            calculateDocumentVector(doc);
+            Map<String, Double> docVector = calculateDocumentVector(index, doc);
+            documentsVectors.put(doc.getDocNo(), docVector);
         }
     }
 
-    private void calculateDocumentVector(ParsedDocument doc) {
+    public static Map<String, Double> calculateDocumentVector(Map<String, TermData> index, ParsedDocument doc) {
         double docLength = 0.0;
         Map<String, Set<Long>> terms = doc.getTerms();
         for (String term : terms.keySet()) {
@@ -126,7 +133,7 @@ public class Indexer {
             int termFreq = terms.get(term).size();
             documentVector.put(term, termFreq / docLength);
         }
-        documentsVectors.put(doc.getDocNo(), documentVector);
+        return documentVector;
     }
 
     public InMemoryIndex getMemoryIndex() {
@@ -182,10 +189,20 @@ public class Indexer {
         }
     }
 
-    public static void main(String[] args) throws IOException, XMLStreamException {
+    public static void main(String[] args) throws IOException, XMLStreamException, InterruptedException {
         BasicConfigurator.configure();
-        Indexer indexer = new Indexer("tmp", "stop-words.txt", true);
-        indexer.start();
+        Indexer indexer = new Indexer("FT933", "stop-words.txt", true);
+        CountDownLatch countDownLatch = indexer.start();
+        countDownLatch.await();
+        InMemoryIndex memoryIndex = new InMemoryIndex(indexer.getConfig());
+        memoryIndex.load();
+        TermData termData = memoryIndex.getTermData("justif");
+        TermData termData2 = indexer.getMemoryIndex().getTermData("justif");
+        for (String doc : termData.getPostingsMap().keySet()) {
+            Map<String, Double> map = memoryIndex.getDocumentVector(doc);
+            Map<String, Double> map2 = indexer.getMemoryIndex().getDocumentVector(doc);
+            logger.info(map.equals(map2));
+        }
         int i = 0;
     }
 }

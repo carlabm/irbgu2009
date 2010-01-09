@@ -20,6 +20,14 @@ public class UnParsedDocument {
 
     private String text;
 
+    public UnParsedDocument() {
+    }
+
+    public UnParsedDocument(String docNo, String text) {
+        this.docNo = docNo;
+        this.text = text + ' ';
+    }
+
     public String getDocNo() {
         return docNo;
     }
@@ -85,7 +93,7 @@ public class UnParsedDocument {
     }
 
     public void setText(String text) {
-        this.text = text;
+        this.text = text + ' ';
     }
 
     public String getText() {
