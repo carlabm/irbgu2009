@@ -18,7 +18,7 @@ import java.util.Set;
 public class PostingFileUtils {
     private static final Logger logger = Logger.getLogger(PostingFileUtils.class);
 
-    public static InMemoryIndex saveIndex(Map<String, TermData> index, Configuration config) throws IOException {
+    public static InMemoryIndex saveIndex(Map<String, TermData> index, Map<String, Map<String, Double>> documentsVectors, Configuration config) throws IOException {
         logger.info("Saving index to file: " + config.getIndexFileName());
         File file = new File(config.getIndexFileName());
         if (file.exists()) {
@@ -36,6 +36,19 @@ public class PostingFileUtils {
             pos += termSerialized.length() + 1;
             saved++;
             UpFacade.getInstance().addIndexSavingEvent(saved, totalToSave);
+        }
+        writer.write('\n');
+        pos++;
+        for (String docNo : documentsVectors.keySet()) {
+            StringBuilder builder = new StringBuilder();
+            builder.append(docNo).append(':');
+            Map<String, Double> docVector = documentsVectors.get(docNo);
+            for (String term : docVector.keySet()) {
+                builder.append(term).append('=').append(docVector.get(term)).append(',');
+            }
+            String serializedDocVector = builder.toString();
+            writer.write(serializedDocVector + '\n');
+            pos += serializedDocVector.length() + 1;
         }
         writer.close();
         logger.info("Finished saving index...");

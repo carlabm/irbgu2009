@@ -54,9 +54,9 @@ public class InMemoryDocs {
 
     public static void main(String[] args) throws IOException {
         BasicConfigurator.configure();
-        InMemoryDocs memoryDocs = new InMemoryDocs(new Configuration("5/conf.txt"));
+        InMemoryDocs memoryDocs = new InMemoryDocs(new Configuration("2/conf.txt"));
         memoryDocs.load();
-        ParsedDocument data = memoryDocs.getDocData("FT933-12427");
+        ParsedDocument data = memoryDocs.getDocData("FT933-495");
         int i = 0;
     }
 }
