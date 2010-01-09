@@ -25,6 +25,7 @@ public class Indexer {
     private static final Object eventsLock = new Object();
     private final Map<String, TermData> index = new HashMap<String, TermData>();
     private final Set<ParsedDocument> docsCache = new HashSet<ParsedDocument>();
+    private final Map<String, Map<String, Double>> documentsVectors = new HashMap<String, Map<String, Double>>();
     private final ExecutorService executor;
     private Parser parser;
     private final Configuration config;
@@ -80,7 +81,7 @@ public class Indexer {
                             try {
                                 executor.awaitTermination(10, TimeUnit.DAYS);
                                 doPreProcessing();
-                                memoryIndex = PostingFileUtils.saveIndex(index, config);
+                                memoryIndex = PostingFileUtils.saveIndex(index, documentsVectors, config);
                                 inMemoryDocs = PostingFileUtils.saveParsedDocuments(docsCache, config);
                                 docsCache.clear();
                                 index.clear();
@@ -106,8 +107,26 @@ public class Indexer {
             term.setTotalDocs(totalDocs);
         }
         for (ParsedDocument doc : docsCache) {
-            doc.finalizeDocument(index);
+            calculateDocumentVector(doc);
         }
+    }
+
+    private void calculateDocumentVector(ParsedDocument doc) {
+        double docLength = 0.0;
+        Map<String, Set<Long>> terms = doc.getTerms();
+        for (String term : terms.keySet()) {
+            TermData termData = index.get(term);
+            int termFreq = terms.get(term).size();
+            double td_idf = termData.getIdf() * termFreq;
+            docLength += td_idf * td_idf;
+        }
+        docLength = Math.sqrt(docLength);
+        Map<String, Double> documentVector = new HashMap<String, Double>();
+        for (String term : terms.keySet()) {
+            int termFreq = terms.get(term).size();
+            documentVector.put(term, termFreq / docLength);
+        }
+        documentsVectors.put(doc.getDocNo(), documentVector);
     }
 
     public InMemoryIndex getMemoryIndex() {

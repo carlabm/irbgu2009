@@ -11,16 +11,35 @@ public class TermData implements Comparable<TermData> {
     private final String term;
     private Map<String, Set<Long>> postingsMap = new HashMap<String, Set<Long>>();
     private long frequency;
-    private double idf = -1D;
+    private double idf = -1.0;
 
     public TermData(String term) {
         this.term = term;
         this.frequency = 0;
     }
 
+
+    //concomit:3:2.609238575955086[FT933-679{118,182,247,289}|FT933-1185{247}|FT933-1192{354}]
+
     public TermData(String term, String serialized) {
         this.term = term;
-        extractFrequency(serialized);
+        int start = serialized.indexOf(':') + 1;
+        int end = serialized.indexOf(':', start);
+        frequency = Long.parseLong(serialized.substring(start, end));
+        start = end + 1;
+        end = serialized.indexOf('[', start);
+        idf = Double.parseDouble(serialized.substring(start, end));
+        start = end + 1;
+        end = serialized.indexOf(']');
+        while (start < end) {
+            int currDocDataEnd = serialized.indexOf('{', start);
+            String currDocNo = serialized.substring(start, currDocDataEnd);
+            start = currDocDataEnd + 1;
+            currDocDataEnd = serialized.indexOf('}', start);
+            Set<Long> postings = getPostings(serialized, start, currDocDataEnd);
+            postingsMap.put(currDocNo, postings);
+            start = currDocDataEnd + 2;
+        }
     }
 
     public void addPosting(String docNo, Set<Long> postings) {
@@ -45,7 +64,7 @@ public class TermData implements Comparable<TermData> {
 
     public String getSavedString() {
         StringBuilder builder = new StringBuilder();
-        builder.append(term).append(':').append(frequency).append('[');
+        builder.append(term).append(':').append(frequency).append(':').append(idf).append('[');
         Iterator<String> docNoIterator = postingsMap.keySet().iterator();
         while (docNoIterator.hasNext()) {
             String docNo = docNoIterator.next();
@@ -79,32 +98,20 @@ public class TermData implements Comparable<TermData> {
         return idf;
     }
 
-    private void extractFrequency(String serialized) {
-        int startIndex = serialized.indexOf(':') + 1;
-        int endIndex = serialized.indexOf('[');
-        frequency = Long.parseLong(serialized.substring(startIndex, endIndex));
-        extractPostings(serialized.substring(endIndex + 1));
+    public Map<String, Set<Long>> getPostingsMap() {
+        return Collections.unmodifiableMap(postingsMap);
     }
 
-    private void extractPostings(String serialized) {
-        int endIndex;
-        while ((endIndex = serialized.indexOf('|')) != -1 || (endIndex = serialized.indexOf(']')) != -1) {
-            String working = serialized.substring(0, endIndex);
-            extractPosting(working);
-            serialized = serialized.substring(endIndex + 1);
-        }
-    }
-
-    private void extractPosting(String working) {
-        int docNameIndex = working.indexOf('{');
-        String docNo = working.substring(0, docNameIndex);
-        working = working.substring(docNameIndex + 1);
+    private Set<Long> getPostings(String data, int start, int end) {
         Set<Long> postings = new LinkedHashSet<Long>();
-        int endIndex;
-        while ((endIndex = working.indexOf(',')) != -1 || (endIndex = working.indexOf('}')) != -1) {
-            postings.add(Long.parseLong(working.substring(0, endIndex)));
-            working = working.substring(endIndex + 1);
+        while (start < end) {
+            int currEnd = data.indexOf(',', start);
+            if (currEnd == -1 || currEnd > end) {
+                currEnd = end;
+            }
+            postings.add(Long.parseLong(data.substring(start, currEnd)));
+            start = currEnd + 1;
         }
-        postingsMap.put(docNo, postings);
+        return postings;
     }
 }
