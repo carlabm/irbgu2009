@@ -53,6 +53,10 @@ public class TermData implements Comparable<TermData> {
         postingsMap.put(docNo, postings);
     }
 
+    public String getTerm() {
+        return term;
+    }
+
     @Override
     public String toString() {
         return "TermData{" +

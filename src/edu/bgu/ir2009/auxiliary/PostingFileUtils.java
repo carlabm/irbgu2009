@@ -27,12 +27,12 @@ public class PostingFileUtils {
         InMemoryIndex res = new InMemoryIndex(config);
         FileWriter writer = new FileWriter(file);
         int saved = 0;
-        int totalToSave = index.size();
+        int totalToSave = index.size() + documentsVectors.size();
         long pos = 0;
         for (TermData td : index.values()) {
             String termSerialized = td.getSavedString();
             writer.write(termSerialized + '\n');
-            res.addTerm(termSerialized, pos);
+            res.addTerm(td.getTerm(), pos);
             pos += termSerialized.length() + 1;
             saved++;
             UpFacade.getInstance().addIndexSavingEvent(saved, totalToSave);
@@ -48,7 +48,10 @@ public class PostingFileUtils {
             }
             String serializedDocVector = builder.toString();
             writer.write(serializedDocVector + '\n');
+            res.addDocVector(docNo, pos);
             pos += serializedDocVector.length() + 1;
+            saved++;
+            UpFacade.getInstance().addIndexSavingEvent(saved, totalToSave);
         }
         writer.close();
         logger.info("Finished saving index...");

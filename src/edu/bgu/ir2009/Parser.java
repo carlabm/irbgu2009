@@ -4,6 +4,7 @@ import edu.bgu.ir2009.auxiliary.Configuration;
 import edu.bgu.ir2009.auxiliary.ParsedDocument;
 import edu.bgu.ir2009.auxiliary.UnParsedDocument;
 import edu.bgu.ir2009.auxiliary.UpFacade;
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 import javax.xml.stream.XMLStreamException;
@@ -30,15 +31,18 @@ public class Parser {
     private final ExecutorService executor;
     private final BlockingQueue<ParsedDocument> parsedDocs = new LinkedBlockingQueue<ParsedDocument>();
 
-    private boolean isStarted = false;
+    private boolean isStartable = true;
     private ReadFile reader;
     private Stemmer stemmer;
     private int totalUnParsedDocuments = 0;
     private int totalParsedDocuments = 0;
 
-
     public Parser(Configuration config) {
-        this(new ReadFile(config), config);
+        this(config, true);
+    }
+
+    public Parser(Configuration config, boolean createReader) {
+        this(createReader ? new ReadFile(config) : null, config);
     }
 
     public Parser(ReadFile reader, Configuration config) {
@@ -67,16 +71,21 @@ public class Parser {
         } catch (FileNotFoundException e) {
             logger.warn("The stop-words file '" + stopWordsFileName + "' not found! Using non!");
         }
-        executor = Executors.newFixedThreadPool(config.getParserThreadsCount());
+        if (reader != null) {
+            executor = Executors.newFixedThreadPool(config.getParserThreadsCount());
+        } else {
+            executor = null;
+            isStartable = false;
+        }
     }
 
     public void start() throws XMLStreamException, FileNotFoundException {
         synchronized (this) {
-            if (!isStarted) {
+            if (isStartable) {
                 reader.start();
-                isStarted = true;
+                isStartable = false;
             } else {
-                throw new IllegalStateException("cannot start same parser twice");
+                throw new IllegalStateException("This parser cannot be started! (Already started or in query mode)");
             }
         }
         executor.execute(new Runnable() {
@@ -119,9 +128,9 @@ public class Parser {
         return res;
     }
 
-    public ParsedDocument parse(String docNo, String text) {
+    public ParsedDocument parse(String id, String text) {
         UnParsedDocument doc = new UnParsedDocument();
-        doc.setDocNo(docNo);
+        doc.setDocNo(id);
         doc.setText(text);
         return parse(doc, false);
     }
@@ -184,5 +193,13 @@ public class Parser {
                 UpFacade.getInstance().addParserEvent(totalParsedDocuments, totalUnParsedDocuments);
             }
         }
+    }
+
+
+    public static void main(String[] args) {
+        BasicConfigurator.configure();
+        Parser parser = new Parser(new Configuration("10/conf.txt"), false);
+        ParsedDocument parsedDocument = parser.parse("1", "i am a jenious");
+        int i = 0;
     }
 }

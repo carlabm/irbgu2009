@@ -60,19 +60,6 @@ public class ParsedDocument {
         text = serialized.substring(start);
     }
 
-    /* //FT933-870|total=0.05265579865312133,waterhous=0.05265579865312133,half=0.05265579865312133,|930927||G
-    private void parseDocVector(String serialized, int start, int end) {
-        while (start < end) {
-            int currEnd = serialized.indexOf('=', start);
-            String currTerm = serialized.substring(start, currEnd);
-            start = currEnd + 1;
-            currEnd = serialized.indexOf(',',start);
-            Double currTermWeight = Double.parseDouble(serialized.substring(start, currEnd));
-            documentVector.put(currTerm, currTermWeight);
-            start = currEnd + 1;
-        }
-    }*/
-
     public void addTerm(String term, long pos) {
         Set<Long> posSet = terms.get(term);
         if (posSet == null) {
