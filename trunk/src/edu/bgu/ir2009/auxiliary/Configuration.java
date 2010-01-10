@@ -17,6 +17,7 @@ public class Configuration {
     private static final String INDEX_FILE_NAME = "index";
     private static final String STOP_WORDS_FILE_NAME = "stop_words.txt";
     private static final String CONF_FILE_NAME = "conf.txt";
+    private static final String INDEX_REF_FILE_NAME = "index_ref";
 
     private final Properties config = new Properties();
     private final String docsDir;
@@ -29,16 +30,18 @@ public class Configuration {
     private final int indexerThreadsCount;
     private final double lambda;
     private final double gamma;
+    private final int DMax;
+    private final String indexReferenceFileName;
 
     public Configuration(String docsDir, String srcStopWordsFileName, boolean useStemmer) {
-        this(docsDir, srcStopWordsFileName, useStemmer, 1.0, 2.0);
+        this(docsDir, srcStopWordsFileName, useStemmer, 45, 1.0, 2.0);
     }
 
-    public Configuration(String docsDir, String srcStopWordsFileName, boolean useStemmer, double lambda, double gamma) {
-        this(docsDir, srcStopWordsFileName, useStemmer, lambda, gamma, 2, 2, 2);
+    public Configuration(String docsDir, String srcStopWordsFileName, boolean useStemmer, int DMax, double lambda, double gamma) {
+        this(docsDir, srcStopWordsFileName, useStemmer, DMax, lambda, gamma, 2, 2, 2);
     }
 
-    public Configuration(String docsDir, String srcStopWordsFileName, boolean useStemmer, double lambda, double gamma, int readerThreadsCount, int parserThreadsCount, int indexerThreadsCount) {
+    public Configuration(String docsDir, String srcStopWordsFileName, boolean useStemmer, int DMax, double lambda, double gamma, int readerThreadsCount, int parserThreadsCount, int indexerThreadsCount) {
         File srcDocsDir = new File(docsDir);
         File stopWordsFile = new File(srcStopWordsFileName);
         if (!srcDocsDir.exists() || !stopWordsFile.exists()) {
@@ -77,6 +80,7 @@ public class Configuration {
         savedDocsFileName = newDirName + "/" + SAVED_DOCS_FILE_NAME;
         //noinspection ResultOfMethodCallIgnored
         indexFileName = newDirName + "/" + INDEX_FILE_NAME;
+        indexReferenceFileName = newDirName + "/" + INDEX_REF_FILE_NAME;
         this.srcStopWordsFileName = newDirName + "/" + STOP_WORDS_FILE_NAME;
         copyStopWordsFile(stopWordsFile, this.srcStopWordsFileName);
         this.readerThreadsCount = readerThreadsCount;
@@ -84,6 +88,7 @@ public class Configuration {
         this.indexerThreadsCount = indexerThreadsCount;
         this.lambda = lambda;
         this.gamma = gamma;
+        this.DMax = DMax;
         saveConfFile(newDirName + "/" + CONF_FILE_NAME);
     }
 
@@ -99,11 +104,13 @@ public class Configuration {
         config.setProperty("docsDir", docsDir);
         config.setProperty("savedDocsFileName", savedDocsFileName);
         config.setProperty("indexFileName", indexFileName);
+        config.setProperty("indexRefFileName", indexReferenceFileName);
         config.setProperty("useStemmer", String.valueOf(useStemmer));
         config.setProperty("srcStopWordsFileName", srcStopWordsFileName);
         config.setProperty("readerThreadsCount", String.valueOf(readerThreadsCount));
         config.setProperty("parserThreadsCount", String.valueOf(parserThreadsCount));
         config.setProperty("indexerThreadsCount", String.valueOf(indexerThreadsCount));
+        config.setProperty("DMax", String.valueOf(DMax));
         config.setProperty("lambda", String.valueOf(lambda));
         config.setProperty("gamma", String.valueOf(gamma));
         try {
@@ -122,16 +129,18 @@ public class Configuration {
             logger.warn("Could not load properties file: " + configFileName + "! Using defaults when possible...");
             exceptionThrown = true;
         }
-        docsDir = config.getProperty("docsDir", "src_docs");
-        savedDocsFileName = config.getProperty("savedDocsFileName", "docs");
-        indexFileName = config.getProperty("indexFileName", "index");
+        docsDir = config.getProperty("docsDir", "docs");
+        savedDocsFileName = config.getProperty("savedDocsFileName", SAVED_DOCS_FILE_NAME);
+        indexFileName = config.getProperty("indexFileName", INDEX_FILE_NAME);
+        indexReferenceFileName = config.getProperty("indexRefFileName", INDEX_REF_FILE_NAME);
         useStemmer = Boolean.parseBoolean(config.getProperty("useStemmer", "true"));
-        srcStopWordsFileName = config.getProperty("srcStopWordsFileName", "stop_words.txt");
+        srcStopWordsFileName = config.getProperty("srcStopWordsFileName", STOP_WORDS_FILE_NAME);
         readerThreadsCount = Integer.parseInt(config.getProperty("readerThreadsCount", "2"));
         parserThreadsCount = Integer.parseInt(config.getProperty("parserThreadsCount", "2"));
         indexerThreadsCount = Integer.parseInt(config.getProperty("indexerThreadsCount", "2"));
         lambda = Double.parseDouble(config.getProperty("lambda", "1.0"));
         gamma = Double.parseDouble(config.getProperty("gamma", "2.0"));
+        DMax = Integer.parseInt(config.getProperty("DMax", "10"));
         if (exceptionThrown) {
             saveConfFile(configFileName);
         }
@@ -175,5 +184,13 @@ public class Configuration {
 
     public double getGamma() {
         return gamma;
+    }
+
+    public int getDMax() {
+        return DMax;
+    }
+
+    public String getIndexReferenceFileName() {
+        return indexReferenceFileName;
     }
 }

@@ -8,7 +8,7 @@ import java.util.*;
  * Time: 19:33:27
  */
 public class TermProximity {
-    public static final int D_MAX = 10;
+    private final int D_MAX;
     private final double LAMBDA;
     private final double GAMMA;
 
@@ -24,7 +24,7 @@ public class TermProximity {
         return res;
     }
 
-    public static List<List<TermNode>> calculateSpans(TermNode[] recomposedText) {
+    public static List<List<TermNode>> calculateSpans(TermNode[] recomposedText, int D_MAX) {
         List<List<TermNode>> res = new LinkedList<List<TermNode>>();
         List<TermNode> currSpan = new LinkedList<TermNode>();
         res.add(currSpan);
@@ -72,7 +72,7 @@ public class TermProximity {
     }
 
 
-    public static long calculateSpanWidth(List<TermNode> span) {
+    public long calculateSpanWidth(List<TermNode> span) {
         long res = D_MAX;
         if (span.size() != 1) {
             res = span.get(span.size() - 1).getPosition() - span.get(0).getPosition() + 1L;
@@ -81,18 +81,22 @@ public class TermProximity {
     }
 
     public TermProximity(Configuration config) {
+        D_MAX = config.getDMax();
         LAMBDA = config.getLambda();
         GAMMA = config.getGamma();
     }
 
-    public double calculateTermWeight(String term, List<TermNode> span) {
+    public double calculateTermWeight(List<TermNode> span) {
         return Math.pow(span.size(), GAMMA) / Math.pow(calculateSpanWidth(span), LAMBDA);
     }
 
     public double calculateRelevanceContribution(String term, List<List<TermNode>> spans) {
         double res = 0.0;
+        TermNode termNode = new TermNode(term, -1L);
         for (List<TermNode> span : spans) {
-            res += calculateTermWeight(term, span);
+            if (span.contains(termNode)) {
+                res += calculateTermWeight(span);
+            }
         }
         return res;
     }

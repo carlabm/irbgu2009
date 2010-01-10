@@ -15,12 +15,14 @@ import java.util.*;
 public class Searcher {
     private final static Logger logger = Logger.getLogger(Searcher.class);
     private final InMemoryIndex index;
+    private final Configuration config;
     private final Parser parser;
     private final Ranker ranker;
     private long searchId = 0;
 
     public Searcher(InMemoryIndex index, Configuration config) {
         this.index = index;
+        this.config = config;
         parser = new Parser(config, false);
         ranker = new Ranker(index, config);
     }
@@ -44,7 +46,7 @@ public class Searcher {
                 for (String term : termsSet) {
                     termsPostings.put(term, tmpIndex.get(term).getPostingsMap().get(retrievedDoc));
                 }
-                docsExpandedSpans.put(retrievedDoc, TermProximity.calculateSpans(TermProximity.recomposeText(termsPostings)));
+                docsExpandedSpans.put(retrievedDoc, TermProximity.calculateSpans(TermProximity.recomposeText(termsPostings), config.getDMax()));
             }
             Map<String, Double> queryVector = Indexer.calculateDocumentVector(tmpIndex, parsedDocument);
             return ranker.rank(queryVector, docsVectors, docsExpandedSpans);
@@ -75,12 +77,15 @@ public class Searcher {
 
     public static void main(String[] args) throws IOException {
         BasicConfigurator.configure();
+        Configuration configuration = new Configuration("1/conf.txt");
+        InMemoryIndex memoryIndex = new InMemoryIndex(configuration);
+        memoryIndex.load();
+        Searcher searcher = new Searcher(memoryIndex, configuration);
         while (true) {
-            Configuration configuration = new Configuration("1/conf.txt");
-            InMemoryIndex memoryIndex = new InMemoryIndex(configuration);
-            memoryIndex.load();
-            Searcher searcher = new Searcher(memoryIndex, configuration);
-            Set<RankedDocument> rankedDocumentSet = searcher.search("agent consult");
+            long start = System.currentTimeMillis();
+            Set<RankedDocument> rankedDocumentSet = searcher.search("where intellectuals, like the bourgeois");
+            long end = System.currentTimeMillis();
+            logger.info("Search took: " + (end - start) + " ms");
             for (RankedDocument docNo : rankedDocumentSet) {
                 logger.info(docNo.getDocNum() + " " + docNo.getScore());
             }
