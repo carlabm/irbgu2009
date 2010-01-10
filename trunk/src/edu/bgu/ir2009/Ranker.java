@@ -1,9 +1,8 @@
 package edu.bgu.ir2009;
 
-import edu.bgu.ir2009.auxiliary.Configuration;
-import edu.bgu.ir2009.auxiliary.InMemoryIndex;
-import edu.bgu.ir2009.auxiliary.RankedDocument;
+import edu.bgu.ir2009.auxiliary.*;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -16,13 +15,15 @@ import java.util.TreeSet;
 public class Ranker {
     private final InMemoryIndex index;
     private final Configuration config;
+    private final TermProximity proximity;
 
     public Ranker(InMemoryIndex index, Configuration config) {
         this.index = index;
         this.config = config;
+        proximity = new TermProximity(config);
     }
 
-    public Set<RankedDocument> rank(Map<String, Double> queryVector, Map<String, Map<String, Double>> toBeRankedVectors) {
+    public Set<RankedDocument> rank(Map<String, Double> queryVector, Map<String, Map<String, Double>> toBeRankedVectors, Map<String, List<List<TermNode>>> docsExpandedSpans) {
         Set<RankedDocument> res = new TreeSet<RankedDocument>();
         for (String docNo : toBeRankedVectors.keySet()) {
             double score = 0.0;
@@ -30,7 +31,7 @@ public class Ranker {
             for (String queryTerm : queryVector.keySet()) {
                 Double termWeight = currDocVector.get(queryTerm);
                 if (termWeight != null) {
-                    score += termWeight * queryVector.get(queryTerm);
+                    score += termWeight * queryVector.get(queryTerm) * proximity.calculateRelevanceContribution(queryTerm, docsExpandedSpans.get(docNo));
                 }
             }
             res.add(new RankedDocument(docNo, score));

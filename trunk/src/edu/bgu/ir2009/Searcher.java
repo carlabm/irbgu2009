@@ -5,10 +5,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * User: Henry Abravanel 310739693
@@ -29,55 +26,64 @@ public class Searcher {
     }
 
     public Set<RankedDocument> search(String text) {
-        ParsedDocument parsedDocument = parser.parse(String.valueOf(searchId++), text);
-        Map<String, Set<Long>> terms = parsedDocument.getTerms();
-        Map<String, TermData> tmpIndex = new HashMap<String, TermData>();
-        Set<String> docs = new HashSet<String>();
         try {
-            for (String term : terms.keySet()) {
+            ParsedDocument parsedDocument = parser.parse(String.valueOf(searchId++), text);
+            Map<String, Set<Long>> terms = parsedDocument.getTerms();
+            Map<String, TermData> tmpIndex = new HashMap<String, TermData>();
+            Set<String> termsSet = terms.keySet();
+            for (String term : termsSet) {  //TODO add LRU to InMemoryIndex
                 TermData termData = index.getTermData(term);
                 tmpIndex.put(term, termData);
             }
+            Set<String> docs = merge(terms, tmpIndex);
+            Map<String, Map<String, Double>> docsVectors = new HashMap<String, Map<String, Double>>();
+            Map<String, List<List<TermNode>>> docsExpandedSpans = new HashMap<String, List<List<TermNode>>>();
+            for (String retrievedDoc : docs) {
+                Map<String, Set<Long>> termsPostings = new HashMap<String, Set<Long>>();
+                docsVectors.put(retrievedDoc, index.getDocumentVector(retrievedDoc, termsSet));
+                for (String term : termsSet) {
+                    termsPostings.put(term, tmpIndex.get(term).getPostingsMap().get(retrievedDoc));
+                }
+                docsExpandedSpans.put(retrievedDoc, TermProximity.calculateSpans(TermProximity.recomposeText(termsPostings)));
+            }
+            Map<String, Double> queryVector = Indexer.calculateDocumentVector(tmpIndex, parsedDocument);
+            return ranker.rank(queryVector, docsVectors, docsExpandedSpans);
         } catch (IOException e) {
             logger.error("Could not retrieve data from index file!!!!!");
             return null;
         }
-        Map<String, Double> queryVector = Indexer.calculateDocumentVector(tmpIndex, parsedDocument);
-        boolean firstLoop = true;
-        for (String term : terms.keySet()) {
+    }
+
+    private Set<String> merge(Map<String, Set<Long>> terms, Map<String, TermData> tmpIndex) {
+        Set<String> docs = new HashSet<String>();
+        Iterator<String> iterator = terms.keySet().iterator();
+        if (iterator.hasNext()) {
+            String term = iterator.next();
             TermData termData = tmpIndex.get(term);
             if (termData != null) {
-                Set<String> docsForTerm = termData.getPostingsMap().keySet();
-                if (firstLoop) {
-                    firstLoop = false;
-                    docs.addAll(docsForTerm);
-                } else {
-                    docs.retainAll(docsForTerm);
-                }
+                docs.addAll(termData.getPostingsMap().keySet());
             }
         }
-        Map<String, Map<String, Double>> docsVectors = new HashMap<String, Map<String, Double>>();
-        try {
-            for (String retrievedDoc : docs) {
-                docsVectors.put(retrievedDoc, index.getDocumentVector(retrievedDoc));
+        while (iterator.hasNext()) {
+            TermData termData = tmpIndex.get(iterator.next());
+            if (termData != null) {
+                docs.retainAll(termData.getPostingsMap().keySet());
             }
-        } catch (IOException e) {
-            logger.error("Could not retrieve data from index file!!!!!");
-            return null;
         }
-        Set<RankedDocument> documentSet = ranker.rank(queryVector, docsVectors);
-        return documentSet;
+        return docs;
     }
 
     public static void main(String[] args) throws IOException {
         BasicConfigurator.configure();
-        Configuration configuration = new Configuration("10/conf.txt");
-        InMemoryIndex memoryIndex = new InMemoryIndex(configuration);
-        memoryIndex.load();
-        Searcher searcher = new Searcher(memoryIndex, configuration);
-        Set<RankedDocument> rankedDocumentSet = searcher.search("outside consultants");
-        for (RankedDocument docNo : rankedDocumentSet) {
-            logger.info(docNo.getDocNum() + " " + docNo.getScore());
+        while (true) {
+            Configuration configuration = new Configuration("1/conf.txt");
+            InMemoryIndex memoryIndex = new InMemoryIndex(configuration);
+            memoryIndex.load();
+            Searcher searcher = new Searcher(memoryIndex, configuration);
+            Set<RankedDocument> rankedDocumentSet = searcher.search("agent consult");
+            for (RankedDocument docNo : rankedDocumentSet) {
+                logger.info(docNo.getDocNum() + " " + docNo.getScore());
+            }
         }
     }
 }

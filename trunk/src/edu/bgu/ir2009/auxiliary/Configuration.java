@@ -27,8 +27,18 @@ public class Configuration {
     private final int readerThreadsCount;
     private final int parserThreadsCount;
     private final int indexerThreadsCount;
+    private final double lambda;
+    private final double gamma;
 
     public Configuration(String docsDir, String srcStopWordsFileName, boolean useStemmer) {
+        this(docsDir, srcStopWordsFileName, useStemmer, 1.0, 2.0);
+    }
+
+    public Configuration(String docsDir, String srcStopWordsFileName, boolean useStemmer, double lambda, double gamma) {
+        this(docsDir, srcStopWordsFileName, useStemmer, lambda, gamma, 2, 2, 2);
+    }
+
+    public Configuration(String docsDir, String srcStopWordsFileName, boolean useStemmer, double lambda, double gamma, int readerThreadsCount, int parserThreadsCount, int indexerThreadsCount) {
         File srcDocsDir = new File(docsDir);
         File stopWordsFile = new File(srcStopWordsFileName);
         if (!srcDocsDir.exists() || !stopWordsFile.exists()) {
@@ -69,9 +79,11 @@ public class Configuration {
         indexFileName = newDirName + "/" + INDEX_FILE_NAME;
         this.srcStopWordsFileName = newDirName + "/" + STOP_WORDS_FILE_NAME;
         copyStopWordsFile(stopWordsFile, this.srcStopWordsFileName);
-        readerThreadsCount = 2;
-        parserThreadsCount = 2;
-        indexerThreadsCount = 2;
+        this.readerThreadsCount = readerThreadsCount;
+        this.parserThreadsCount = parserThreadsCount;
+        this.indexerThreadsCount = indexerThreadsCount;
+        this.lambda = lambda;
+        this.gamma = gamma;
         saveConfFile(newDirName + "/" + CONF_FILE_NAME);
     }
 
@@ -92,6 +104,8 @@ public class Configuration {
         config.setProperty("readerThreadsCount", String.valueOf(readerThreadsCount));
         config.setProperty("parserThreadsCount", String.valueOf(parserThreadsCount));
         config.setProperty("indexerThreadsCount", String.valueOf(indexerThreadsCount));
+        config.setProperty("lambda", String.valueOf(lambda));
+        config.setProperty("gamma", String.valueOf(gamma));
         try {
             config.store(new FileOutputStream(confFileName), "");
         } catch (IOException e) {
@@ -116,6 +130,8 @@ public class Configuration {
         readerThreadsCount = Integer.parseInt(config.getProperty("readerThreadsCount", "2"));
         parserThreadsCount = Integer.parseInt(config.getProperty("parserThreadsCount", "2"));
         indexerThreadsCount = Integer.parseInt(config.getProperty("indexerThreadsCount", "2"));
+        lambda = Double.parseDouble(config.getProperty("lambda", "1.0"));
+        gamma = Double.parseDouble(config.getProperty("gamma", "2.0"));
         if (exceptionThrown) {
             saveConfFile(configFileName);
         }
@@ -153,8 +169,11 @@ public class Configuration {
         return useStemmer;
     }
 
-    public static void main(String[] args) {
-        Configuration configuration = new Configuration("tmp", "stop-words.txt", true);
-        int i = 0;
+    public double getLambda() {
+        return lambda;
+    }
+
+    public double getGamma() {
+        return gamma;
     }
 }
