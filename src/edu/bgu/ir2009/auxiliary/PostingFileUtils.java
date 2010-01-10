@@ -24,14 +24,13 @@ public class PostingFileUtils {
         if (indexFile.exists()) {
             FileUtils.deleteQuietly(indexFile);
         }
-        File indexRefFile = new File(config.getIndexFileName());
+        File indexRefFile = new File(config.getIndexReferenceFileName());
         if (indexRefFile.exists()) {
             FileUtils.deleteQuietly(indexRefFile);
         }
         InMemoryIndex res = new InMemoryIndex(config);
         FileWriter indexWriter = new FileWriter(indexFile);
         FileWriter indexRefWriter = new FileWriter(indexRefFile);
-        //TODO finish ref file
         int saved = 0;
         int totalToSave = index.size() + documentsVectors.size();
         long pos = 0;
@@ -39,11 +38,13 @@ public class PostingFileUtils {
             String termSerialized = td.getSavedString();
             indexWriter.write(termSerialized + '\n');
             res.addTerm(td.getTerm(), pos);
+            indexRefWriter.write(td.getTerm() + "=" + pos + "\n");
             pos += termSerialized.length() + 1;
             saved++;
             UpFacade.getInstance().addIndexSavingEvent(saved, totalToSave);
         }
         indexWriter.write('\n');
+        indexRefWriter.write('\n');
         pos++;
         for (String docNo : documentsVectors.keySet()) {
             StringBuilder builder = new StringBuilder();
@@ -55,11 +56,13 @@ public class PostingFileUtils {
             String serializedDocVector = builder.toString();
             indexWriter.write(serializedDocVector + '\n');
             res.addDocVector(docNo, pos);
+            indexRefWriter.write(docNo + "=" + pos + "\n");
             pos += serializedDocVector.length() + 1;
             saved++;
             UpFacade.getInstance().addIndexSavingEvent(saved, totalToSave);
         }
         indexWriter.close();
+        indexRefWriter.close();
         logger.info("Finished saving index...");
         return res;
     }

@@ -52,6 +52,30 @@ public class InMemoryIndex {
         }
     }
 
+    public void newLoad() throws IOException {
+        LineIterator iterator = null;
+        try {
+            iterator = FileUtils.lineIterator(new File(config.getIndexReferenceFileName()));
+            while (iterator.hasNext()) {
+                String line = iterator.nextLine();
+                if ("".equals(line)) {
+                    break;
+                }
+                int end = line.indexOf('=');
+                String term = line.substring(0, end);
+                termOffsets.put(term, Long.parseLong(line.substring(end + 1, line.length())));
+            }
+            while (iterator.hasNext()) {
+                String line = iterator.nextLine();
+                int end = line.indexOf('=');
+                String docNo = line.substring(0, end);
+                docOffsets.put(docNo, Long.parseLong(line.substring(end + 1, line.length())));
+            }
+        } finally {
+            LineIterator.closeQuietly(iterator);
+        }
+    }
+
     public void addTerm(String term, long offset) {
         termOffsets.put(term, offset);
     }

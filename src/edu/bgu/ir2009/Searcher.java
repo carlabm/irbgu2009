@@ -77,9 +77,12 @@ public class Searcher {
 
     public static void main(String[] args) throws IOException {
         BasicConfigurator.configure();
-        Configuration configuration = new Configuration("1/conf.txt");
+        Configuration configuration = new Configuration("5/conf.txt");
         InMemoryIndex memoryIndex = new InMemoryIndex(configuration);
-        memoryIndex.load();
+        long loadStart = System.currentTimeMillis();
+        memoryIndex.newLoad();
+        long loadEnd = System.currentTimeMillis();
+        logger.info("Load took: " + (loadEnd - loadStart) + " ms");
         Searcher searcher = new Searcher(memoryIndex, configuration);
         while (true) {
             long start = System.currentTimeMillis();
