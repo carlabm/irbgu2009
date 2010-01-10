@@ -42,4 +42,9 @@ public class TermNode implements Comparable<TermNode> {
     public int compareTo(TermNode o) {
         return (int) (position - o.position);
     }
+
+    @Override
+    public String toString() {
+        return "{" + term + ", " + position + "}";
+    }
 }

@@ -9,6 +9,8 @@ import java.util.*;
  */
 public class TermProximity {
     public static final int D_MAX = 10;
+    private final double LAMBDA;
+    private final double GAMMA;
 
     public static TermNode[] recomposeText(Map<String, Set<Long>> termsPostings) {
         Set<TermNode> resSet = new TreeSet<TermNode>();
@@ -22,47 +24,76 @@ public class TermProximity {
         return res;
     }
 
-    public static List<Set<TermNode>> calculateSpans(TermNode[] recomposedText) {
-        List<Set<TermNode>> res = new LinkedList<Set<TermNode>>();
-        TreeSet<TermNode> currSpan = new TreeSet<TermNode>();
-        for (int i = 0; i < recomposedText.length; i++) {
-            if (i < recomposedText.length - 1) {
-                if (recomposedText[i + 1].getPosition() - recomposedText[i].getPosition() > D_MAX) {
-                    currSpan.add(recomposedText[i]);
+    public static List<List<TermNode>> calculateSpans(TermNode[] recomposedText) {
+        List<List<TermNode>> res = new LinkedList<List<TermNode>>();
+        List<TermNode> currSpan = new LinkedList<TermNode>();
+        res.add(currSpan);
+        for (int i = 0; i < recomposedText.length - 1; i++) {
+            TermNode next = recomposedText[i + 1];
+            TermNode curr = recomposedText[i];
+            if (next.getPosition() - curr.getPosition() > D_MAX) {
+                currSpan.add(curr);
+                currSpan = new LinkedList<TermNode>();
+                res.add(currSpan);
+            } else {
+                if (next.getTerm().equals(curr.getTerm())) {
+                    currSpan.add(curr);
+                    currSpan = new LinkedList<TermNode>();
                     res.add(currSpan);
-                    currSpan = new TreeSet<TermNode>();
                 } else {
-                    if (recomposedText[i + 1].getTerm().equals(recomposedText[i].getTerm())) {
-                        currSpan.add(recomposedText[i]);
-                        res.add(currSpan);
-                        currSpan = new TreeSet<TermNode>();
+                    int index;
+                    if ((index = currSpan.indexOf(new TermNode(next.getTerm(), -1L))) != -1) {
+                        TermNode termNode = currSpan.get(index);
+                        long prevDistance = curr.getPosition() - termNode.getPosition();
+                        long nextDistance = next.getPosition() - curr.getPosition();
+                        if (prevDistance > nextDistance) {
+                            currSpan = new LinkedList<TermNode>();
+                            res.add(currSpan);
+                            currSpan.add(curr);
+                        } else {
+                            currSpan.add(curr);
+                            currSpan = new LinkedList<TermNode>();
+                            res.add(currSpan);
+                        }
                     } else {
-                        //TODO last case
+                        currSpan.add(curr);
                     }
                 }
             }
-
+        }
+        TermNode lastTerm = recomposedText[recomposedText.length - 1];
+        List<TermNode> lastSpan = res.get(res.size() - 1);
+        if (lastSpan.contains(lastTerm)) {
+            res.add(Arrays.asList(lastTerm));
+        } else {
+            lastSpan.add(lastTerm);
         }
         return res;
     }
 
-    public static void main(String[] args) {
-        Map<String, Set<Long>> termsPostings = new HashMap<String, Set<Long>>();
-        LinkedHashSet<Long> longLinkedHashSet = new LinkedHashSet<Long>();
-        longLinkedHashSet.add(0L);
-        longLinkedHashSet.add(3L);
-        longLinkedHashSet.add(6L);
-        termsPostings.put("i", longLinkedHashSet);
-        longLinkedHashSet = new LinkedHashSet<Long>();
-        longLinkedHashSet.add(1L);
-        longLinkedHashSet.add(4L);
-        longLinkedHashSet.add(7L);
-        termsPostings.put("am", longLinkedHashSet);
-        longLinkedHashSet = new LinkedHashSet<Long>();
-        longLinkedHashSet.add(2L);
-        longLinkedHashSet.add(5L);
-        termsPostings.put("henry", longLinkedHashSet);
-        Set<TermNode> termNodes = recomposeText(termsPostings);
-        int i = 0;
+
+    public static long calculateSpanWidth(List<TermNode> span) {
+        long res = D_MAX;
+        if (span.size() != 1) {
+            res = span.get(span.size() - 1).getPosition() - span.get(0).getPosition() + 1L;
+        }
+        return res;
+    }
+
+    public TermProximity(Configuration config) {
+        LAMBDA = config.getLambda();
+        GAMMA = config.getGamma();
+    }
+
+    public double calculateTermWeight(String term, List<TermNode> span) {
+        return Math.pow(span.size(), GAMMA) / Math.pow(calculateSpanWidth(span), LAMBDA);
+    }
+
+    public double calculateRelevanceContribution(String term, List<List<TermNode>> spans) {
+        double res = 0.0;
+        for (List<TermNode> span : spans) {
+            res += calculateTermWeight(term, span);
+        }
+        return res;
     }
 }

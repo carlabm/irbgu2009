@@ -174,6 +174,10 @@ public class ReadFile {
                 }
             } catch (Exception e) {
                 logger.error(e, e);
+                try {
+                    docQueue.put(emptyDoc);
+                } catch (InterruptedException ignored) {
+                }
             }
         }
     }

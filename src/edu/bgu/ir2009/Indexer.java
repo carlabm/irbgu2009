@@ -194,15 +194,6 @@ public class Indexer {
         Indexer indexer = new Indexer("FT933", "stop-words.txt", true);
         CountDownLatch countDownLatch = indexer.start();
         countDownLatch.await();
-        InMemoryIndex memoryIndex = new InMemoryIndex(indexer.getConfig());
-        memoryIndex.load();
-        TermData termData = memoryIndex.getTermData("justif");
-        TermData termData2 = indexer.getMemoryIndex().getTermData("justif");
-        for (String doc : termData.getPostingsMap().keySet()) {
-            Map<String, Double> map = memoryIndex.getDocumentVector(doc);
-            Map<String, Double> map2 = indexer.getMemoryIndex().getDocumentVector(doc);
-            logger.info(map.equals(map2));
-        }
         int i = 0;
     }
 }
