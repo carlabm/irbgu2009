@@ -19,25 +19,31 @@ public class PostingFileUtils {
     private static final Logger logger = Logger.getLogger(PostingFileUtils.class);
 
     public static InMemoryIndex saveIndex(Map<String, TermData> index, Map<String, Map<String, Double>> documentsVectors, Configuration config) throws IOException {
-        logger.info("Saving index to file: " + config.getIndexFileName());
-        File file = new File(config.getIndexFileName());
-        if (file.exists()) {
-            FileUtils.deleteQuietly(file);
+        logger.info("Saving index to indexFile: " + config.getIndexFileName() + " Reference indexFile: " + config.getIndexReferenceFileName());
+        File indexFile = new File(config.getIndexFileName());
+        if (indexFile.exists()) {
+            FileUtils.deleteQuietly(indexFile);
+        }
+        File indexRefFile = new File(config.getIndexFileName());
+        if (indexRefFile.exists()) {
+            FileUtils.deleteQuietly(indexRefFile);
         }
         InMemoryIndex res = new InMemoryIndex(config);
-        FileWriter writer = new FileWriter(file);
+        FileWriter indexWriter = new FileWriter(indexFile);
+        FileWriter indexRefWriter = new FileWriter(indexRefFile);
+        //TODO finish ref file
         int saved = 0;
         int totalToSave = index.size() + documentsVectors.size();
         long pos = 0;
         for (TermData td : index.values()) {
             String termSerialized = td.getSavedString();
-            writer.write(termSerialized + '\n');
+            indexWriter.write(termSerialized + '\n');
             res.addTerm(td.getTerm(), pos);
             pos += termSerialized.length() + 1;
             saved++;
             UpFacade.getInstance().addIndexSavingEvent(saved, totalToSave);
         }
-        writer.write('\n');
+        indexWriter.write('\n');
         pos++;
         for (String docNo : documentsVectors.keySet()) {
             StringBuilder builder = new StringBuilder();
@@ -47,13 +53,13 @@ public class PostingFileUtils {
                 builder.append(term).append('=').append(docVector.get(term)).append(',');
             }
             String serializedDocVector = builder.toString();
-            writer.write(serializedDocVector + '\n');
+            indexWriter.write(serializedDocVector + '\n');
             res.addDocVector(docNo, pos);
             pos += serializedDocVector.length() + 1;
             saved++;
             UpFacade.getInstance().addIndexSavingEvent(saved, totalToSave);
         }
-        writer.close();
+        indexWriter.close();
         logger.info("Finished saving index...");
         return res;
     }
