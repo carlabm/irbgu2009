@@ -7,10 +7,7 @@ import org.apache.log4j.Logger;
 import javax.xml.stream.XMLStreamException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -194,6 +191,69 @@ public class Indexer {
         Indexer indexer = new Indexer("FT933", "stop-words.txt", true);
         CountDownLatch countDownLatch = indexer.start();
         countDownLatch.await();
+        InMemoryIndex memoryIndex = new InMemoryIndex(indexer.getConfig());
+        memoryIndex.newLoad();
+        TermData termData = memoryIndex.getTermData("justif");
+        TermData termData2 = indexer.getMemoryIndex().getTermData("justif");
+        logger.info(termData.equals(termData2));
+        for (String doc : termData.getPostingsMap().keySet()) {
+            Set<String> fakeSet = new Set<String>() {
+                public int size() {
+                    return 0;
+                }
+
+                public boolean isEmpty() {
+                    return false;
+                }
+
+                public boolean contains(Object o) {
+                    return true;
+                }
+
+                public Iterator<String> iterator() {
+                    return null;
+                }
+
+                public Object[] toArray() {
+                    return new Object[0];
+                }
+
+                public <T> T[] toArray(T[] a) {
+                    return null;
+                }
+
+                public boolean add(String s) {
+                    return false;
+                }
+
+                public boolean remove(Object o) {
+                    return false;
+                }
+
+                public boolean containsAll(Collection<?> c) {
+                    return false;
+                }
+
+                public boolean addAll(Collection<? extends String> c) {
+                    return false;
+                }
+
+                public boolean retainAll(Collection<?> c) {
+                    return false;
+                }
+
+                public boolean removeAll(Collection<?> c) {
+                    return false;
+                }
+
+                public void clear() {
+
+                }
+            };
+            Map<String, Double> map = memoryIndex.getDocumentVector(doc, fakeSet);
+            Map<String, Double> map2 = indexer.getMemoryIndex().getDocumentVector(doc, fakeSet);
+            logger.info(map.equals(map2));
+        }
         int i = 0;
     }
 }

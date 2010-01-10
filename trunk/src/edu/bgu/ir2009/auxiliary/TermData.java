@@ -118,4 +118,31 @@ public class TermData implements Comparable<TermData> {
         }
         return postings;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TermData termData = (TermData) o;
+
+        if (frequency != termData.frequency) return false;
+        if (Double.compare(termData.idf, idf) != 0) return false;
+        if (!postingsMap.equals(termData.postingsMap)) return false;
+        if (!term.equals(termData.term)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = term.hashCode();
+        result = 31 * result + postingsMap.hashCode();
+        result = 31 * result + (int) (frequency ^ (frequency >>> 32));
+        temp = idf != +0.0d ? Double.doubleToLongBits(idf) : 0L;
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
 }
