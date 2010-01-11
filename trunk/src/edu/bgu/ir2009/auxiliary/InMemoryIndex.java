@@ -5,11 +5,11 @@ import org.apache.commons.io.LineIterator;
 import org.apache.log4j.Logger;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * User: Henry Abravanel 310739693 henrya@bgu.ac.il
@@ -21,35 +21,15 @@ public class InMemoryIndex {
     private final Map<String, Long> termOffsets = new HashMap<String, Long>();
     private final Map<String, Long> docOffsets = new HashMap<String, Long>();
     private final Configuration config;
+    private final LRUCache<String, TermData> termDataCache;
+    private final LRUCache<String, Map<String, Double>> docsVectorCache;
+    private final RandomAccessFile indexFile;
 
-    public InMemoryIndex(Configuration config) {
+    public InMemoryIndex(Configuration config) throws FileNotFoundException {
         this.config = config;
-    }
-
-    public void load() throws IOException {
-        LineIterator iterator = null;
-        try {
-            iterator = FileUtils.lineIterator(new File(config.getIndexFileName()));
-            long offset = 0L;
-            while (iterator.hasNext()) {
-                String line = iterator.nextLine();
-                if ("".equals(line)) {
-                    break;
-                }
-                String term = line.substring(0, line.indexOf(':'));
-                termOffsets.put(term, offset);
-                offset += line.length() + 1;
-            }
-            offset++;
-            while (iterator.hasNext()) {
-                String line = iterator.nextLine();
-                String docNo = line.substring(0, line.indexOf(':'));
-                docOffsets.put(docNo, offset);
-                offset += line.length() + 1;
-            }
-        } finally {
-            LineIterator.closeQuietly(iterator);
-        }
+        termDataCache = new LRUCache<String, TermData>(config.getInMemoryIndexCacheSize());
+        docsVectorCache = new LRUCache<String, Map<String, Double>>(config.getInMemoryDocsCacheSize());
+        indexFile = new RandomAccessFile(config.getIndexFileName(), "r");
     }
 
     public void newLoad() throws IOException {
@@ -85,30 +65,32 @@ public class InMemoryIndex {
     }
 
     public TermData getTermData(String term) throws IOException {
-        TermData res = null;
-        Long termOffset = termOffsets.get(term);
-        if (termOffset != null) {
-            RandomAccessFile file = new RandomAccessFile(config.getIndexFileName(), "r");
-            file.seek(termOffset);
-            res = new TermData(term, file.readLine());
-            file.close();
+        TermData res;
+        if ((res = termDataCache.get(term)) == null) {
+            Long termOffset = termOffsets.get(term);
+            if (termOffset != null) {
+                indexFile.seek(termOffset);
+                res = new TermData(term, indexFile.readLine());
+                termDataCache.put(term, res);
+            }
         }
         return res;
     }
 
-    public Map<String, Double> getDocumentVector(String docNo, Set<String> termsSet) throws IOException {
-        Map<String, Double> res = null;
-        Long docOffset = docOffsets.get(docNo);
-        if (docOffset != null) {
-            RandomAccessFile file = new RandomAccessFile(config.getIndexFileName(), "r");
-            file.seek(docOffset);
-            res = parseDocumentVector(file.readLine(), termsSet);
-            file.close();
+    public Map<String, Double> getDocumentVector(String docNo) throws IOException {
+        Map<String, Double> res;
+        if ((res = docsVectorCache.get(docNo)) == null) {
+            Long docOffset = docOffsets.get(docNo);
+            if (docOffset != null) {
+                indexFile.seek(docOffset);
+                res = parseDocumentVector(indexFile.readLine());
+                docsVectorCache.put(docNo, res);
+            }
         }
         return res;
     }
 
-    private Map<String, Double> parseDocumentVector(String serialized, Set<String> termsSet) {
+    private Map<String, Double> parseDocumentVector(String serialized) {
         Map<String, Double> res = new HashMap<String, Double>();
         int start = serialized.indexOf(":") + 1;
         int end = serialized.length();
@@ -116,14 +98,10 @@ public class InMemoryIndex {
             int currEnd = serialized.indexOf('=', start);
             String currTerm = serialized.substring(start, currEnd);
             start = currEnd + 1;
-            if (termsSet.contains(currTerm)) {
-                currEnd = serialized.indexOf(',', start);
-                Double currTermWeight = Double.parseDouble(serialized.substring(start, currEnd));
-                res.put(currTerm, currTermWeight);
-                start = currEnd + 1;
-            } else {
-                start = serialized.indexOf(',', start) + 1;
-            }
+            currEnd = serialized.indexOf(',', start);
+            Double currTermWeight = Double.parseDouble(serialized.substring(start, currEnd));
+            res.put(currTerm, currTermWeight);
+            start = currEnd + 1;
         }
         return res;
     }
