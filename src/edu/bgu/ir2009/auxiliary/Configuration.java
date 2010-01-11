@@ -32,6 +32,12 @@ public class Configuration {
     private final double gamma;
     private final int DMax;
     private final String indexReferenceFileName;
+    private final int inMemoryIndexCacheSize;
+    private final int inMemoryDocsCacheSize;
+
+    public Configuration() {
+        this(getBiggestDirNum() + "/" + CONF_FILE_NAME);
+    }
 
     public Configuration(String docsDir, String srcStopWordsFileName, boolean useStemmer) {
         this(docsDir, srcStopWordsFileName, useStemmer, 45, 1.0, 2.0);
@@ -49,29 +55,7 @@ public class Configuration {
         }
         this.docsDir = docsDir;
         this.useStemmer = useStemmer;
-        File currentDir = new File(".");
-        File[] numberNamedDirs = currentDir.listFiles(new FileFilter() {
-            public boolean accept(File file) {
-                boolean accept = file.isDirectory();
-                if (accept) {
-                    String name = file.getName();
-                    try {
-                        Integer.parseInt(name);
-                    } catch (NumberFormatException e) {
-                        accept = false;
-                    }
-                }
-                return accept;
-            }
-        });
-        int biggest = 0;
-        for (File dir : numberNamedDirs) {
-            int dirNum = Integer.parseInt(dir.getName());
-            if (dirNum > biggest) {
-                biggest = dirNum;
-            }
-        }
-        File newDir = new File("" + (biggest + 1));
+        File newDir = new File("" + (getBiggestDirNum() + 1));
         boolean success = newDir.mkdir();
         if (!success) {
             throw new RuntimeException("Could not create directory for current configuration!");
@@ -89,6 +73,8 @@ public class Configuration {
         this.lambda = lambda;
         this.gamma = gamma;
         this.DMax = DMax;
+        inMemoryIndexCacheSize = 200;
+        inMemoryDocsCacheSize = 100;
         saveConfFile(newDirName + "/" + CONF_FILE_NAME);
     }
 
@@ -113,6 +99,8 @@ public class Configuration {
         config.setProperty("DMax", String.valueOf(DMax));
         config.setProperty("lambda", String.valueOf(lambda));
         config.setProperty("gamma", String.valueOf(gamma));
+        config.setProperty("inMemoryIndexCacheSize", String.valueOf(inMemoryIndexCacheSize));
+        config.setProperty("inMemoryDocsCacheSize", String.valueOf(inMemoryDocsCacheSize));
         try {
             config.store(new FileOutputStream(confFileName), "");
         } catch (IOException e) {
@@ -141,6 +129,8 @@ public class Configuration {
         lambda = Double.parseDouble(config.getProperty("lambda", "1.0"));
         gamma = Double.parseDouble(config.getProperty("gamma", "2.0"));
         DMax = Integer.parseInt(config.getProperty("DMax", "10"));
+        inMemoryIndexCacheSize = Integer.parseInt(config.getProperty("inMemoryIndexCacheSize", "200"));
+        inMemoryDocsCacheSize = Integer.parseInt(config.getProperty("inMemoryDocsCacheSize", "100"));
         if (exceptionThrown) {
             saveConfFile(configFileName);
         }
@@ -192,5 +182,39 @@ public class Configuration {
 
     public String getIndexReferenceFileName() {
         return indexReferenceFileName;
+    }
+
+    public int getInMemoryIndexCacheSize() {
+        return inMemoryIndexCacheSize;
+    }
+
+    public int getInMemoryDocsCacheSize() {
+        return inMemoryDocsCacheSize;
+    }
+
+    private static int getBiggestDirNum() {
+        File currentDir = new File(".");
+        File[] numberNamedDirs = currentDir.listFiles(new FileFilter() {
+            public boolean accept(File file) {
+                boolean accept = file.isDirectory();
+                if (accept) {
+                    String name = file.getName();
+                    try {
+                        Integer.parseInt(name);
+                    } catch (NumberFormatException e) {
+                        accept = false;
+                    }
+                }
+                return accept;
+            }
+        });
+        int biggest = 0;
+        for (File dir : numberNamedDirs) {
+            int dirNum = Integer.parseInt(dir.getName());
+            if (dirNum > biggest) {
+                biggest = dirNum;
+            }
+        }
+        return biggest;
     }
 }

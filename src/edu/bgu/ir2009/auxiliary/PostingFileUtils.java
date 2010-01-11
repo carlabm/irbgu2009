@@ -69,7 +69,7 @@ public class PostingFileUtils {
 
     public static InMemoryIndex loadInMemoryIndex(Configuration config) throws IOException {
         InMemoryIndex res = new InMemoryIndex(config);
-        res.load();
+        res.newLoad();
         return res;
     }
 

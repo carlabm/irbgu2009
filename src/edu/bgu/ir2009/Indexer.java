@@ -195,7 +195,7 @@ public class Indexer {
         memoryIndex.newLoad();
         TermData termData = memoryIndex.getTermData("justif");
         TermData termData2 = indexer.getMemoryIndex().getTermData("justif");
-        logger.info(termData.equals(termData2));
+        logger.info("term data equality" + termData.equals(termData2));
         for (String doc : termData.getPostingsMap().keySet()) {
             Set<String> fakeSet = new Set<String>() {
                 public int size() {
@@ -250,8 +250,8 @@ public class Indexer {
 
                 }
             };
-            Map<String, Double> map = memoryIndex.getDocumentVector(doc, fakeSet);
-            Map<String, Double> map2 = indexer.getMemoryIndex().getDocumentVector(doc, fakeSet);
+            Map<String, Double> map = memoryIndex.getDocumentVector(doc);
+            Map<String, Double> map2 = indexer.getMemoryIndex().getDocumentVector(doc);
             logger.info(map.equals(map2));
         }
         int i = 0;

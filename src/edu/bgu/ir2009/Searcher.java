@@ -31,24 +31,24 @@ public class Searcher {
         try {
             ParsedDocument parsedDocument = parser.parse(String.valueOf(searchId++), text);
             Map<String, Set<Long>> terms = parsedDocument.getTerms();
-            Map<String, TermData> tmpIndex = new HashMap<String, TermData>();
+            Map<String, TermData> termDataMap = new HashMap<String, TermData>();
             Set<String> termsSet = terms.keySet();
             for (String term : termsSet) {  //TODO add LRU to InMemoryIndex
                 TermData termData = index.getTermData(term);
-                tmpIndex.put(term, termData);
+                termDataMap.put(term, termData);
             }
-            Set<String> docs = merge(terms, tmpIndex);
+            Set<String> docs = merge(terms, termDataMap);
             Map<String, Map<String, Double>> docsVectors = new HashMap<String, Map<String, Double>>();
             Map<String, List<List<TermNode>>> docsExpandedSpans = new HashMap<String, List<List<TermNode>>>();
             for (String retrievedDoc : docs) {
                 Map<String, Set<Long>> termsPostings = new HashMap<String, Set<Long>>();
-                docsVectors.put(retrievedDoc, index.getDocumentVector(retrievedDoc, termsSet));
+                docsVectors.put(retrievedDoc, index.getDocumentVector(retrievedDoc));
                 for (String term : termsSet) {
-                    termsPostings.put(term, tmpIndex.get(term).getPostingsMap().get(retrievedDoc));
+                    termsPostings.put(term, termDataMap.get(term).getPostingsMap().get(retrievedDoc));
                 }
                 docsExpandedSpans.put(retrievedDoc, TermProximity.calculateSpans(TermProximity.recomposeText(termsPostings), config.getDMax()));
             }
-            Map<String, Double> queryVector = Indexer.calculateDocumentVector(tmpIndex, parsedDocument);
+            Map<String, Double> queryVector = Indexer.calculateDocumentVector(termDataMap, parsedDocument);
             return ranker.rank(queryVector, docsVectors, docsExpandedSpans);
         } catch (IOException e) {
             logger.error("Could not retrieve data from index file!!!!!");
@@ -77,7 +77,7 @@ public class Searcher {
 
     public static void main(String[] args) throws IOException {
         BasicConfigurator.configure();
-        Configuration configuration = new Configuration("5/conf.txt");
+        Configuration configuration = new Configuration();
         InMemoryIndex memoryIndex = new InMemoryIndex(configuration);
         long loadStart = System.currentTimeMillis();
         memoryIndex.newLoad();
