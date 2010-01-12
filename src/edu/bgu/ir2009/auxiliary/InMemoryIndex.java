@@ -70,7 +70,13 @@ public class InMemoryIndex {
             Long termOffset = termOffsets.get(term);
             if (termOffset != null) {
                 indexFile.seek(termOffset);
-                res = new TermData(term, indexFile.readLine());
+                String line = indexFile.readLine();
+                try {
+                    res = new TermData(term, line);
+                } catch (RuntimeException e) {
+                    res = null;
+                    logger.error("Error while parsing term data from file: term - " + term + " . Read from file - " + line);
+                }
                 termDataCache.put(term, res);
             }
         }
