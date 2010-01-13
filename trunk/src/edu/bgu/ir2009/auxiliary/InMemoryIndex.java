@@ -23,16 +23,18 @@ public class InMemoryIndex {
     private final Configuration config;
     private final LRUCache<String, TermData> termDataCache;
     private final LRUCache<String, Map<String, Double>> docsVectorCache;
-    private final RandomAccessFile indexFile;
+    private RandomAccessFile indexFile;
 
-    public InMemoryIndex(Configuration config) throws FileNotFoundException {
+    public InMemoryIndex(Configuration config, boolean existingIndex) throws FileNotFoundException {
         this.config = config;
         termDataCache = new LRUCache<String, TermData>(config.getInMemoryIndexCacheSize());
         docsVectorCache = new LRUCache<String, Map<String, Double>>(config.getInMemoryDocsCacheSize());
-        indexFile = new RandomAccessFile(config.getIndexFileName(), "r");
+        if (existingIndex) {
+            indexFile = new RandomAccessFile(config.getIndexFileName(), "r");
+        }
     }
 
-    public void newLoad() throws IOException {
+    public void load() throws IOException {
         LineIterator iterator = null;
         try {
             iterator = FileUtils.lineIterator(new File(config.getIndexReferenceFileName()));

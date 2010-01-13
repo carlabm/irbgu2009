@@ -14,6 +14,7 @@ import java.util.Properties;
 public class Configuration {
     private static final Logger logger = Logger.getLogger(Configuration.class);
     private static final String SAVED_DOCS_FILE_NAME = "saved_docs";
+    private static final String SAVED_DOCS_REF_FILE_NAME = "saved_docs_ref";
     private static final String INDEX_FILE_NAME = "index";
     private static final String STOP_WORDS_FILE_NAME = "stop_words.txt";
     private static final String CONF_FILE_NAME = "conf.txt";
@@ -34,6 +35,7 @@ public class Configuration {
     private final String indexReferenceFileName;
     private final int inMemoryIndexCacheSize;
     private final int inMemoryDocsCacheSize;
+    private final String savedDocsRefFileName;
 
     public Configuration() {
         this(getBiggestDirNum() + "/" + CONF_FILE_NAME);
@@ -62,6 +64,7 @@ public class Configuration {
         }
         String newDirName = newDir.getName();
         savedDocsFileName = newDirName + "/" + SAVED_DOCS_FILE_NAME;
+        savedDocsRefFileName = newDirName + "/" + SAVED_DOCS_REF_FILE_NAME;
         //noinspection ResultOfMethodCallIgnored
         indexFileName = newDirName + "/" + INDEX_FILE_NAME;
         indexReferenceFileName = newDirName + "/" + INDEX_REF_FILE_NAME;
@@ -89,6 +92,7 @@ public class Configuration {
     private void saveConfFile(String confFileName) {
         config.setProperty("docsDir", docsDir);
         config.setProperty("savedDocsFileName", savedDocsFileName);
+        config.setProperty("savedDocsRefFileName", savedDocsRefFileName);
         config.setProperty("indexFileName", indexFileName);
         config.setProperty("indexRefFileName", indexReferenceFileName);
         config.setProperty("useStemmer", String.valueOf(useStemmer));
@@ -119,6 +123,7 @@ public class Configuration {
         }
         docsDir = config.getProperty("docsDir", "docs");
         savedDocsFileName = config.getProperty("savedDocsFileName", SAVED_DOCS_FILE_NAME);
+        savedDocsRefFileName = config.getProperty("savedDocsRefFileName", SAVED_DOCS_REF_FILE_NAME);
         indexFileName = config.getProperty("indexFileName", INDEX_FILE_NAME);
         indexReferenceFileName = config.getProperty("indexRefFileName", INDEX_REF_FILE_NAME);
         useStemmer = Boolean.parseBoolean(config.getProperty("useStemmer", "true"));
@@ -216,5 +221,9 @@ public class Configuration {
             }
         }
         return biggest;
+    }
+
+    public String getSavedDocsRefFileName() {
+        return savedDocsRefFileName;
     }
 }

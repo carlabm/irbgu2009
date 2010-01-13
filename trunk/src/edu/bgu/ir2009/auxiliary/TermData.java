@@ -9,6 +9,7 @@ import java.util.*;
  */
 public class TermData implements Comparable<TermData> {
     private final String term;
+    private final Object lock = new Object();
     private Map<String, Set<Long>> postingsMap = new HashMap<String, Set<Long>>();
     private long frequency;
     private double idf = -1.0;
@@ -43,14 +44,13 @@ public class TermData implements Comparable<TermData> {
     }
 
     public void addPosting(String docNo, Set<Long> postings) {
-        if (postingsMap.get(docNo) != null) {
-            throw new IllegalArgumentException("Postings for term '" + term + "' and docNo '" + docNo + "' already exist!");
-        }
         if (postings.size() == 0) {
             throw new IllegalArgumentException("postings set should contain at least one posting");
         }
-        frequency += postings.size();
-        postingsMap.put(docNo, postings);
+        synchronized (lock) {
+            frequency += postings.size();
+            postingsMap.put(docNo, postings);
+        }
     }
 
     public String getTerm() {

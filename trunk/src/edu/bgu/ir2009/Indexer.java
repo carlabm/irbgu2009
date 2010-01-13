@@ -22,28 +22,28 @@ public class Indexer {
     private static final Logger logger = Logger.getLogger(Indexer.class);
     private static final Object eventsLock = new Object();
     private final Map<String, TermData> index = new HashMap<String, TermData>();
-    private final Set<ParsedDocument> docsCache = new HashSet<ParsedDocument>();
     private final Map<String, Map<String, Double>> documentsVectors = new HashMap<String, Map<String, Double>>();
+    private final List<DocumentPostings> postings = Collections.synchronizedList(new LinkedList<DocumentPostings>());
     private final ExecutorService executor;
-    private Parser parser;
     private final Configuration config;
     private final Object lock = new Object();
 
+    private Parser parser;
     private boolean isStarted = false;
     private int indexedDocs = 0;
     private int totalIndexedDocs = 0;
     private InMemoryIndex memoryIndex;
     private InMemoryDocs inMemoryDocs;
 
-    public Indexer(String docsDir, String srcStopWordsFileName, boolean useStemmer) {
+    public Indexer(String docsDir, String srcStopWordsFileName, boolean useStemmer) throws IOException {
         this(new Configuration(docsDir, srcStopWordsFileName, useStemmer));
     }
 
-    public Indexer(Configuration config) {
+    public Indexer(Configuration config) throws IOException {
         this(new Parser(config), config);
     }
 
-    public Indexer(Parser parser, Configuration config) {
+    public Indexer(Parser parser, Configuration config) throws IOException {
         this.parser = parser;
         this.config = config;
         executor = Executors.newFixedThreadPool(config.getIndexerThreadsCount());
@@ -65,12 +65,12 @@ public class Indexer {
         }
         executor.execute(new Runnable() {
             public void run() {
-                ParsedDocument doc;
-                while (!executor.isShutdown() && (doc = parser.getNextParsedDocument()) != null) {
+                DocumentPostings postings;
+                while (!executor.isShutdown() && (postings = parser.getNextParsedDocumentPostings()) != null) {
                     synchronized (eventsLock) {
                         totalIndexedDocs++;
                     }
-                    executor.execute(new IndexerWorker(doc));
+                    executor.execute(new IndexerWorker(postings));
                 }
                 parser = null;
                 if (!executor.isShutdown()) {
@@ -80,12 +80,11 @@ public class Indexer {
                             try {
                                 executor.awaitTermination(10, TimeUnit.DAYS);
                                 doPreProcessing();
+                                Indexer.this.postings.clear();
+                                System.gc();
                                 memoryIndex = PostingFileUtils.saveIndex(index, documentsVectors, config);
                                 index.clear();
                                 documentsVectors.clear();
-                                System.gc();
-                                inMemoryDocs = PostingFileUtils.saveParsedDocuments(docsCache, config);
-                                docsCache.clear();
                                 System.gc();
                                 res.countDown();
                             } catch (InterruptedException e) {
@@ -96,7 +95,6 @@ public class Indexer {
                         }
                     }).start();
                 } else {
-                    docsCache.clear();
                     index.clear();
                 }
             }
@@ -105,23 +103,21 @@ public class Indexer {
     }
 
     private void doPreProcessing() {
-        long totalDocs = docsCache.size();
         for (TermData term : index.values()) {
-            term.setTotalDocs(totalDocs);
+            term.setTotalDocs(totalIndexedDocs);
         }
-        for (ParsedDocument doc : docsCache) {
-            Map<String, Double> docVector = calculateDocumentVector(index, doc);
-            documentsVectors.put(doc.getDocNo(), docVector);
+        for (DocumentPostings docPostings : postings) {
+            Map<String, Double> docVector = calculateDocumentVector(index, docPostings);
+            documentsVectors.put(docPostings.getDocNo(), docVector);
         }
     }
 
-    public static Map<String, Double> calculateDocumentVector(Map<String, TermData> index, ParsedDocument doc) {
+    public static Map<String, Double> calculateDocumentVector(Map<String, TermData> index, DocumentPostings doc) {
         double docLength = 0.0;
         Map<String, Set<Long>> terms = doc.getTerms();
         for (String term : terms.keySet()) {
-            TermData termData = index.get(term);
             int termFreq = terms.get(term).size();
-            double td_idf = termData.getIdf() * termFreq;
+            double td_idf = index.get(term).getIdf() * termFreq;
             docLength += td_idf * td_idf;
         }
         docLength = Math.sqrt(docLength);
@@ -147,10 +143,10 @@ public class Indexer {
         parser = null;
     }
 
-    private void indexParsedDocument(ParsedDocument doc) throws IOException {
-        logger.info("Starting indexing doc: " + doc.getDocNo());
-        String docNo = doc.getDocNo();
-        Map<String, Set<Long>> docTerms = doc.getTerms();
+    private void indexParsedDocument(DocumentPostings postings) throws IOException {
+        String docNo = postings.getDocNo();
+        logger.info("Starting indexing doc: " + docNo);
+        Map<String, Set<Long>> docTerms = postings.getTerms();
         for (String term : docTerms.keySet()) {
             TermData termData;
             synchronized (lock) {
@@ -162,20 +158,20 @@ public class Indexer {
             }
             termData.addPosting(docNo, docTerms.get(term));
         }
-        docsCache.add(doc);
-        logger.info("Finished indexing doc: " + doc.getDocNo());
+        logger.info("Finished indexing docPostings: " + postings.getDocNo());
     }
 
     private class IndexerWorker implements Runnable {
-        private final ParsedDocument doc;
+        private final DocumentPostings docPostings;
 
-        public IndexerWorker(ParsedDocument doc) {
-            this.doc = doc;
+        public IndexerWorker(DocumentPostings docPostings) {
+            this.docPostings = docPostings;
         }
 
         public void run() {
             try {
-                indexParsedDocument(doc);
+                indexParsedDocument(docPostings);
+                postings.add(docPostings);
                 synchronized (eventsLock) {
                     indexedDocs++;
                     UpFacade.getInstance().addIndexerEvent(indexedDocs, totalIndexedDocs);
@@ -188,15 +184,16 @@ public class Indexer {
 
     public static void main(String[] args) throws IOException, XMLStreamException, InterruptedException {
         BasicConfigurator.configure();
-        Indexer indexer = new Indexer("FT933", "stop-words.txt", true);
+        Configuration conf = new Configuration("FT933", "stop-words.txt", true, 50, 1.0, 2.0, 1, 2, 2);
+        Indexer indexer = new Indexer(conf);
         CountDownLatch countDownLatch = indexer.start();
         countDownLatch.await();
-        InMemoryIndex memoryIndex = new InMemoryIndex(indexer.getConfig());
-        memoryIndex.newLoad();
+        InMemoryIndex memoryIndex = new InMemoryIndex(indexer.getConfig(), true);
+        memoryIndex.load();
         TermData termData = memoryIndex.getTermData("justif");
         TermData termData2 = indexer.getMemoryIndex().getTermData("justif");
         logger.info("term data equality" + termData.equals(termData2));
-        for (String doc : termData.getPostingsMap().keySet()) {
+        for (String docPostings : termData.getPostingsMap().keySet()) {
             Set<String> fakeSet = new Set<String>() {
                 public int size() {
                     return 0;
@@ -250,8 +247,8 @@ public class Indexer {
 
                 }
             };
-            Map<String, Double> map = memoryIndex.getDocumentVector(doc);
-            Map<String, Double> map2 = indexer.getMemoryIndex().getDocumentVector(doc);
+            Map<String, Double> map = memoryIndex.getDocumentVector(docPostings);
+            Map<String, Double> map2 = indexer.getMemoryIndex().getDocumentVector(docPostings);
             logger.info(map.equals(map2));
         }
         int i = 0;

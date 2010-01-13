@@ -20,7 +20,7 @@ public class Searcher {
     private final Ranker ranker;
     private long searchId = 0;
 
-    public Searcher(InMemoryIndex index, Configuration config) {
+    public Searcher(InMemoryIndex index, Configuration config) throws IOException {
         this.index = index;
         this.config = config;
         parser = new Parser(config, false);
@@ -29,24 +29,40 @@ public class Searcher {
 
     public Set<RankedDocument> search(String text) {
         try {
-            ParsedDocument parsedDocument = parser.parse("query-" + String.valueOf(searchId++), text);
-            Map<String, Set<Long>> terms = parsedDocument.getTerms();
+            DocumentPostings documentPostings = parser.parse("query-" + String.valueOf(searchId++), text);
+            Map<String, Set<Long>> terms = documentPostings.getTerms();
             if (terms.isEmpty()) {
                 return Collections.emptySet();
             }
             Set<String> termsSet = terms.keySet();
             Map<String, TermData> termDataMap = retrieveTermData(termsSet);
             Set<String> docs = merge(termsSet, termDataMap);
-            GetDocumentVectorsAndSpans documentVectorsAndSpans = new GetDocumentVectorsAndSpans(termDataMap, docs).invoke();
-            Map<String, Map<String, Double>> docsVectors = documentVectorsAndSpans.getDocsVectors();
-            Map<String, List<List<TermNode>>> docsExpandedSpans = documentVectorsAndSpans.getDocsExpandedSpans();
-            Map<String, TermNode[]> recomposedDocs = documentVectorsAndSpans.getRecomposedTexts();
-            Map<String, Double> queryVector = Indexer.calculateDocumentVector(termDataMap, parsedDocument);
+            GetDocumentVectorsAndTexts documentVectorsAndTexts = new GetDocumentVectorsAndTexts(termDataMap, docs).invoke();
+            Map<String, Map<String, Double>> docsVectors = documentVectorsAndTexts.getDocsVectors();
+            Map<String, TermNode[]> recomposedDocs = documentVectorsAndTexts.getRecomposedTexts();
+            if (isQuotedQuery(text)) {
+                docs = filterIrrelevantDocs(terms, termDataMap, recomposedDocs);
+            }
+            Map<String, List<List<TermNode>>> docsExpandedSpans = getExpandedSpans(docs, recomposedDocs);
+            Map<String, Double> queryVector = Indexer.calculateDocumentVector(termDataMap, documentPostings);
             return ranker.rank(queryVector, docsVectors, docsExpandedSpans);
         } catch (IOException e) {
             logger.error("Could not retrieve data from index file!!!!!");
             return null;
         }
+    }
+
+    private Set<String> filterIrrelevantDocs(Map<String, Set<Long>> terms, Map<String, TermData> termDataMap, Map<String, TermNode[]> recomposedDocs) {
+
+        return recomposedDocs.keySet(); //TODO implement
+    }
+
+    private Map<String, List<List<TermNode>>> getExpandedSpans(Set<String> docs, Map<String, TermNode[]> recomposedDocs) {
+        Map<String, List<List<TermNode>>> docsExpandedSpans = new HashMap<String, List<List<TermNode>>>();
+        for (String retrievedDoc : docs) {
+            docsExpandedSpans.put(retrievedDoc, TermProximity.calculateSpans(recomposedDocs.get(retrievedDoc), config.getDMax()));
+        }
+        return docsExpandedSpans;
     }
 
     private Map<String, TermData> retrieveTermData(Set<String> termsSet) throws IOException {
@@ -92,9 +108,9 @@ public class Searcher {
     public static void main(String[] args) throws IOException {
         BasicConfigurator.configure();
         Configuration configuration = new Configuration();
-        InMemoryIndex memoryIndex = new InMemoryIndex(configuration);
+        InMemoryIndex memoryIndex = new InMemoryIndex(configuration, true);
         long loadStart = System.currentTimeMillis();
-        memoryIndex.newLoad();
+        memoryIndex.load();
         long loadEnd = System.currentTimeMillis();
         logger.info("Load took: " + (loadEnd - loadStart) + " ms");
         Searcher searcher = new Searcher(memoryIndex, configuration);
@@ -109,18 +125,16 @@ public class Searcher {
         }
     }
 
-    private class GetDocumentVectorsAndSpans {
+    private class GetDocumentVectorsAndTexts {
         private final Map<String, TermData> termDataMap;
         private final Set<String> docs;
         private final Map<String, Map<String, Double>> docsVectors;
-        private final Map<String, List<List<TermNode>>> docsExpandedSpans;
         private final Map<String, TermNode[]> recomposedTexts;
 
-        public GetDocumentVectorsAndSpans(Map<String, TermData> termDataMap, Set<String> docs) {
+        public GetDocumentVectorsAndTexts(Map<String, TermData> termDataMap, Set<String> docs) {
             this.termDataMap = termDataMap;
             this.docs = docs;
             docsVectors = new HashMap<String, Map<String, Double>>();
-            docsExpandedSpans = new HashMap<String, List<List<TermNode>>>();
             recomposedTexts = new HashMap<String, TermNode[]>();
         }
 
@@ -128,15 +142,11 @@ public class Searcher {
             return docsVectors;
         }
 
-        public Map<String, List<List<TermNode>>> getDocsExpandedSpans() {
-            return docsExpandedSpans;
-        }
-
         public Map<String, TermNode[]> getRecomposedTexts() {
             return recomposedTexts;
         }
 
-        public GetDocumentVectorsAndSpans invoke() throws IOException {
+        public GetDocumentVectorsAndTexts invoke() throws IOException {
             for (String retrievedDoc : docs) {
                 Map<String, Set<Long>> termsPostings = new HashMap<String, Set<Long>>();
                 docsVectors.put(retrievedDoc, index.getDocumentVector(retrievedDoc));
@@ -145,7 +155,6 @@ public class Searcher {
                 }
                 TermNode[] recomposedText = TermProximity.recomposeText(termsPostings);
                 recomposedTexts.put(retrievedDoc, recomposedText);
-                docsExpandedSpans.put(retrievedDoc, TermProximity.calculateSpans(recomposedText, config.getDMax()));
             }
             return this;
         }

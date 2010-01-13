@@ -3,12 +3,10 @@ package edu.bgu.ir2009.auxiliary;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * User: Henry Abravanel 310739693 henrya@bgu.ac.il
@@ -28,7 +26,7 @@ public class PostingFileUtils {
         if (indexRefFile.exists()) {
             FileUtils.deleteQuietly(indexRefFile);
         }
-        InMemoryIndex res = new InMemoryIndex(config);
+        InMemoryIndex res = new InMemoryIndex(config, false);
         FileWriter indexWriter = new FileWriter(indexFile);
         FileWriter indexRefWriter = new FileWriter(indexRefFile);
         int saved = 0;
@@ -68,42 +66,14 @@ public class PostingFileUtils {
     }
 
     public static InMemoryIndex loadInMemoryIndex(Configuration config) throws IOException {
-        InMemoryIndex res = new InMemoryIndex(config);
-        res.newLoad();
+        InMemoryIndex res = new InMemoryIndex(config, true);
+        res.load();
         return res;
     }
 
     public static InMemoryDocs loadInMemoryDocs(Configuration config) throws IOException {
         InMemoryDocs res = new InMemoryDocs(config);
         res.load();
-        return res;
-    }
-
-    public static InMemoryDocs saveParsedDocuments(final Set<ParsedDocument> docsCache, final Configuration config) throws IOException {
-        logger.info("Saving parsed documents to: " + config.getSavedDocsFileName());
-        InMemoryDocs res = new InMemoryDocs(config);
-        File docFile = new File(config.getSavedDocsFileName());
-        if (!docFile.exists()) {
-            BufferedWriter writer = null;
-            try {
-                writer = new BufferedWriter(new FileWriter(docFile));
-                int savedDocs = 0;
-                long offset = 0;
-                for (ParsedDocument doc : docsCache) {
-                    String serializedDoc = doc.serialize();
-                    writer.write(serializedDoc + "\n");
-                    res.addDocument(doc.getDocNo(), offset);
-                    offset += serializedDoc.length() + 1;
-                    savedDocs++;
-                    UpFacade.getInstance().addDocumentsSavingEvent(savedDocs, docsCache.size());
-                }
-            } finally {
-                if (writer != null) {
-                    writer.close();
-                }
-            }
-        }
-        logger.info("Finished saving documents. Saved " + docsCache.size() + " documents.");
         return res;
     }
 }
