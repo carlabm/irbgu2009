@@ -13,6 +13,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.concurrent.*;
 
@@ -23,7 +24,7 @@ import java.util.concurrent.*;
  */
 public class ReadFile {
     private final static Logger logger = Logger.getLogger(ReadFile.class);
-    private final static UnParsedDocument emptyDoc = new UnParsedDocument();
+    private final static UnParsedDocument EMPTY_DOC = new UnParsedDocument();
     private final static Object lock = new Object();
 
     private final String dirName;
@@ -59,7 +60,6 @@ public class ReadFile {
                 UpFacade.getInstance().addReaderEvent(0, totalFiles);
                 for (int i = 0, filesLength = files.length; !executor.isShutdown() && i < filesLength; i++) {
                     String fileName = files[i];
-                    logger.info(fileName + " is being submitted for reading...");
                     executor.execute(new ReaderWorker(fileName));
                 }
                 new Thread(new Runnable() {
@@ -67,7 +67,7 @@ public class ReadFile {
                         executor.shutdown();
                         try {
                             executor.awaitTermination(10, TimeUnit.DAYS);
-                            docQueue.put(emptyDoc);
+                            docQueue.put(EMPTY_DOC);
                         } catch (InterruptedException e) {
                             logger.warn(e, e);
                         }
@@ -94,45 +94,51 @@ public class ReadFile {
         return res;
     }
 
-    private void read(String fileName) throws XMLStreamException, FileNotFoundException {
+    private void read(String fileName) throws XMLStreamException, IOException {
         logger.info("Starting reading file: " + fileName);
-        XMLStreamReader xmlParser = XMLInputFactory.newInstance().createXMLStreamReader(new DocumentInputStream(dirName + "/" + fileName));
-        StAXOMBuilder builder = new StAXOMBuilder(xmlParser);
-        OMElement omElement = builder.getDocumentElement();
-        Iterator docIterator = omElement.getChildElements();
-        while (docIterator.hasNext()) {
-            UnParsedDocument dr = new UnParsedDocument();
-            OMElement docElement = (OMElement) docIterator.next();
-            Iterator inDocElIterator = docElement.getChildElements();
-            while (inDocElIterator.hasNext()) {
-                OMElement inDocEl = (OMElement) inDocElIterator.next();
-                String localName = inDocEl.getLocalName().trim();
-                if ("DOCNO".equals(localName)) {
-                    dr.setDocNo(inDocEl.getText().trim());
-                } else {
-                    if ("TEXT".equals(localName)) {
-                        dr.setText(inDocEl.getText());
+        DocumentInputStream inputStream = null;
+        XMLStreamReader xmlParser = null;
+        StAXOMBuilder builder = null;
+        try {
+            inputStream = new DocumentInputStream(dirName + "/" + fileName);
+            xmlParser = XMLInputFactory.newInstance().createXMLStreamReader(inputStream);
+            builder = new StAXOMBuilder(xmlParser);
+            OMElement omElement = builder.getDocumentElement();
+            Iterator docIterator = omElement.getChildElements();
+            while (docIterator.hasNext()) {
+                UnParsedDocument dr = new UnParsedDocument();
+                OMElement docElement = (OMElement) docIterator.next();
+                Iterator inDocElIterator = docElement.getChildElements();
+                while (inDocElIterator.hasNext()) {
+                    OMElement inDocEl = (OMElement) inDocElIterator.next();
+                    String localName = inDocEl.getLocalName().trim();
+                    if ("DOCNO".equals(localName)) {
+                        dr.setDocNo(inDocEl.getText().trim());
                     } else {
-                        if ("DATE".equals(localName)) {
-                            dr.setDate(Long.parseLong(inDocEl.getText().trim()));
+                        if ("TEXT".equals(localName)) {
+                            dr.setText(inDocEl.getText());
                         } else {
-                            if ("BYLINE".equals(localName)) {
-                                dr.setByLine(inDocEl.getText().trim());
+                            if ("DATE".equals(localName)) {
+                                dr.setDate(Long.parseLong(inDocEl.getText().trim()));
                             } else {
-                                if ("CN".equals(localName)) {
-                                    dr.setCn(inDocEl.getText().trim());
+                                if ("BYLINE".equals(localName)) {
+                                    dr.setByLine(inDocEl.getText().trim());
                                 } else {
-                                    if ("IN".equals(localName)) {
-                                        dr.setIn(inDocEl.getText().trim());
+                                    if ("CN".equals(localName)) {
+                                        dr.setCn(inDocEl.getText().trim());
                                     } else {
-                                        if ("TP".equals(localName)) {
-                                            dr.setTp(inDocEl.getText().trim());
+                                        if ("IN".equals(localName)) {
+                                            dr.setIn(inDocEl.getText().trim());
                                         } else {
-                                            if ("PUB".equals(localName)) {
-                                                dr.setPub(inDocEl.getText().trim());
+                                            if ("TP".equals(localName)) {
+                                                dr.setTp(inDocEl.getText().trim());
                                             } else {
-                                                if ("PAGE".equals(localName)) {
-                                                    dr.setPage(inDocEl.getText().trim());
+                                                if ("PUB".equals(localName)) {
+                                                    dr.setPub(inDocEl.getText().trim());
+                                                } else {
+                                                    if ("PAGE".equals(localName)) {
+                                                        dr.setPage(inDocEl.getText().trim());
+                                                    }
                                                 }
                                             }
                                         }
@@ -142,12 +148,22 @@ public class ReadFile {
                         }
                     }
                 }
+                logger.debug("Finished reading doc: " + dr.getDocNo());
+                try {
+                    docQueue.put(dr);
+                } catch (InterruptedException ignored) {
+                    logger.debug("Interrupted while putting unparsed document in the docsQueue");
+                }
             }
-            logger.debug("Finished reading doc: " + dr.getDocNo());
-            try {
-                docQueue.put(dr);
-            } catch (InterruptedException ignored) {
-                logger.debug("Interrupted while putting unparsed document in the docsQueue");
+        } finally {
+            if (builder != null) {
+                builder.close();
+            }
+            if (xmlParser != null) {
+                xmlParser.close();
+            }
+            if (inputStream != null) {
+                inputStream.close();
             }
         }
         logger.info("Finished reading file: " + fileName);
@@ -175,7 +191,7 @@ public class ReadFile {
             } catch (Exception e) {
                 logger.error(e, e);
                 try {
-                    docQueue.put(emptyDoc);
+                    docQueue.put(EMPTY_DOC);
                 } catch (InterruptedException ignored) {
                 }
             }

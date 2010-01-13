@@ -43,4 +43,8 @@ public class DocumentInputStream extends InputStream {
         }
         return res;
     }
+
+    public void close() throws IOException {
+        is.close();
+    }
 }

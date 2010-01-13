@@ -23,6 +23,49 @@ public class UnParsedDocument {
     public UnParsedDocument() {
     }
 
+    public UnParsedDocument(String serialized) {
+        int start = 0;
+        int end = serialized.indexOf('|');
+        docNo = serialized.substring(start, end);
+        start = end + 1;
+        end = serialized.indexOf('|', start);
+        date = Long.parseLong(serialized.substring(start, end));
+        start = end + 1;
+        end = serialized.indexOf('|', start);
+        byLine = serialized.substring(start, end);
+        start = end + 1;
+        end = serialized.indexOf('|', start);
+        cn = serialized.substring(start, end);
+        start = end + 1;
+        end = serialized.indexOf('|', start);
+        in = serialized.substring(start, end);
+        start = end + 1;
+        end = serialized.indexOf('|', start);
+        tp = serialized.substring(start, end);
+        start = end + 1;
+        end = serialized.indexOf('|', start);
+        pub = serialized.substring(start, end);
+        start = end + 1;
+        end = serialized.indexOf('|', start);
+        page = serialized.substring(start, end);
+        start = end + 1;
+        text = serialized.substring(start);
+    }
+
+    public String serialize() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(docNo.replace('|', ' ')).append('|')
+                .append(date).append('|')
+                .append(byLine.replace('|', ' ')).append('|')
+                .append(cn.replace('|', ' ')).append('|')
+                .append(in.replace('|', ' ')).append('|')
+                .append(tp.replace('|', ' ')).append('|')
+                .append(pub.replace('|', ' ')).append('|')
+                .append(page.replace('|', ' ')).append('|')
+                .append(text);
+        return builder.toString();
+    }
+
     public UnParsedDocument(String docNo, String text) {
         this.docNo = docNo;
         this.text = text + ' ';
