@@ -1,9 +1,11 @@
 package edu.bgu.ir2009.auxiliary;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.LineIterator;
-
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.*;
 
 /**
@@ -20,8 +22,8 @@ public class NextWordIndex {
     public NextWordIndex(Configuration config, boolean loadFromFile) throws IOException {
         this.config = config;
         if (loadFromFile) {
-            load();
             indexFile = new RandomAccessFile(config.getNextWordIndexFileName(), "r");
+            load();
         }
     }
 
@@ -29,8 +31,13 @@ public class NextWordIndex {
         Map<String, Set<Long>> res = null;
         Pair<Long, Long> pair = offsets.get(first);
         if (pair != null) {
-            indexFile.seek(pair.getFirst());
-            String line = indexFile.readLine();
+            StringBuilder builder = new StringBuilder();
+            FileChannel channel = indexFile.getChannel();
+            MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_ONLY, pair.getFirst(), pair.getSecond());
+            while (buffer.remaining() > 0) {
+                builder.append((char) buffer.get());
+            }
+            String line = builder.toString();
             int start = line.indexOf(':') + 1;
             int end = line.indexOf('{');
             String currNextWord = line.substring(start, end);
@@ -62,23 +69,25 @@ public class NextWordIndex {
     }
 
     public void load() throws IOException {
-        LineIterator iterator = null;
-        try {
-            iterator = FileUtils.lineIterator(new File(config.getNextWordRefIndexFileName()));
-            while (iterator.hasNext()) {
-                String line = iterator.nextLine();
+        FileChannel channel = new RandomAccessFile(config.getNextWordRefIndexFileName(), "r").getChannel();
+        MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
+        StringBuilder builder = new StringBuilder();
+        while (buffer.remaining() > 0) {
+            char singleChar = (char) buffer.get();
+            if (singleChar != '\n') {
+                builder.append(singleChar);
+            } else {
+                String line = builder.toString();
                 int first = line.indexOf(':');
                 int second = line.indexOf(':', first + 1);
                 String firstWord = line.substring(0, first);
                 Long offset = Long.parseLong(line.substring(first + 1, second));
                 Long size = Long.parseLong(line.substring(second + 1, line.length()));
                 offsets.put(firstWord, new Pair<Long, Long>(offset, size));
-            }
-        } finally {
-            if (iterator != null) {
-                LineIterator.closeQuietly(iterator);
+                builder.delete(0, builder.length());
             }
         }
+        channel.close();
     }
 
     public void addWordPair(String doc, String first, String second, Long pos) {
@@ -159,11 +168,15 @@ public class NextWordIndex {
 
     public static void main(String[] args) throws IOException {
         long start = System.currentTimeMillis();
-        NextWordIndex index1 = new NextWordIndex(new Configuration("1/conf.txt"), true);
+        NextWordIndex index1 = new NextWordIndex(new Configuration("2/conf.txt"), true);
         long end = System.currentTimeMillis();
         System.out.println("load took: " + (end - start));
         start = System.currentTimeMillis();
-        Map<String, Set<Long>> map = index1.getNextWordPostings("bank", "justifa");
+        Map<String, Set<Long>> map = index1.getNextWordPostings("bank", "justif");
+        end = System.currentTimeMillis();
+        System.out.println("call took: " + (end - start));
+        start = System.currentTimeMillis();
+        map = index1.getNextWordPostings("uk", "summer");
         end = System.currentTimeMillis();
         System.out.println("call took: " + (end - start));
         int i = 0;

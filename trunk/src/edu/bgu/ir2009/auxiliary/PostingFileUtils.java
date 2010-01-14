@@ -1,6 +1,5 @@
 package edu.bgu.ir2009.auxiliary;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -19,13 +18,7 @@ public class PostingFileUtils {
     public static InMemoryIndex saveIndex(Map<String, TermData> index, Map<String, Map<String, Double>> documentsVectors, Configuration config) throws IOException {
         logger.info("Saving index to indexFile: " + config.getIndexFileName() + " Reference indexFile: " + config.getIndexReferenceFileName());
         File indexFile = new File(config.getIndexFileName());
-        if (indexFile.exists()) {
-            FileUtils.deleteQuietly(indexFile);
-        }
         File indexRefFile = new File(config.getIndexReferenceFileName());
-        if (indexRefFile.exists()) {
-            FileUtils.deleteQuietly(indexRefFile);
-        }
         InMemoryIndex res = new InMemoryIndex(config, false);
         FileWriter indexWriter = new FileWriter(indexFile);
         FileWriter indexRefWriter = new FileWriter(indexRefFile);
@@ -35,8 +28,8 @@ public class PostingFileUtils {
         for (TermData td : index.values()) {
             String termSerialized = td.getSavedString();
             indexWriter.write(termSerialized + '\n');
-            res.addTerm(td.getTerm(), pos);
-            indexRefWriter.write(td.getTerm() + "=" + pos + "\n");
+            res.addTerm(td.getTerm(), pos, termSerialized.length());
+            indexRefWriter.write(td.getTerm() + ":" + pos + ":" + termSerialized.length() + "\n");
             pos += termSerialized.length() + 1;
             saved++;
             UpFacade.getInstance().addIndexSavingEvent(saved, totalToSave);
@@ -53,8 +46,8 @@ public class PostingFileUtils {
             }
             String serializedDocVector = builder.toString();
             indexWriter.write(serializedDocVector + '\n');
-            res.addDocVector(docNo, pos);
-            indexRefWriter.write(docNo + "=" + pos + "\n");
+            res.addDocVector(docNo, pos, serializedDocVector.length());
+            indexRefWriter.write(docNo + ":" + pos + ":" + serializedDocVector.length() + "\n");
             pos += serializedDocVector.length() + 1;
             saved++;
             UpFacade.getInstance().addIndexSavingEvent(saved, totalToSave);
