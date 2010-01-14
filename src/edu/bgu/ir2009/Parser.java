@@ -6,10 +6,11 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 import javax.xml.stream.XMLStreamException;
-import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.*;
@@ -51,23 +52,21 @@ public class Parser {
         if (useStemmer) {
             stemmer = new Stemmer();
         }
-        BufferedReader stopWordsReader;
         String stopWordsFileName = config.getSrcStopWordsFileName();
         try {
-            stopWordsReader = new BufferedReader(new FileReader(stopWordsFileName));
-            String stopWord;
-            try {
-                while ((stopWord = stopWordsReader.readLine()) != null) {
-                    stopWordsSet.add(stopWord.trim());
-                }
-            } catch (IOException e) {
-                logger.error(e, e);
-            } finally {
-                try {
-                    stopWordsReader.close();
-                } catch (IOException ignored) {
+            FileChannel channel = new FileInputStream(stopWordsFileName).getChannel();
+            MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
+            StringBuilder builder = new StringBuilder();
+            while (buffer.remaining() > 0) {
+                char singleChar = (char) buffer.get();
+                if (singleChar != '\n') {
+                    builder.append(singleChar);
+                } else {
+                    stopWordsSet.add(builder.toString());
+                    builder.delete(0, builder.length());
                 }
             }
+            channel.close();
         } catch (FileNotFoundException e) {
             logger.warn("The stop-words file '" + stopWordsFileName + "' not found! Using non!");
         }

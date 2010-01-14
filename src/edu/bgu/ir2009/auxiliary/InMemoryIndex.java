@@ -1,13 +1,13 @@
 package edu.bgu.ir2009.auxiliary;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.LineIterator;
 import org.apache.log4j.Logger;
 
-import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,8 +18,8 @@ import java.util.Map;
  */
 public class InMemoryIndex {
     private final static Logger logger = Logger.getLogger(InMemoryIndex.class);
-    private final Map<String, Long> termOffsets = new HashMap<String, Long>();
-    private final Map<String, Long> docOffsets = new HashMap<String, Long>();
+    private final Map<String, Pair<Long, Long>> termOffsets = new HashMap<String, Pair<Long, Long>>();
+    private final Map<String, Pair<Long, Long>> docOffsets = new HashMap<String, Pair<Long, Long>>();
     private final Configuration config;
     private final LRUCache<String, TermData> termDataCache;
     private final LRUCache<String, Map<String, Double>> docsVectorCache;
@@ -35,44 +35,65 @@ public class InMemoryIndex {
     }
 
     public void load() throws IOException {
-        LineIterator iterator = null;
-        try {
-            iterator = FileUtils.lineIterator(new File(config.getIndexReferenceFileName()));
-            while (iterator.hasNext()) {
-                String line = iterator.nextLine();
+        FileChannel channel = new FileInputStream(config.getIndexReferenceFileName()).getChannel();
+        MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
+        StringBuilder builder = new StringBuilder();
+        while (buffer.remaining() > 0) {
+            char singleChar = (char) buffer.get();
+            if (singleChar != '\n') {
+                builder.append(singleChar);
+            } else {
+                String line = builder.toString();
                 if ("".equals(line)) {
                     break;
                 }
-                int end = line.indexOf('=');
+                int end = line.indexOf(':');
                 String term = line.substring(0, end);
-                termOffsets.put(term, Long.parseLong(line.substring(end + 1, line.length())));
+                int start = end + 1;
+                end = line.indexOf(':', start);
+                long offset = Long.parseLong(line.substring(start, end));
+                long length = Long.parseLong(line.substring(end + 1, line.length()));
+                termOffsets.put(term, new Pair<Long, Long>(offset, length));
+                builder.delete(0, builder.length());
             }
-            while (iterator.hasNext()) {
-                String line = iterator.nextLine();
-                int end = line.indexOf('=');
-                String docNo = line.substring(0, end);
-                docOffsets.put(docNo, Long.parseLong(line.substring(end + 1, line.length())));
-            }
-        } finally {
-            LineIterator.closeQuietly(iterator);
         }
+        while (buffer.remaining() > 0) {
+            char singleChar = (char) buffer.get();
+            if (singleChar != '\n') {
+                builder.append(singleChar);
+            } else {
+                String line = builder.toString();
+                int end = line.indexOf(':');
+                String docNo = line.substring(0, end);
+                int start = end + 1;
+                end = line.indexOf(':', start);
+                long offset = Long.parseLong(line.substring(start, end));
+                long length = Long.parseLong(line.substring(end + 1, line.length()));
+                docOffsets.put(docNo, new Pair<Long, Long>(offset, length));
+            }
+        }
+        channel.close();
     }
 
-    public void addTerm(String term, long offset) {
-        termOffsets.put(term, offset);
+    public void addTerm(String term, long offset, long length) {
+        termOffsets.put(term, new Pair<Long, Long>(offset, length));
     }
 
-    public void addDocVector(String docNo, long offset) {
-        docOffsets.put(docNo, offset);
+    public void addDocVector(String docNo, long offset, long length) {
+        docOffsets.put(docNo, new Pair<Long, Long>(offset, length));
     }
 
     public TermData getTermData(String term) throws IOException {
         TermData res;
         if ((res = termDataCache.get(term)) == null) {
-            Long termOffset = termOffsets.get(term);
-            if (termOffset != null) {
-                indexFile.seek(termOffset);
-                String line = indexFile.readLine();
+            Pair<Long, Long> pair = termOffsets.get(term);
+            if (pair != null) {
+                MappedByteBuffer buffer = indexFile.getChannel().map(FileChannel.MapMode.READ_ONLY, pair.getFirst(), pair.getSecond());
+                StringBuilder builder = new StringBuilder();
+                while (buffer.remaining() > 0) {
+                    builder.append((char) buffer.get());
+                }
+                String line = builder.toString();
                 try {
                     res = new TermData(term, line);
                 } catch (RuntimeException e) {
@@ -88,10 +109,14 @@ public class InMemoryIndex {
     public Map<String, Double> getDocumentVector(String docNo) throws IOException {
         Map<String, Double> res;
         if ((res = docsVectorCache.get(docNo)) == null) {
-            Long docOffset = docOffsets.get(docNo);
-            if (docOffset != null) {
-                indexFile.seek(docOffset);
-                res = parseDocumentVector(indexFile.readLine());
+            Pair<Long, Long> pair = docOffsets.get(docNo);
+            if (pair != null) {
+                MappedByteBuffer buffer = indexFile.getChannel().map(FileChannel.MapMode.READ_ONLY, pair.getFirst(), pair.getSecond());
+                StringBuilder builder = new StringBuilder();
+                while (buffer.remaining() > 0) {
+                    builder.append((char) buffer.get());
+                }
+                res = parseDocumentVector(builder.toString());
                 docsVectorCache.put(docNo, res);
             }
         }
