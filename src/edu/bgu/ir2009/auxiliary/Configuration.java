@@ -16,9 +16,11 @@ public class Configuration {
     private static final String SAVED_DOCS_FILE_NAME = "saved_docs";
     private static final String SAVED_DOCS_REF_FILE_NAME = "saved_docs_ref";
     private static final String INDEX_FILE_NAME = "index";
+    private static final String INDEX_REF_FILE_NAME = "index_ref";
+    private static final String NEXT_WORD_INDEX_FILE_NAME = "nw_index";
+    private static final String NEXT_WORD_INDEX_REF_FILE_NAME = "nw_index_ref";
     private static final String STOP_WORDS_FILE_NAME = "stop_words.txt";
     private static final String CONF_FILE_NAME = "conf.txt";
-    private static final String INDEX_REF_FILE_NAME = "index_ref";
 
     private final Properties config = new Properties();
     private final String docsDir;
@@ -36,6 +38,8 @@ public class Configuration {
     private final int inMemoryIndexCacheSize;
     private final int inMemoryDocsCacheSize;
     private final String savedDocsRefFileName;
+    private final String nextWordIndexFileName;
+    private final String nextWordRefIndexFileName;
 
     public Configuration() {
         this(getBiggestDirNum() + "/" + CONF_FILE_NAME);
@@ -68,6 +72,8 @@ public class Configuration {
         //noinspection ResultOfMethodCallIgnored
         indexFileName = newDirName + "/" + INDEX_FILE_NAME;
         indexReferenceFileName = newDirName + "/" + INDEX_REF_FILE_NAME;
+        nextWordIndexFileName = newDirName + "/" + NEXT_WORD_INDEX_FILE_NAME;
+        nextWordRefIndexFileName = newDirName + "/" + NEXT_WORD_INDEX_REF_FILE_NAME;
         this.srcStopWordsFileName = newDirName + "/" + STOP_WORDS_FILE_NAME;
         copyStopWordsFile(stopWordsFile, this.srcStopWordsFileName);
         this.readerThreadsCount = readerThreadsCount;
@@ -95,6 +101,8 @@ public class Configuration {
         config.setProperty("savedDocsRefFileName", savedDocsRefFileName);
         config.setProperty("indexFileName", indexFileName);
         config.setProperty("indexRefFileName", indexReferenceFileName);
+        config.setProperty("nextWordIndexFileName", nextWordIndexFileName);
+        config.setProperty("nextWordRefIndexFileName", nextWordRefIndexFileName);
         config.setProperty("useStemmer", String.valueOf(useStemmer));
         config.setProperty("srcStopWordsFileName", srcStopWordsFileName);
         config.setProperty("readerThreadsCount", String.valueOf(readerThreadsCount));
@@ -126,6 +134,8 @@ public class Configuration {
         savedDocsRefFileName = config.getProperty("savedDocsRefFileName", SAVED_DOCS_REF_FILE_NAME);
         indexFileName = config.getProperty("indexFileName", INDEX_FILE_NAME);
         indexReferenceFileName = config.getProperty("indexRefFileName", INDEX_REF_FILE_NAME);
+        nextWordIndexFileName = config.getProperty("nextWordIndexFileName", NEXT_WORD_INDEX_FILE_NAME);
+        nextWordRefIndexFileName = config.getProperty("nextWordRefIndexFileName", NEXT_WORD_INDEX_REF_FILE_NAME);
         useStemmer = Boolean.parseBoolean(config.getProperty("useStemmer", "true"));
         srcStopWordsFileName = config.getProperty("srcStopWordsFileName", STOP_WORDS_FILE_NAME);
         readerThreadsCount = Integer.parseInt(config.getProperty("readerThreadsCount", "2"));
@@ -225,5 +235,13 @@ public class Configuration {
 
     public String getSavedDocsRefFileName() {
         return savedDocsRefFileName;
+    }
+
+    public String getNextWordIndexFileName() {
+        return nextWordIndexFileName;
+    }
+
+    public String getNextWordRefIndexFileName() {
+        return nextWordRefIndexFileName;
     }
 }
