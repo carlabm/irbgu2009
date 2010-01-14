@@ -101,6 +101,9 @@ public class IndexingDialog extends JDialog implements Observer {
                                     int percent = (int) (((double) savingEvent.getSavedTerm()) / savingEvent.getTotalTerms() * 100);
                                     savingProgressBar.setValue(percent);
                                     savingProgressBar.setString(percent + "%");
+                                    if (savingEvent.getSavedTerm() == savingEvent.getTotalTerms()) {
+                                        closeButton.setEnabled(true);
+                                    }
                                 } else {
                                     buttonCancel.setEnabled(false);
                                     DocumentsSavingEvent savingEvent = (DocumentsSavingEvent) arg;

@@ -28,7 +28,7 @@ public class Parser {
     private final boolean useStemmer;
     private final ExecutorService executor;
     private final BlockingQueue<DocumentPostings> docPostings = new LinkedBlockingQueue<DocumentPostings>();
-    private final NextWordIndex nextWordIndex = new NextWordIndex();
+    private final NextWordIndex nextWordIndex;
     private final DocumentWriter docWriter;
 
     private boolean isStartable = true;
@@ -74,9 +74,11 @@ public class Parser {
         if (reader != null) {
             executor = Executors.newFixedThreadPool(config.getParserThreadsCount());
             docWriter = new DocumentWriter(config);
+            nextWordIndex = new NextWordIndex(config, false);
         } else {
             executor = null;
             docWriter = null;
+            nextWordIndex = null;
             isStartable = false;
         }
     }
@@ -111,6 +113,11 @@ public class Parser {
                         } finally {
                             try {
                                 docWriter.close();
+                            } catch (IOException e) {
+                                logger.error(e, e);
+                            }
+                            try {
+                                nextWordIndex.store();
                             } catch (IOException e) {
                                 logger.error(e, e);
                             }

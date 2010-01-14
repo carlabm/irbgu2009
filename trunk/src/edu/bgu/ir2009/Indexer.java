@@ -1,6 +1,7 @@
 package edu.bgu.ir2009;
 
 import edu.bgu.ir2009.auxiliary.*;
+import edu.bgu.ir2009.gui.IndexingDialog;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
@@ -184,9 +185,13 @@ public class Indexer {
 
     public static void main(String[] args) throws IOException, XMLStreamException, InterruptedException {
         BasicConfigurator.configure();
-        Configuration conf = new Configuration("FT933", "stop-words.txt", true, 50, 1.0, 2.0, 1, 2, 2);
+        Configuration conf = new Configuration("FT933", "stop-words.txt", true, 50, 1.0, 2.0, 2, 1, 2);
+        IndexingDialog dialog = new IndexingDialog();
         Indexer indexer = new Indexer(conf);
+        UpFacade.getInstance().addIndexBindEvent(indexer);
         CountDownLatch countDownLatch = indexer.start();
+        dialog.pack();
+        dialog.setVisible(true);
         countDownLatch.await();
         InMemoryIndex memoryIndex = new InMemoryIndex(indexer.getConfig(), true);
         memoryIndex.load();
