@@ -17,6 +17,7 @@ public class NextWordIndex {
     private final Map<String, Map<String, Map<String, Set<Long>>>> index = new HashMap<String, Map<String, Map<String, Set<Long>>>>();
     private final Map<String, Pair<Long, Long>> offsets = new HashMap<String, Pair<Long, Long>>();
     private final Configuration config;
+    private final Object lock = new Object();
     private RandomAccessFile indexFile;
 
     public NextWordIndex(Configuration config, boolean loadFromFile) throws IOException {
@@ -91,22 +92,24 @@ public class NextWordIndex {
     }
 
     public void addWordPair(String doc, String first, String second, Long pos) {
-        Map<String, Map<String, Set<Long>>> nextWordMap = index.get(first);
-        if (nextWordMap == null) {
-            nextWordMap = new HashMap<String, Map<String, Set<Long>>>();
-            index.put(first, nextWordMap);
+        synchronized (lock) {
+            Map<String, Map<String, Set<Long>>> nextWordMap = index.get(first);
+            if (nextWordMap == null) {
+                nextWordMap = new HashMap<String, Map<String, Set<Long>>>();
+                index.put(first, nextWordMap);
+            }
+            Map<String, Set<Long>> postingsMap = nextWordMap.get(second);
+            if (postingsMap == null) {
+                postingsMap = new HashMap<String, Set<Long>>();
+                nextWordMap.put(second, postingsMap);
+            }
+            Set<Long> docPostings = postingsMap.get(doc);
+            if (docPostings == null) {
+                docPostings = new LinkedHashSet<Long>();
+                postingsMap.put(doc, docPostings);
+            }
+            docPostings.add(pos);
         }
-        Map<String, Set<Long>> postingsMap = nextWordMap.get(second);
-        if (postingsMap == null) {
-            postingsMap = new HashMap<String, Set<Long>>();
-            nextWordMap.put(second, postingsMap);
-        }
-        Set<Long> docPostings = postingsMap.get(doc);
-        if (docPostings == null) {
-            docPostings = new LinkedHashSet<Long>();
-            postingsMap.put(doc, docPostings);
-        }
-        docPostings.add(pos);
     }
 
     public void store() throws IOException {

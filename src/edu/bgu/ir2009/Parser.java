@@ -34,7 +34,6 @@ public class Parser {
 
     private boolean isStartable = true;
     private ReadFile reader;
-    private Stemmer stemmer;
     private int totalUnParsedDocuments = 0;
     private int totalParsedDocuments = 0;
 
@@ -49,9 +48,6 @@ public class Parser {
     public Parser(ReadFile reader, Configuration config) throws IOException {
         this.reader = reader;
         useStemmer = config.useStemmer();
-        if (useStemmer) {
-            stemmer = new Stemmer();
-        }
         String stopWordsFileName = config.getSrcStopWordsFileName();
         try {
             FileChannel channel = new FileInputStream(stopWordsFileName).getChannel();
@@ -169,10 +165,10 @@ public class Parser {
                     String newTerm = currTerm.toString();
                     if (!stopWordsSet.contains(newTerm)) {
                         if (useStemmer) {
+                            Stemmer stemmer = new Stemmer();
                             stemmer.add(newTerm.toCharArray(), newTerm.length());
                             stemmer.stem();
                             newTerm = stemmer.toString();
-                            stemmer = new Stemmer();
                         }
                         res.addTerm(newTerm, pos);
                         if (lastTerm != null) {
