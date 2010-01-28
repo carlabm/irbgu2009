@@ -44,7 +44,7 @@ public class Indexer {
         this(new Parser(config), config);
     }
 
-    public Indexer(Parser parser, Configuration config) throws IOException {
+    public Indexer(Parser parser, Configuration config) {
         this.parser = parser;
         this.config = config;
         executor = Executors.newFixedThreadPool(config.getIndexerThreadsCount());
@@ -144,7 +144,7 @@ public class Indexer {
         parser = null;
     }
 
-    private void indexParsedDocument(DocumentPostings postings) throws IOException {
+    private void indexParsedDocument(DocumentPostings postings) {
         String docNo = postings.getDocNo();
         logger.info("Starting indexing doc: " + docNo);
         Map<String, Set<Long>> docTerms = postings.getTerms();
@@ -170,15 +170,11 @@ public class Indexer {
         }
 
         public void run() {
-            try {
-                indexParsedDocument(docPostings);
-                postings.add(docPostings);
-                synchronized (eventsLock) {
-                    indexedDocs++;
-                    UpFacade.getInstance().addIndexerEvent(indexedDocs, totalIndexedDocs);
-                }
-            } catch (IOException e) {
-                logger.error(e, e);
+            indexParsedDocument(docPostings);
+            postings.add(docPostings);
+            synchronized (eventsLock) {
+                indexedDocs++;
+                UpFacade.getInstance().addIndexerEvent(indexedDocs, totalIndexedDocs);
             }
         }
     }

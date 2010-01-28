@@ -112,7 +112,7 @@ public class Parser {
                                 logger.error(e, e);
                             }
                             try {
-                                nextWordIndex.store();
+                                nextWordIndex.close();
                             } catch (IOException e) {
                                 logger.error(e, e);
                             }
@@ -171,7 +171,7 @@ public class Parser {
                             newTerm = stemmer.toString();
                         }
                         res.addTerm(newTerm, pos);
-                        if (lastTerm != null) {
+                        if (lastTerm != null && addToQueue) {
                             nextWordIndex.addWordPair(res.getDocNo(), lastTerm, newTerm, pos - 1);
                         }
                         lastTerm = newTerm;
@@ -226,7 +226,7 @@ public class Parser {
 
     public static void main(String[] args) throws XMLStreamException, IOException, InterruptedException {
         BasicConfigurator.configure();
-        Parser parser = new Parser(new Configuration("FT933", "stop-words.txt", true));
+        Parser parser = new Parser(new Configuration("FT933", "stop-words.txt", true, 45, 1.0, 2.0, 2, 1, 1));
         parser.start();
         while (parser.getNextParsedDocumentPostings() != null) {
 

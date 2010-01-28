@@ -40,6 +40,7 @@ public class Configuration {
     private final String savedDocsRefFileName;
     private final String nextWordIndexFileName;
     private final String nextWordRefIndexFileName;
+    private final String workingDir;
 
     public Configuration() {
         this(getBiggestDirNum() + "/" + CONF_FILE_NAME);
@@ -66,15 +67,15 @@ public class Configuration {
         if (!success) {
             throw new RuntimeException("Could not create directory for current configuration!");
         }
-        String newDirName = newDir.getName();
-        savedDocsFileName = newDirName + "/" + SAVED_DOCS_FILE_NAME;
-        savedDocsRefFileName = newDirName + "/" + SAVED_DOCS_REF_FILE_NAME;
+        workingDir = newDir.getName();
+        savedDocsFileName = workingDir + "/" + SAVED_DOCS_FILE_NAME;
+        savedDocsRefFileName = workingDir + "/" + SAVED_DOCS_REF_FILE_NAME;
         //noinspection ResultOfMethodCallIgnored
-        indexFileName = newDirName + "/" + INDEX_FILE_NAME;
-        indexReferenceFileName = newDirName + "/" + INDEX_REF_FILE_NAME;
-        nextWordIndexFileName = newDirName + "/" + NEXT_WORD_INDEX_FILE_NAME;
-        nextWordRefIndexFileName = newDirName + "/" + NEXT_WORD_INDEX_REF_FILE_NAME;
-        this.srcStopWordsFileName = newDirName + "/" + STOP_WORDS_FILE_NAME;
+        indexFileName = workingDir + "/" + INDEX_FILE_NAME;
+        indexReferenceFileName = workingDir + "/" + INDEX_REF_FILE_NAME;
+        nextWordIndexFileName = workingDir + "/" + NEXT_WORD_INDEX_FILE_NAME;
+        nextWordRefIndexFileName = workingDir + "/" + NEXT_WORD_INDEX_REF_FILE_NAME;
+        this.srcStopWordsFileName = workingDir + "/" + STOP_WORDS_FILE_NAME;
         copyStopWordsFile(stopWordsFile, this.srcStopWordsFileName);
         this.readerThreadsCount = readerThreadsCount;
         this.parserThreadsCount = parserThreadsCount;
@@ -84,7 +85,7 @@ public class Configuration {
         this.DMax = DMax;
         inMemoryIndexCacheSize = 200;
         inMemoryDocsCacheSize = 100;
-        saveConfFile(newDirName + "/" + CONF_FILE_NAME);
+        saveConfFile(workingDir + "/" + CONF_FILE_NAME);
     }
 
     private void copyStopWordsFile(File stopWordsFile, String srcStopWordsFileName) {
@@ -113,6 +114,7 @@ public class Configuration {
         config.setProperty("gamma", String.valueOf(gamma));
         config.setProperty("inMemoryIndexCacheSize", String.valueOf(inMemoryIndexCacheSize));
         config.setProperty("inMemoryDocsCacheSize", String.valueOf(inMemoryDocsCacheSize));
+        config.setProperty("workingDir", workingDir);
         try {
             config.store(new FileOutputStream(confFileName), "");
         } catch (IOException e) {
@@ -129,6 +131,7 @@ public class Configuration {
             logger.warn("Could not load properties file: " + configFileName + "! Using defaults when possible...");
             exceptionThrown = true;
         }
+        workingDir = config.getProperty("workingDir", ".");
         docsDir = config.getProperty("docsDir", "docs");
         savedDocsFileName = config.getProperty("savedDocsFileName", SAVED_DOCS_FILE_NAME);
         savedDocsRefFileName = config.getProperty("savedDocsRefFileName", SAVED_DOCS_REF_FILE_NAME);
@@ -244,4 +247,10 @@ public class Configuration {
     public String getNextWordRefIndexFileName() {
         return nextWordRefIndexFileName;
     }
+
+    public String getWorkingDir() {
+        return workingDir;
+    }
+
+
 }

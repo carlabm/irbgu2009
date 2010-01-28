@@ -12,7 +12,6 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.concurrent.*;
@@ -44,7 +43,7 @@ public class ReadFile {
         executor = Executors.newFixedThreadPool(config.getReaderThreadsCount());
     }
 
-    public void start() throws XMLStreamException, FileNotFoundException {
+    public void start() {
         synchronized (this) {
             if (!isStarted) {
                 isStarted = true;

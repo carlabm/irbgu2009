@@ -1,12 +1,17 @@
 package edu.bgu.ir2009.auxiliary;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
+import edu.bgu.ir2009.auxiliary.io.FlushWriter;
+import edu.bgu.ir2009.auxiliary.io.NextWordFlushingStrategy;
+import org.apache.log4j.Logger;
+
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * User: Henry Abravanel 310739693 henrya@bgu.ac.il
@@ -14,17 +19,24 @@ import java.util.*;
  * Time: 02:02:04
  */
 public class NextWordIndex {
+    private final Logger logger = Logger.getLogger(NextWordIndex.class);
     private final Map<String, Map<String, Map<String, Set<Long>>>> index = new HashMap<String, Map<String, Map<String, Set<Long>>>>();
     private final Map<String, Pair<Long, Long>> offsets = new HashMap<String, Pair<Long, Long>>();
+    private final FlushWriter<Map<String, Map<String, Map<String, Set<Long>>>>> nwWriter;
     private final Configuration config;
     private final Object lock = new Object();
+    private int currentUnflushedCount = 0;
     private RandomAccessFile indexFile;
+
 
     public NextWordIndex(Configuration config, boolean loadFromFile) throws IOException {
         this.config = config;
         if (loadFromFile) {
+            nwWriter = null;
             indexFile = new RandomAccessFile(config.getNextWordIndexFileName(), "r");
             load();
+        } else {
+            nwWriter = new FlushWriter<Map<String, Map<String, Map<String, Set<Long>>>>>(new NextWordFlushingStrategy(config), config);
         }
     }
 
@@ -93,95 +105,38 @@ public class NextWordIndex {
 
     public void addWordPair(String doc, String first, String second, Long pos) {
         synchronized (lock) {
-            Map<String, Map<String, Set<Long>>> nextWordMap = index.get(first);
-            if (nextWordMap == null) {
-                nextWordMap = new HashMap<String, Map<String, Set<Long>>>();
-                index.put(first, nextWordMap);
-            }
-            Map<String, Set<Long>> postingsMap = nextWordMap.get(second);
-            if (postingsMap == null) {
-                postingsMap = new HashMap<String, Set<Long>>();
-                nextWordMap.put(second, postingsMap);
-            }
-            Set<Long> docPostings = postingsMap.get(doc);
-            if (docPostings == null) {
-                docPostings = new LinkedHashSet<Long>();
-                postingsMap.put(doc, docPostings);
-            }
-            docPostings.add(pos);
-        }
-    }
-
-    public void store() throws IOException {
-        BufferedWriter writer = null;
-        BufferedWriter refWriter = null;
-        try {
-            writer = new BufferedWriter(new FileWriter(config.getNextWordIndexFileName()));
-            refWriter = new BufferedWriter(new FileWriter(config.getNextWordRefIndexFileName()));
-            long pos = 0;
-            Iterator<String> iterator = index.keySet().iterator();
-            while (iterator.hasNext()) {
-                String first = iterator.next();
-                String serialized = buildSerializedPosting(first);
-                writer.write(serialized + '\n');
-                offsets.put(first, new Pair<Long, Long>(pos, (long) serialized.length()));
-                pos += serialized.length() + 1;
-                iterator.remove();
-            }
-            for (String first : offsets.keySet()) {
-                Pair<Long, Long> pair = offsets.get(first);
-                refWriter.write(first + ":" + pair.getFirst() + ":" + pair.getSecond() + "\n");
-            }
-        } finally {
-            if (writer != null) {
+            currentUnflushedCount++;
+            if (currentUnflushedCount > 1000000) {
+                currentUnflushedCount = 0;
                 try {
-                    writer.close();
-                } catch (IOException ignored) {
-                }
-            }
-            if (refWriter != null) {
-                try {
-                    refWriter.close();
-                } catch (IOException ignored) {
+                    logger.info("Flushing next word records...");
+                    nwWriter.flush(index);
+                    System.gc();
+                } catch (IOException e) {
+                    logger.error(e, e);
                 }
             }
         }
-    }
-
-    private String buildSerializedPosting(String first) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(first).append(':');
         Map<String, Map<String, Set<Long>>> nextWordMap = index.get(first);
-        for (String second : nextWordMap.keySet()) {
-            builder.append(second).append('{');
-            Map<String, Set<Long>> postingsMap = nextWordMap.get(second);
-            for (String docNo : postingsMap.keySet()) {
-                builder.append(docNo).append('[');
-                Set<Long> docPostingsSet = postingsMap.get(docNo);
-                for (Long posting : docPostingsSet) {
-                    builder.append(posting).append(',');
-                }
-                builder.append(']').append(',');
-            }
-            builder.append('}').append(',');
+        if (nextWordMap == null) {
+            nextWordMap = new HashMap<String, Map<String, Set<Long>>>();
+            index.put(first, nextWordMap);
         }
-        return builder.toString();
+        Map<String, Set<Long>> postingsMap = nextWordMap.get(second);
+        if (postingsMap == null) {
+            postingsMap = new HashMap<String, Set<Long>>();
+            nextWordMap.put(second, postingsMap);
+        }
+        Set<Long> docPostings = postingsMap.get(doc);
+        if (docPostings == null) {
+            docPostings = new LinkedHashSet<Long>();
+            postingsMap.put(doc, docPostings);
+        }
+        docPostings.add(pos);
     }
 
-
-    public static void main(String[] args) throws IOException {
-        long start = System.currentTimeMillis();
-        NextWordIndex index1 = new NextWordIndex(new Configuration("2/conf.txt"), true);
-        long end = System.currentTimeMillis();
-        System.out.println("load took: " + (end - start));
-        start = System.currentTimeMillis();
-        Map<String, Set<Long>> map = index1.getNextWordPostings("bank", "justif");
-        end = System.currentTimeMillis();
-        System.out.println("call took: " + (end - start));
-        start = System.currentTimeMillis();
-        map = index1.getNextWordPostings("uk", "summer");
-        end = System.currentTimeMillis();
-        System.out.println("call took: " + (end - start));
-        int i = 0;
+    public void close() throws IOException {
+        nwWriter.flush(index);
+        nwWriter.close();
     }
 }
