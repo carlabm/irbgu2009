@@ -62,9 +62,27 @@ public class FlushWriter<T> {
     }
 
 
-    public void close() {
+    public void close() throws IOException {
         synchronized (lock) {
             if (flushFile != null) {
+                BufferedWriter writer = null;
+                try {
+                    writer = new BufferedWriter(new FileWriter(fs.getRefFileName()));
+                    LineIterator iterator = FileUtils.lineIterator(flushFile);
+                    long pos = 0;
+                    while (iterator.hasNext()) {
+                        String line = iterator.nextLine();
+                        String refId = fs.getLineRefID(line);
+                        writer.write(refId + ':' + pos + ':' + line.length() + '\n');
+                        pos += line.length() + 1;
+                    }
+                    LineIterator.closeQuietly(iterator);
+                } finally {
+                    if (writer != null) {
+                        writer.close();
+                    }
+                }
+
                 File nwFile = new File(fs.getFinalFileName());
                 boolean success = flushFile.renameTo(nwFile);
                 if (!success) {

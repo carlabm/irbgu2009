@@ -68,6 +68,14 @@ public class NextWordFlushingStrategy implements FlushingStrategy<Map<String, Ma
         return config.getNextWordIndexFileName();
     }
 
+    public String getRefFileName() {
+        return config.getNextWordRefIndexFileName();
+    }
+
+    public String getLineRefID(String line) {
+        return line.substring(0, line.indexOf(':'));
+    }
+
     private static String buildSerializedPosting(String first, Map<String, Map<String, Map<String, Set<Long>>>> index) {
         StringBuilder builder = new StringBuilder();
         builder.append(first).append(':');

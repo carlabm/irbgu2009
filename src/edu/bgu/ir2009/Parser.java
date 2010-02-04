@@ -1,7 +1,6 @@
 package edu.bgu.ir2009;
 
 import edu.bgu.ir2009.auxiliary.*;
-import edu.bgu.ir2009.auxiliary.io.DocumentWriter;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
@@ -30,7 +29,6 @@ public class Parser {
     private final ExecutorService executor;
     private final BlockingQueue<DocumentPostings> docPostings = new LinkedBlockingQueue<DocumentPostings>();
     private final NextWordIndex nextWordIndex;
-    private final DocumentWriter docWriter;
 
     private boolean isStartable = true;
     private ReadFile reader;
@@ -68,11 +66,9 @@ public class Parser {
         }
         if (reader != null) {
             executor = Executors.newFixedThreadPool(config.getParserThreadsCount());
-            docWriter = new DocumentWriter(config);
             nextWordIndex = new NextWordIndex(config, false);
         } else {
             executor = null;
-            docWriter = null;
             nextWordIndex = null;
             isStartable = false;
         }
@@ -94,7 +90,6 @@ public class Parser {
                     synchronized (lock) {
                         totalUnParsedDocuments++;
                     }
-                    logger.info("Document " + doc.getDocNo() + " is being submitted for parsing...");
                     executor.execute(new ParserWorker(doc));
                 }
                 reader = null;
@@ -106,11 +101,6 @@ public class Parser {
                         } catch (InterruptedException e) {
                             logger.warn(e, e);
                         } finally {
-                            try {
-                                docWriter.close();
-                            } catch (IOException e) {
-                                logger.error(e, e);
-                            }
                             try {
                                 nextWordIndex.close();
                             } catch (IOException e) {
@@ -151,7 +141,6 @@ public class Parser {
 
 
     private DocumentPostings parse(UnParsedDocument unParsedDoc, boolean addToQueue) {
-        logger.info("Started parsing document " + unParsedDoc.getDocNo());
         DocumentPostings res = new DocumentPostings(unParsedDoc.getDocNo());
         long pos = 0;
         StringBuilder currTerm = new StringBuilder();
@@ -188,7 +177,6 @@ public class Parser {
                 logger.warn(e, e);
             }
         }
-        logger.info("Finished parsing document " + unParsedDoc.getDocNo());
         return res;
     }
 
@@ -196,11 +184,6 @@ public class Parser {
         reader.stop();
         reader = null;
         executor.shutdownNow();
-        try {
-            docWriter.close();
-        } catch (IOException e) {
-            logger.error(e, e);
-        }
     }
 
     private class ParserWorker implements Runnable {
@@ -212,11 +195,6 @@ public class Parser {
 
         public void run() {
             parse(doc, true);
-            try {
-                docWriter.write(doc);
-            } catch (IOException e) {
-                logger.error(e, e);
-            }
             synchronized (lock) {
                 totalParsedDocuments++;
                 UpFacade.getInstance().addParserEvent(totalParsedDocuments, totalUnParsedDocuments);
@@ -226,7 +204,7 @@ public class Parser {
 
     public static void main(String[] args) throws XMLStreamException, IOException, InterruptedException {
         BasicConfigurator.configure();
-        Parser parser = new Parser(new Configuration("FT933", "stop-words.txt", true, 45, 1.0, 2.0, 2, 1, 1));
+        Parser parser = new Parser(new Configuration("FT933", "stop-words.txt", true, 45, 1.0, 2.0, 2, 2, 1));
         parser.start();
         while (parser.getNextParsedDocumentPostings() != null) {
 
