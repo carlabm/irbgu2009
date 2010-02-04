@@ -1,4 +1,4 @@
-package edu.bgu.ir2009.auxiliary;
+package edu.bgu.ir2009.auxiliary.io;
 
 import java.io.FileInputStream;
 import java.io.IOException;

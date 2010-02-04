@@ -146,7 +146,6 @@ public class Indexer {
 
     private void indexParsedDocument(DocumentPostings postings) {
         String docNo = postings.getDocNo();
-        logger.info("Starting indexing doc: " + docNo);
         Map<String, Set<Long>> docTerms = postings.getTerms();
         for (String term : docTerms.keySet()) {
             TermData termData;
@@ -159,7 +158,7 @@ public class Indexer {
             }
             termData.addPosting(docNo, docTerms.get(term));
         }
-        logger.info("Finished indexing docPostings: " + postings.getDocNo());
+//        logger.info("Finished indexing docPostings: " + postings.getDocNo());
     }
 
     private class IndexerWorker implements Runnable {
@@ -181,7 +180,7 @@ public class Indexer {
 
     public static void main(String[] args) throws IOException, XMLStreamException, InterruptedException {
         BasicConfigurator.configure();
-        Configuration conf = new Configuration("FT933", "stop-words.txt", true, 50, 1.0, 2.0, 2, 1, 2);
+        Configuration conf = new Configuration("FT933", "stop-words.txt", true, 50, 1.0, 2.0, 2, 2, 2);
         IndexingDialog dialog = new IndexingDialog();
         Indexer indexer = new Indexer(conf);
         UpFacade.getInstance().addIndexBindEvent(indexer);

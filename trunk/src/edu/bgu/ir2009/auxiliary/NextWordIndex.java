@@ -103,18 +103,16 @@ public class NextWordIndex {
         channel.close();
     }
 
-    public void addWordPair(String doc, String first, String second, Long pos) {
-        synchronized (lock) {
-            currentUnflushedCount++;
-            if (currentUnflushedCount > 1000000) {
-                currentUnflushedCount = 0;
-                try {
-                    logger.info("Flushing next word records...");
-                    nwWriter.flush(index);
-                    System.gc();
-                } catch (IOException e) {
-                    logger.error(e, e);
-                }
+    public synchronized void addWordPair(String doc, String first, String second, Long pos) {
+        currentUnflushedCount++;
+        if (currentUnflushedCount > 1000000) {
+            currentUnflushedCount = 0;
+            try {
+                logger.info("Flushing next word records...");
+                nwWriter.flush(index);
+                logger.info("Done flushing next word records...");
+            } catch (IOException e) {
+                logger.error(e, e);
             }
         }
         Map<String, Map<String, Set<Long>>> nextWordMap = index.get(first);
@@ -135,7 +133,8 @@ public class NextWordIndex {
         docPostings.add(pos);
     }
 
-    public void close() throws IOException {
+    public synchronized void close() throws IOException {
+        logger.info("Flushing and Closing remaining unflushed next words...");
         nwWriter.flush(index);
         nwWriter.close();
     }

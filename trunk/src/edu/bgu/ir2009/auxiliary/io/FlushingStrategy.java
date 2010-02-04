@@ -16,4 +16,8 @@ public interface FlushingStrategy<T> {
     void flushRemainingContent(T toFlush, BufferedWriter flushWriter) throws IOException;
 
     String getFinalFileName();
+
+    String getRefFileName();
+
+    String getLineRefID(String line);
 }

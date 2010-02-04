@@ -1,9 +1,10 @@
 package edu.bgu.ir2009;
 
 import edu.bgu.ir2009.auxiliary.Configuration;
-import edu.bgu.ir2009.auxiliary.DocumentInputStream;
 import edu.bgu.ir2009.auxiliary.UnParsedDocument;
 import edu.bgu.ir2009.auxiliary.UpFacade;
+import edu.bgu.ir2009.auxiliary.io.DocumentInputStream;
+import edu.bgu.ir2009.auxiliary.io.DocumentWriter;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.impl.builder.StAXOMBuilder;
 import org.apache.log4j.Logger;
@@ -33,6 +34,7 @@ public class ReadFile {
     private boolean isStarted = false;
     private int totalFiles;
     private int filesRead = 0;
+    private DocumentWriter docWriter;
 
     public ReadFile(String docsDir, String srcStopWordsFileName, boolean useStemmer) {
         this(new Configuration(docsDir, srcStopWordsFileName, useStemmer));
@@ -41,6 +43,11 @@ public class ReadFile {
     public ReadFile(Configuration config) {
         this.dirName = config.getDocsDir();
         executor = Executors.newFixedThreadPool(config.getReaderThreadsCount());
+        try {
+            docWriter = new DocumentWriter(config);
+        } catch (IOException e) {
+            logger.error(e, e);
+        }
     }
 
     public void start() {
@@ -66,8 +73,12 @@ public class ReadFile {
                         executor.shutdown();
                         try {
                             executor.awaitTermination(10, TimeUnit.DAYS);
+                            if (docWriter != null) {
+                                docWriter.close();
+                            }
                             docQueue.put(EMPTY_DOC);
-                        } catch (InterruptedException e) {
+                            logger.info("Finished reading all file. Total files: " + totalFiles);
+                        } catch (Exception e) {
                             logger.warn(e, e);
                         }
                     }
@@ -94,7 +105,6 @@ public class ReadFile {
     }
 
     private void read(String fileName) throws XMLStreamException, IOException {
-        logger.info("Starting reading file: " + fileName);
         DocumentInputStream inputStream = null;
         XMLStreamReader xmlParser = null;
         StAXOMBuilder builder = null;
@@ -147,8 +157,8 @@ public class ReadFile {
                         }
                     }
                 }
-                logger.debug("Finished reading doc: " + dr.getDocNo());
                 try {
+                    docWriter.write(dr);
                     docQueue.put(dr);
                 } catch (InterruptedException ignored) {
                     logger.debug("Interrupted while putting unparsed document in the docsQueue");
@@ -165,7 +175,6 @@ public class ReadFile {
                 inputStream.close();
             }
         }
-        logger.info("Finished reading file: " + fileName);
     }
 
     public void stop() {
