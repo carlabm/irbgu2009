@@ -155,10 +155,10 @@ public class Indexer {
                     termData = new TermData(term);
                     index.put(term, termData);
                 }
+                //todo add here a strtegy
             }
             termData.addPosting(docNo, docTerms.get(term));
         }
-//        logger.info("Finished indexing docPostings: " + postings.getDocNo());
     }
 
     private class IndexerWorker implements Runnable {
