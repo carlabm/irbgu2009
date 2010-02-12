@@ -11,7 +11,7 @@ import java.io.IOException;
 public interface FlushingStrategy<T> {
     String getTempFilePrefix();
 
-    void mergePreviousWithNew(T toFlush, BufferedWriter flushWriter, String line) throws IOException;
+    void mergePreviousWithNew(T toFlush, BufferedWriter flushWriter, String previous) throws IOException;
 
     void flushRemainingContent(T toFlush, BufferedWriter flushWriter) throws IOException;
 
