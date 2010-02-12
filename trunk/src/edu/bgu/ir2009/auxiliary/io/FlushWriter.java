@@ -39,11 +39,11 @@ public class FlushWriter<T> {
                 if (oldFlushIndexFile != null) {
                     LineIterator iterator = FileUtils.lineIterator(oldFlushIndexFile);
                     while (iterator.hasNext()) {
-                        String line = iterator.nextLine();
-                        if ("".equals(line)) {
+                        String previous = iterator.nextLine();
+                        if ("".equals(previous)) {
                             break;
                         }
-                        fs.mergePreviousWithNew(toFlush, flushWriter, line);
+                        fs.mergePreviousWithNew(toFlush, flushWriter, previous);
                         flushWriter.write('\n');
                     }
                     LineIterator.closeQuietly(iterator);

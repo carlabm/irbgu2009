@@ -66,7 +66,7 @@ public class Parser {
         }
         if (reader != null) {
             executor = Executors.newFixedThreadPool(config.getParserThreadsCount());
-            nextWordIndex = new NextWordIndex(config, false);
+            nextWordIndex = new NextWordIndex(config);
         } else {
             executor = null;
             nextWordIndex = null;

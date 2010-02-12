@@ -23,18 +23,18 @@ public class NextWordFlushingStrategy implements FlushingStrategy<Map<String, Ma
         return "tmp_nwindex_";
     }
 
-    public void mergePreviousWithNew(Map<String, Map<String, Map<String, Set<Long>>>> toFlush, BufferedWriter flushWriter, String line) throws IOException {
+    public void mergePreviousWithNew(Map<String, Map<String, Map<String, Set<Long>>>> toFlush, BufferedWriter flushWriter, String previous) throws IOException {
         int start = 0;
-        int end = line.indexOf(':', start);
-        String first = line.substring(start, end);
+        int end = previous.indexOf(':', start);
+        String first = previous.substring(start, end);
         Map<String, Map<String, Set<Long>>> firstMap = toFlush.get(first);
         flushWriter.write(first + ':');
-        while ((start = end + 1) < line.length()) {
-            end = line.indexOf('{', start);
-            String currNextWord = line.substring(start, end);
+        while ((start = end + 1) < previous.length()) {
+            end = previous.indexOf('{', start);
+            String currNextWord = previous.substring(start, end);
             start = end;
-            end = line.indexOf('}', start);
-            String toAppend = line.substring(start, end);
+            end = previous.indexOf('}', start);
+            String toAppend = previous.substring(start, end);
             flushWriter.write(currNextWord + toAppend);
             if (firstMap != null) {
                 Map<String, Set<Long>> secondMap = firstMap.get(currNextWord);
