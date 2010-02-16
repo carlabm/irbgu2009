@@ -24,11 +24,23 @@ public class TermIndexFlushingStrategy implements FlushingStrategy<Map<String, T
     }
 
     public void mergePreviousWithNew(Map<String, TermData> toFlush, BufferedWriter flushWriter, String line) throws IOException {
-
+        String prevTerm = line.substring(0, line.indexOf(':'));
+        flushWriter.write(line);
+        TermData prevTermData = toFlush.get(prevTerm);
+        if (prevTermData != null) {
+            flushWriter.write(prevTermData.getSerializedPostings());
+            toFlush.remove(prevTerm);
+        }
     }
 
     public void flushRemainingContent(Map<String, TermData> toFlush, BufferedWriter flushWriter) throws IOException {
-
+        for (String term : toFlush.keySet()) {
+            flushWriter.write(term);
+            flushWriter.write(':');
+            flushWriter.write(toFlush.get(term).getSerializedPostings());
+            flushWriter.write('\n');
+        }
+        toFlush.clear();
     }
 
     public String getFinalFileName() {

@@ -10,7 +10,7 @@ import java.util.*;
 public class TermData implements Comparable<TermData> {
     private final String term;
     private final Object lock = new Object();
-    private Map<String, Set<Long>> postingsMap = new HashMap<String, Set<Long>>();
+    private Map<String, Set<Long>> postingsMap = Collections.synchronizedMap(new HashMap<String, Set<Long>>());
     private long frequency;
     private double idf = -1.0;
 
@@ -18,9 +18,6 @@ public class TermData implements Comparable<TermData> {
         this.term = term;
         this.frequency = 0;
     }
-
-
-    //concomit:3:2.609238575955086[FT933-679{118,182,247,289}|FT933-1185{247}|FT933-1192{354}]
 
     public TermData(String term, String serialized) {
         this.term = term;
@@ -66,7 +63,7 @@ public class TermData implements Comparable<TermData> {
                 '}';
     }
 
-    public String getSavedString() {
+    /* public String getSavedString() {
         StringBuilder builder = new StringBuilder();
         builder.append(term).append(':').append(frequency).append(':').append(idf).append('[');
         Iterator<String> docNoIterator = postingsMap.keySet().iterator();
@@ -87,6 +84,18 @@ public class TermData implements Comparable<TermData> {
             }
         }
         builder.append(']');
+        return builder.toString();
+    }*/
+
+    public String getSerializedPostings() {
+        StringBuilder builder = new StringBuilder();
+        for (String docNo : postingsMap.keySet()) {
+            builder.append(docNo).append('{');
+            for (Long posting : postingsMap.get(docNo)) {
+                builder.append(posting).append(',');
+            }
+            builder.append('}').append(',');
+        }
         return builder.toString();
     }
 

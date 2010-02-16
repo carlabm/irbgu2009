@@ -2,13 +2,13 @@
 <project version="4">
   <component name="ChangeListManager" verified="true">
     <list default="true" readonly="true" id="156d3955-5176-423a-92a9-52a5ff1fd474" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/Parser.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/Parser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/io/FlushWriter.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/io/FlushWriter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/io/NextWordFlushingStrategy.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/io/NextWordFlushingStrategy.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/io/FlushingStrategy.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/io/FlushingStrategy.java" />
+      <change type="DELETED" beforePath="D:\henry\study\ir\src\edu\bgu\ir2009\auxiliary\io\IndexFlushingStrategy.java" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/io/TermIndexFlushingStrategy.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/io/TermIndexFlushingStrategy.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/PostingFileUtils.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/PostingFileUtils.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/TermIndex.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/Indexer.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/Indexer.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/TermData.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/TermData.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/io/TermIndexFlushingStrategy.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/NextWordIndex.java" afterPath="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/NextWordIndex.java" />
     </list>
     <ignored path=".idea/workspace.xml" />
     <ignored path="ir2009.iws" />
@@ -102,8 +102,8 @@
       <property name="field_breakpoints_groupByClasses" value="true" />
       <property name="method_breakpoints_groupByClasses" value="true" />
       <property name="exception_breakpoints_viewId" value="TABLE" />
-      <property name="exception_breakpoints_groupByClasses" value="true" />
       <property name="field_breakpoints_viewId" value="TABLE" />
+      <property name="exception_breakpoints_groupByClasses" value="true" />
       <property name="method_breakpoints_groupByMethods" value="false" />
     </ui_properties>
   </component>
@@ -116,7 +116,7 @@
       <file leaf-file-name="TermIndexFlushingStrategy.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/io/TermIndexFlushingStrategy.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="30" column="0" selection-start="871" selection-end="871" vertical-scroll-proportion="0.0">
+            <state line="33" column="20" selection-start="1055" selection-end="1055" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -125,7 +125,25 @@
       <file leaf-file-name="Indexer.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/Indexer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="85" column="66" selection-start="3345" selection-end="3345" vertical-scroll-proportion="0.0">
+            <state line="24" column="4" selection-start="710" selection-end="779" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TermIndex.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/TermIndex.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="10" column="23" selection-start="214" selection-end="214" vertical-scroll-proportion="0.47619048">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Parser.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/Parser.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="163" column="46" selection-start="6357" selection-end="6357" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -134,43 +152,16 @@
       <file leaf-file-name="PostingFileUtils.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/PostingFileUtils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="28" column="41" selection-start="1211" selection-end="1211" vertical-scroll-proportion="0.0">
+            <state line="57" column="16" selection-start="2656" selection-end="2656" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TermData.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/TermData.java">
+      <file leaf-file-name="FlushingStrategy.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/io/FlushingStrategy.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="90" column="149" selection-start="3096" selection-end="3096" vertical-scroll-proportion="0.71428573">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="NextWordFlushingStrategy.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/io/NextWordFlushingStrategy.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="75" column="8" selection-start="2757" selection-end="2801" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="FlushWriter.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/io/FlushWriter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="50" column="17" selection-start="1846" selection-end="1846" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="IndexFlushingStrategy.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/io/IndexFlushingStrategy.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="25" column="129" selection-start="719" selection-end="719" vertical-scroll-proportion="0.0">
+            <state line="13" column="0" selection-start="272" selection-end="272" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -186,22 +177,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/ReadFile.java" />
         <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/Ranker.java" />
         <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/TermProximity.java" />
         <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/Configuration.java" />
-        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/PostingFileUtils.java" />
         <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/Searcher.java" />
         <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/InMemoryIndex.java" />
-        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/TermData.java" />
-        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/io/IndexFlushingStrategy.java" />
         <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/NextWordIndex.java" />
         <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/Parser.java" />
         <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/io/FlushingStrategy.java" />
         <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/io/NextWordFlushingStrategy.java" />
         <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/io/FlushWriter.java" />
-        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/Indexer.java" />
+        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/PostingFileUtils.java" />
+        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/io/IndexFlushingStrategy.java" />
         <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/io/TermIndexFlushingStrategy.java" />
+        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/TermData.java" />
+        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/Indexer.java" />
+        <option value="$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/TermIndex.java" />
       </list>
     </option>
   </component>
@@ -240,24 +231,129 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="Favorites" />
-      <pane id="ProjectPane">
-        <subPane />
-      </pane>
       <pane id="PackagesPane" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ir" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ir" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ir" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ir" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ir" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ir2009" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ir" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ir" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ir2009" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="gui" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ir" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ir" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ir2009" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="auxiliary" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ir" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ir" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ir2009" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="auxiliary" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="io" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Favorites" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth1" value="103" />
-    <property name="project.structure.last.edited" value="Project" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth0" value="74" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth3" value="31" />
-    <property name="project.structure.proportion" value="0.15" />
-    <property name="OverrideImplement.combined" value="true" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth2" value="98" />
-    <property name="options.splitter.main.proportions" value="0.3" />
+    <property name="OverrideImplement.combined" value="true" />
+    <property name="project.structure.proportion" value="0.15" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder1" value="1" />
+    <property name="options.splitter.main.proportions" value="0.3" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder0" value="0" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder3" value="3" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder2" value="2" />
@@ -276,21 +372,21 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth4" value="103" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth5" value="778" />
     <property name="GoToClass.includeLibraries" value="false" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth5" value="778" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder5" value="5" />
     <property name="options.lastSelected" value="fileTemplates" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder5" value="5" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder3" value="3" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder4" value="4" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder1" value="1" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder2" value="2" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder0" value="0" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder2" value="2" />
     <property name="MemberChooser.copyJavadoc" value="false" />
-    <property name="dynamic.classpath" value="false" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder0" value="0" />
     <property name="options.searchVisible" value="true" />
+    <property name="dynamic.classpath" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
@@ -684,16 +780,16 @@
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3295325" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32736155" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32736155" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.19789132" sideWeight="0.56442416" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28018224" sideWeight="0.54885995" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28018224" sideWeight="0.54885995" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4397394" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16009104" sideWeight="0.56790125" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5972382" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24986653" sideWeight="0.56790125" order="2" side_tool="false" content_ui="combo" />
@@ -757,11 +853,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/io/IndexReader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="13" selection-start="478" selection-end="478" vertical-scroll-proportion="-0.53956836" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/Ranker.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="25" column="31" selection-start="587" selection-end="587" vertical-scroll-proportion="0.31220096" />
@@ -777,24 +868,9 @@
         <state line="136" column="94" selection-start="6650" selection-end="6650" vertical-scroll-proportion="0.029904306" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/NextWordIndex.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="0" selection-start="205" selection-end="205" vertical-scroll-proportion="0.33099824" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/gui/IndexingDialog.form">
       <provider selected="true" editor-type-id="ui-designer">
         <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/Parser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="202" column="0" selection-start="7405" selection-end="7405" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/io/FlushingStrategy.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="84" selection-start="356" selection-end="356" vertical-scroll-proportion="0.47098976" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/io/NextWordIndexReadStrategy.java">
@@ -802,41 +878,81 @@
         <state line="16" column="13" selection-start="376" selection-end="376" vertical-scroll-proportion="0.33274958" />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/io/FlushingStrategy.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="0" selection-start="272" selection-end="272" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/io/TermIndexFlushingStrategy.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="0" selection-start="871" selection-end="871" vertical-scroll-proportion="0.0">
+        <state line="33" column="20" selection-start="1055" selection-end="1055" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/io/FlushWriter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="45" column="36" selection-start="1592" selection-end="1592" vertical-scroll-proportion="0.2857143">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/io/NextWordFlushingStrategy.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="25" column="90" selection-start="716" selection-end="716" vertical-scroll-proportion="-0.7826087">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/NextWordIndex.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="34" column="27" selection-start="1305" selection-end="1305" vertical-scroll-proportion="0.33274958">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/Parser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="163" column="46" selection-start="6357" selection-end="6357" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/TermData.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="110" selection-start="397" selection-end="397" vertical-scroll-proportion="0.37883958">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/PostingFileUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="57" column="16" selection-start="2656" selection-end="2656" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/TermNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="13" selection-start="129" selection-end="129" vertical-scroll-proportion="0.33333334">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/Indexer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="85" column="66" selection-start="3345" selection-end="3345" vertical-scroll-proportion="0.0" />
+        <state line="24" column="4" selection-start="710" selection-end="779" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/PostingFileUtils.java">
+    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/TermIndex.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="41" selection-start="1211" selection-end="1211" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/io/NextWordFlushingStrategy.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="75" column="8" selection-start="2757" selection-end="2801" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/io/FlushWriter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="50" column="17" selection-start="1846" selection-end="1846" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/io/IndexFlushingStrategy.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="129" selection-start="719" selection-end="719" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/edu/bgu/ir2009/auxiliary/TermData.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="90" column="149" selection-start="3096" selection-end="3096" vertical-scroll-proportion="0.71428573">
+        <state line="10" column="23" selection-start="214" selection-end="214" vertical-scroll-proportion="0.47619048">
           <folding />
         </state>
       </provider>
