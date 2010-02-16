@@ -1,8 +1,8 @@
 package edu.bgu.ir2009;
 
 import edu.bgu.ir2009.auxiliary.*;
-import edu.bgu.ir2009.gui.IndexingDialog;
-import org.apache.log4j.BasicConfigurator;
+import edu.bgu.ir2009.auxiliary.io.FlushWriter;
+import edu.bgu.ir2009.auxiliary.io.TermIndexFlushingStrategy;
 import org.apache.log4j.Logger;
 
 import javax.xml.stream.XMLStreamException;
@@ -28,6 +28,7 @@ public class Indexer {
     private final ExecutorService executor;
     private final Configuration config;
     private final Object lock = new Object();
+    private final FlushWriter<Map<String, TermData>> termWriter;
 
     private Parser parser;
     private boolean isStarted = false;
@@ -35,6 +36,7 @@ public class Indexer {
     private int totalIndexedDocs = 0;
     private InMemoryIndex memoryIndex;
     private InMemoryDocs inMemoryDocs;
+    private int toFlushPostings = 0;
 
     public Indexer(String docsDir, String srcStopWordsFileName, boolean useStemmer) throws IOException {
         this(new Configuration(docsDir, srcStopWordsFileName, useStemmer));
@@ -48,6 +50,7 @@ public class Indexer {
         this.parser = parser;
         this.config = config;
         executor = Executors.newFixedThreadPool(config.getIndexerThreadsCount());
+        termWriter = new FlushWriter<Map<String, TermData>>(new TermIndexFlushingStrategy(config), config);
     }
 
     public Configuration getConfig() {
@@ -80,13 +83,14 @@ public class Indexer {
                             executor.shutdown();
                             try {
                                 executor.awaitTermination(10, TimeUnit.DAYS);
-                                doPreProcessing();
-                                Indexer.this.postings.clear();
-                                System.gc();
-                                memoryIndex = PostingFileUtils.saveIndex(index, documentsVectors, config);
-                                index.clear();
-                                documentsVectors.clear();
-                                System.gc();
+
+/*                                doPreProcessing();
+Indexer.this.postings.clear();
+System.gc();
+memoryIndex = PostingFileUtils.saveIndex(index, documentsVectors, config);
+index.clear();
+documentsVectors.clear();
+System.gc();*/
                                 res.countDown();
                             } catch (InterruptedException e) {
                                 logger.warn(e, e);
@@ -144,7 +148,7 @@ public class Indexer {
         parser = null;
     }
 
-    private void indexParsedDocument(DocumentPostings postings) {
+    private void indexParsedDocument(DocumentPostings postings) throws IOException {
         String docNo = postings.getDocNo();
         Map<String, Set<Long>> docTerms = postings.getTerms();
         for (String term : docTerms.keySet()) {
@@ -155,7 +159,11 @@ public class Indexer {
                     termData = new TermData(term);
                     index.put(term, termData);
                 }
-                //todo add here a strtegy
+                toFlushPostings += termData.getPostingsMap().size();
+                if (toFlushPostings > 10000) {
+                    toFlushPostings = 0;
+                    termWriter.flush(index);
+                }
             }
             termData.addPosting(docNo, docTerms.get(term));
         }
@@ -169,88 +177,16 @@ public class Indexer {
         }
 
         public void run() {
-            indexParsedDocument(docPostings);
-            postings.add(docPostings);
-            synchronized (eventsLock) {
-                indexedDocs++;
-                UpFacade.getInstance().addIndexerEvent(indexedDocs, totalIndexedDocs);
+            try {
+                indexParsedDocument(docPostings);
+                postings.add(docPostings);
+                synchronized (eventsLock) {
+                    indexedDocs++;
+                    UpFacade.getInstance().addIndexerEvent(indexedDocs, totalIndexedDocs);
+                }
+            } catch (IOException e) {
+                logger.error(e, e);
             }
         }
-    }
-
-    public static void main(String[] args) throws IOException, XMLStreamException, InterruptedException {
-        BasicConfigurator.configure();
-        Configuration conf = new Configuration("FT933", "stop-words.txt", true, 50, 1.0, 2.0, 2, 2, 2);
-        IndexingDialog dialog = new IndexingDialog();
-        Indexer indexer = new Indexer(conf);
-        UpFacade.getInstance().addIndexBindEvent(indexer);
-        CountDownLatch countDownLatch = indexer.start();
-        dialog.pack();
-        dialog.setVisible(true);
-        countDownLatch.await();
-        InMemoryIndex memoryIndex = new InMemoryIndex(indexer.getConfig(), true);
-        memoryIndex.load();
-        TermData termData = memoryIndex.getTermData("justif");
-        TermData termData2 = indexer.getMemoryIndex().getTermData("justif");
-        logger.info("term data equality" + termData.equals(termData2));
-        for (String docPostings : termData.getPostingsMap().keySet()) {
-            Set<String> fakeSet = new Set<String>() {
-                public int size() {
-                    return 0;
-                }
-
-                public boolean isEmpty() {
-                    return false;
-                }
-
-                public boolean contains(Object o) {
-                    return true;
-                }
-
-                public Iterator<String> iterator() {
-                    return null;
-                }
-
-                public Object[] toArray() {
-                    return new Object[0];
-                }
-
-                public <T> T[] toArray(T[] a) {
-                    return null;
-                }
-
-                public boolean add(String s) {
-                    return false;
-                }
-
-                public boolean remove(Object o) {
-                    return false;
-                }
-
-                public boolean containsAll(Collection<?> c) {
-                    return false;
-                }
-
-                public boolean addAll(Collection<? extends String> c) {
-                    return false;
-                }
-
-                public boolean retainAll(Collection<?> c) {
-                    return false;
-                }
-
-                public boolean removeAll(Collection<?> c) {
-                    return false;
-                }
-
-                public void clear() {
-
-                }
-            };
-            Map<String, Double> map = memoryIndex.getDocumentVector(docPostings);
-            Map<String, Double> map2 = indexer.getMemoryIndex().getDocumentVector(docPostings);
-            logger.info(map.equals(map2));
-        }
-        int i = 0;
     }
 }
