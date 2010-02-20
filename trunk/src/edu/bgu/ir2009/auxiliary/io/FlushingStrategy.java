@@ -1,5 +1,7 @@
 package edu.bgu.ir2009.auxiliary.io;
 
+import edu.bgu.ir2009.auxiliary.Configuration;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 
@@ -20,4 +22,6 @@ public interface FlushingStrategy<T> {
     String getRefFileName();
 
     String getLineRefID(String line);
+
+    Configuration getConfig();
 }

@@ -47,7 +47,7 @@ public class InMemoryDocs {    //TODO change to work with DocumentReader
 
     public static void main(String[] args) throws IOException, ParseException {
         BasicConfigurator.configure();
-        InMemoryDocs memoryDocs = new InMemoryDocs(new Configuration("2/conf.txt"));
+        InMemoryDocs memoryDocs = new InMemoryDocs(new Configuration("9/conf.txt"));
         memoryDocs.load();
         UnParsedDocument data = memoryDocs.getDocData("FT933-495");
         SimpleDateFormat f = new SimpleDateFormat("yyMMdd");

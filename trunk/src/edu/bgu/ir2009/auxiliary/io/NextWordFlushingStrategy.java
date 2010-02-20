@@ -76,6 +76,10 @@ public class NextWordFlushingStrategy implements FlushingStrategy<Map<String, Ma
         return line.substring(0, line.indexOf(':'));
     }
 
+    public Configuration getConfig() {
+        return config;
+    }
+
     private static String buildSerializedPosting(String first, Map<String, Map<String, Map<String, Set<Long>>>> index) {
         StringBuilder builder = new StringBuilder();
         builder.append(first).append(':');

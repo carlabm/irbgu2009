@@ -35,4 +35,18 @@ public class DocumentPostings {
     public String getDocNo() {
         return docNo;
     }
+
+    public String serialize() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(docNo).append(':');
+        for (String term : terms.keySet()) {
+            builder.append(term).append('-');
+            Set<Long> termPos = terms.get(term);
+            for (Long pos : termPos) {
+                builder.append(pos).append(',');
+            }
+            builder.append('|');
+        }
+        return builder.toString();
+    }
 }

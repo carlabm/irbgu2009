@@ -1,5 +1,6 @@
 package edu.bgu.ir2009.auxiliary.io;
 
+import edu.bgu.ir2009.auxiliary.LRUCache;
 import edu.bgu.ir2009.auxiliary.Pair;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
@@ -22,6 +23,7 @@ public class IndexReader<ReadResult, ExtraParam> {
     private final Map<String, Pair<Integer, Integer>> offsets = new HashMap<String, Pair<Integer, Integer>>();
     private final MappedByteBuffer indexBuffer;
     private final FileChannel indexChannel;
+    private final LRUCache<String, ReadResult> cache = new LRUCache<String, ReadResult>(100);
 
     public IndexReader(IndexReadStrategy<ReadResult, ExtraParam> is) throws IOException {
         this.is = is;
@@ -47,14 +49,17 @@ public class IndexReader<ReadResult, ExtraParam> {
     }
 
     public ReadResult read(String refId, ExtraParam param) throws IOException {
-        ReadResult res = null;
-        Pair<Integer, Integer> params = offsets.get(refId);
-        if (params != null) {
-            Integer length = params.getSecond();
-            byte[] resBuffer = new byte[length];
-            indexBuffer.position(params.getFirst());
-            indexBuffer.get(resBuffer, 0, length);
-            res = is.processLine(new String(resBuffer), param);
+        ReadResult res = cache.get(refId);
+        if (res == null) {
+            Pair<Integer, Integer> params = offsets.get(refId);
+            if (params != null) {
+                Integer length = params.getSecond();
+                byte[] resBuffer = new byte[length];
+                indexBuffer.position(params.getFirst());
+                indexBuffer.get(resBuffer, 0, length);
+                res = is.processLine(new String(resBuffer), param);
+                cache.put(refId, res);
+            }
         }
         return res;
     }

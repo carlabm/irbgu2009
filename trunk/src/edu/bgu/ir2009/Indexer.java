@@ -1,8 +1,9 @@
 package edu.bgu.ir2009;
 
-import edu.bgu.ir2009.auxiliary.*;
-import edu.bgu.ir2009.auxiliary.io.FlushWriter;
-import edu.bgu.ir2009.auxiliary.io.TermIndexFlushingStrategy;
+import edu.bgu.ir2009.auxiliary.Configuration;
+import edu.bgu.ir2009.auxiliary.DocumentPostings;
+import edu.bgu.ir2009.auxiliary.InMemoryDocs;
+import edu.bgu.ir2009.auxiliary.UpFacade;
 import org.apache.log4j.Logger;
 
 import javax.xml.stream.XMLStreamException;
@@ -22,19 +23,17 @@ import java.util.concurrent.TimeUnit;
 public class Indexer {
     private static final Logger logger = Logger.getLogger(Indexer.class);
     private static final Object eventsLock = new Object();
-    private final Map<String, TermData> index = new HashMap<String, TermData>();
+
     private final Map<String, Map<String, Double>> documentsVectors = new HashMap<String, Map<String, Double>>();
     private final List<DocumentPostings> postings = Collections.synchronizedList(new LinkedList<DocumentPostings>());
     private final ExecutorService executor;
     private final Configuration config;
     private final Object lock = new Object();
-    private final FlushWriter<Map<String, TermData>> termWriter;
 
     private Parser parser;
     private boolean isStarted = false;
     private int indexedDocs = 0;
     private int totalIndexedDocs = 0;
-    private InMemoryIndex memoryIndex;
     private InMemoryDocs inMemoryDocs;
     private int toFlushPostings = 0;
 
@@ -50,7 +49,6 @@ public class Indexer {
         this.parser = parser;
         this.config = config;
         executor = Executors.newFixedThreadPool(config.getIndexerThreadsCount());
-        termWriter = new FlushWriter<Map<String, TermData>>(new TermIndexFlushingStrategy(config), config);
     }
 
     public Configuration getConfig() {
@@ -100,42 +98,11 @@ System.gc();*/
                         }
                     }).start();
                 } else {
-                    index.clear();
+//                    index.clear();
                 }
             }
         });
         return res;
-    }
-
-    private void doPreProcessing() {
-        for (TermData term : index.values()) {
-            term.setTotalDocs(totalIndexedDocs);
-        }
-        for (DocumentPostings docPostings : postings) {
-            Map<String, Double> docVector = calculateDocumentVector(index, docPostings);
-            documentsVectors.put(docPostings.getDocNo(), docVector);
-        }
-    }
-
-    public static Map<String, Double> calculateDocumentVector(Map<String, TermData> index, DocumentPostings doc) {
-        double docLength = 0.0;
-        Map<String, Set<Long>> terms = doc.getTerms();
-        for (String term : terms.keySet()) {
-            int termFreq = terms.get(term).size();
-            double td_idf = index.get(term).getIdf() * termFreq;
-            docLength += td_idf * td_idf;
-        }
-        docLength = Math.sqrt(docLength);
-        Map<String, Double> documentVector = new HashMap<String, Double>();
-        for (String term : terms.keySet()) {
-            int termFreq = terms.get(term).size();
-            documentVector.put(term, termFreq / docLength);
-        }
-        return documentVector;
-    }
-
-    public InMemoryIndex getMemoryIndex() {
-        return memoryIndex;
     }
 
     public InMemoryDocs getInMemoryDocs() {
@@ -148,27 +115,6 @@ System.gc();*/
         parser = null;
     }
 
-    private void indexParsedDocument(DocumentPostings postings) throws IOException {
-        String docNo = postings.getDocNo();
-        Map<String, Set<Long>> docTerms = postings.getTerms();
-        for (String term : docTerms.keySet()) {
-            TermData termData;
-            synchronized (lock) {
-                termData = index.get(term);
-                if (termData == null) {
-                    termData = new TermData(term);
-                    index.put(term, termData);
-                }
-                toFlushPostings += termData.getPostingsMap().size();
-                if (toFlushPostings > 10000) {
-                    toFlushPostings = 0;
-                    termWriter.flush(index);
-                }
-            }
-            termData.addPosting(docNo, docTerms.get(term));
-        }
-    }
-
     private class IndexerWorker implements Runnable {
         private final DocumentPostings docPostings;
 
@@ -177,15 +123,10 @@ System.gc();*/
         }
 
         public void run() {
-            try {
-                indexParsedDocument(docPostings);
-                postings.add(docPostings);
-                synchronized (eventsLock) {
-                    indexedDocs++;
-                    UpFacade.getInstance().addIndexerEvent(indexedDocs, totalIndexedDocs);
-                }
-            } catch (IOException e) {
-                logger.error(e, e);
+            postings.add(docPostings);
+            synchronized (eventsLock) {
+                indexedDocs++;
+                UpFacade.getInstance().addIndexerEvent(indexedDocs, totalIndexedDocs);
             }
         }
     }
