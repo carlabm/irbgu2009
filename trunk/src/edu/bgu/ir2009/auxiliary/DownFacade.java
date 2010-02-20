@@ -1,6 +1,6 @@
 package edu.bgu.ir2009.auxiliary;
 
-import edu.bgu.ir2009.Indexer;
+import edu.bgu.ir2009.IndexerV2;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -32,9 +32,9 @@ public class DownFacade {
     public void startIndexing(final String docsFolder, final String stopWordsFile, final boolean useStemmer) {
         new Thread(new Runnable() {
             public void run() {
-                Indexer indexer = null;
+                IndexerV2 indexer = null;
                 try {
-                    indexer = new Indexer(docsFolder, stopWordsFile, useStemmer);
+                    indexer = new IndexerV2(docsFolder, stopWordsFile, useStemmer);
                 } catch (IOException e) {
                     logger.error(e, e);
                 }

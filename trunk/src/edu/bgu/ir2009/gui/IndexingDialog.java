@@ -2,7 +2,7 @@ package edu.bgu.ir2009.gui;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import edu.bgu.ir2009.Indexer;
+import edu.bgu.ir2009.IndexerV2;
 import edu.bgu.ir2009.auxiliary.*;
 
 import javax.swing.*;
@@ -19,7 +19,8 @@ public class IndexingDialog extends JDialog implements Observer {
     private JProgressBar savingProgressBar;
     private JProgressBar savingDocsProgressBar;
     private JButton closeButton;
-    private Indexer indexer;
+    private JLabel statusBarTextField;
+    private IndexerV2 indexer;
 
     public IndexingDialog() {
         setTitle("Indexing...");
@@ -57,6 +58,8 @@ public class IndexingDialog extends JDialog implements Observer {
 
     private void onCancel() {
         if (buttonCancel.isEnabled()) {
+            statusBarTextField.setText("Canceling...");
+            buttonCancel.setEnabled(false);
             indexer.stop();
             dispose();
         }
@@ -95,23 +98,15 @@ public class IndexingDialog extends JDialog implements Observer {
                                 indexingProgressBar.setValue((int) (((double) indexerEvent.getIndexedDocs()) / indexerEvent.getTotalToIndexDocs() * 100));
                                 indexingProgressBar.setString(indexerEvent.getIndexedDocs() + "/" + indexerEvent.getTotalToIndexDocs());
                             } else {
-                                if (arg instanceof SavingEvent) {
-                                    buttonCancel.setEnabled(false);
-                                    SavingEvent savingEvent = (SavingEvent) arg;
-                                    int percent = (int) (((double) savingEvent.getSavedTerm()) / savingEvent.getTotalTerms() * 100);
-                                    savingProgressBar.setValue(percent);
-                                    savingProgressBar.setString(percent + "%");
-                                    if (savingEvent.getSavedTerm() == savingEvent.getTotalTerms()) {
-                                        closeButton.setEnabled(true);
-                                    }
-                                } else {
-                                    buttonCancel.setEnabled(false);
-                                    DocumentsSavingEvent savingEvent = (DocumentsSavingEvent) arg;
-                                    int percent = (int) (((double) savingEvent.getSavedDocs()) / savingEvent.getTotalDocs() * 100);
-                                    savingDocsProgressBar.setValue(percent);
-                                    savingDocsProgressBar.setString(percent + "%");
-                                    if (savingEvent.getSavedDocs() == savingEvent.getTotalDocs()) {
-                                        closeButton.setEnabled(true);
+                                if (arg instanceof StatusEvent) {
+                                    StatusEvent statusEvent = (StatusEvent) arg;
+                                    switch (statusEvent.getType()) {
+                                        case DONE:
+                                            buttonCancel.setEnabled(false);
+                                            closeButton.setEnabled(true);
+                                        case MSG:
+                                            statusBarTextField.setText(statusEvent.getMsg());
+                                            break;
                                     }
                                 }
                             }
@@ -138,7 +133,7 @@ public class IndexingDialog extends JDialog implements Observer {
      */
     private void $$$setupUI$$$() {
         contentPane = new JPanel();
-        contentPane.setLayout(new FormLayout("fill:d:noGrow,left:4dlu:noGrow,fill:d:grow", "center:d:noGrow,top:4dlu:noGrow,center:max(d;4px):noGrow,top:4dlu:noGrow,center:max(d;4px):noGrow,top:4dlu:noGrow,center:max(d;4px):noGrow,top:4dlu:noGrow,center:max(d;4px):noGrow,top:4dlu:noGrow,center:m:grow"));
+        contentPane.setLayout(new FormLayout("fill:d:noGrow,left:4dlu:noGrow,fill:d:grow", "center:d:noGrow,top:4dlu:noGrow,center:max(d;4px):noGrow,top:4dlu:noGrow,center:max(d;4px):noGrow,top:4dlu:noGrow,center:max(d;4px):noGrow,top:4dlu:noGrow,center:m:grow"));
         final JLabel label1 = new JLabel();
         label1.setText("Reading Progress:");
         CellConstraints cc = new CellConstraints();
@@ -161,21 +156,12 @@ public class IndexingDialog extends JDialog implements Observer {
         indexingProgressBar.setString("");
         indexingProgressBar.setStringPainted(true);
         contentPane.add(indexingProgressBar, cc.xy(3, 5, CellConstraints.FILL, CellConstraints.DEFAULT));
-        final JLabel label4 = new JLabel();
-        label4.setText("Saving Progress (Index):");
-        contentPane.add(label4, cc.xy(1, 7));
-        savingProgressBar = new JProgressBar();
-        savingProgressBar.setStringPainted(true);
-        contentPane.add(savingProgressBar, cc.xy(3, 7, CellConstraints.FILL, CellConstraints.DEFAULT));
-        final JLabel label5 = new JLabel();
-        label5.setText("Saving Progress (Documents):");
-        contentPane.add(label5, cc.xy(1, 9));
-        savingDocsProgressBar = new JProgressBar();
-        savingDocsProgressBar.setStringPainted(true);
-        contentPane.add(savingDocsProgressBar, cc.xy(3, 9, CellConstraints.FILL, CellConstraints.DEFAULT));
+        statusBarTextField = new JLabel();
+        statusBarTextField.setText("Indexing...");
+        contentPane.add(statusBarTextField, cc.xyw(1, 7, 3));
         final JPanel panel1 = new JPanel();
         panel1.setLayout(new FormLayout("fill:d:grow,left:4dlu:noGrow,fill:d:noGrow,left:4dlu:noGrow,fill:max(d;4px):noGrow", "top:d:noGrow"));
-        contentPane.add(panel1, cc.xyw(1, 11, 3, CellConstraints.DEFAULT, CellConstraints.BOTTOM));
+        contentPane.add(panel1, cc.xyw(1, 9, 3, CellConstraints.DEFAULT, CellConstraints.BOTTOM));
         buttonCancel = new JButton();
         buttonCancel.setEnabled(false);
         buttonCancel.setText("Cancel");

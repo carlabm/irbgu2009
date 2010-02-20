@@ -84,14 +84,19 @@ public class IndexerV2 {
                             executor.shutdown();
                             try {
                                 executor.awaitTermination(10, TimeUnit.DAYS);
-                                res.countDown();
+                                UpFacade.getInstance().addMsgEvent("Finishing saving indexes...");
                                 termIndex.close();
                                 docPostingsWriter.close();
+                                UpFacade.getInstance().addMsgEvent("Calculating and saving document vectors...");
                                 Map<String, Long> termDFMap = PostingFileUtils.getTermDFMap(config);
                                 FlushWriter docVectorsWriter = new FlushWriter(new DocumentVectorsFlushingStrategy(config, termDFMap, totalIndexedDocs));
+                                logger.info("calculating and flushing document vectors");
                                 docVectorsWriter.flush(null);
                                 docVectorsWriter.close();
+                                logger.info("finished flushing document vectors");
                                 config.setTotalDocuments(totalIndexedDocs);
+                                UpFacade.getInstance().addDoneEvent();
+                                res.countDown();
                             } catch (InterruptedException e) {
                                 logger.warn(e, e);
                             } catch (Exception e) {
@@ -103,6 +108,12 @@ public class IndexerV2 {
             }
         });
         return res;
+    }
+
+    public void stop() {
+        executor.shutdownNow();
+        parser.stop();
+        parser = null;
     }
 
     private class IndexerWorker implements Runnable {
@@ -133,9 +144,10 @@ public class IndexerV2 {
 
     public static void main(String[] args) throws IOException, XMLStreamException, InterruptedException {
         BasicConfigurator.configure();
-        Configuration conf = new Configuration("FT933", "stop-words.txt", true, 50, 1.0, 2.0, 2, 2, 2);
+        Configuration conf = new Configuration("FT933", "stop-words.txt", false, 50, 1.0, 2.0, 2, 2, 2);
         IndexingDialog dialog = new IndexingDialog();
         IndexerV2 indexer = new IndexerV2(conf);
+        UpFacade.getInstance().addIndexBindEvent(indexer);
         CountDownLatch countDownLatch = indexer.start();
         dialog.pack();
         dialog.setVisible(true);

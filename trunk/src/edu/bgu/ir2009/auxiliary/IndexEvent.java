@@ -1,6 +1,6 @@
 package edu.bgu.ir2009.auxiliary;
 
-import edu.bgu.ir2009.Indexer;
+import edu.bgu.ir2009.IndexerV2;
 
 /**
  * User: Henry Abravanel 310739693
@@ -8,13 +8,13 @@ import edu.bgu.ir2009.Indexer;
  * Time: 21:47:07
  */
 public class IndexEvent {
-    private final Indexer indexer;
+    private final IndexerV2 indexer;
 
-    public IndexEvent(Indexer indexer) {
+    public IndexEvent(IndexerV2 indexer) {
         this.indexer = indexer;
     }
 
-    public Indexer getIndexer() {
+    public IndexerV2 getIndexer() {
         return indexer;
     }
 }

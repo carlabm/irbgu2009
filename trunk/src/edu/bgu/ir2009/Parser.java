@@ -83,7 +83,6 @@ public class Parser {
                     }
                     executor.execute(new ParserWorker(doc));
                 }
-                reader = null;
                 new Thread(new Runnable() {
                     public void run() {
                         executor.shutdown();
@@ -103,6 +102,7 @@ public class Parser {
                             } catch (InterruptedException e) {
                                 logger.warn(e, e);
                             }
+                            reader = null;
                         }
                     }
                 }).start();
