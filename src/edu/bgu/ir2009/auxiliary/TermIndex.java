@@ -36,9 +36,10 @@ public class TermIndex {
             }
             inMemoryPostings += termData.getPostingsMap().size();
             if (inMemoryPostings > 10000000) {
-                logger.info("Flushing terms to disk...");
                 inMemoryPostings = 0;
+                logger.info("Flushing terms to disk...");
                 termWriter.flush(index);
+                logger.info("Done flushing terms to disk...");
             }
             termData.addPosting(docNo, docTerms.get(term));
         }

@@ -1,10 +1,7 @@
 package edu.bgu.ir2009;
 
 import edu.bgu.ir2009.auxiliary.*;
-import edu.bgu.ir2009.auxiliary.io.DocVectorReader;
-import edu.bgu.ir2009.auxiliary.io.DocumentVectorsFlushingStrategy;
-import edu.bgu.ir2009.auxiliary.io.IndexReader;
-import edu.bgu.ir2009.auxiliary.io.TermIndexReadStrategy;
+import edu.bgu.ir2009.auxiliary.io.*;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
@@ -21,9 +18,10 @@ public class Searcher {
     private final Configuration config;
     private final Parser parser;
     private final Ranker ranker;
+    private final IndexReader<TermData, Object> termIndex;
+    private final IndexReader<Map<String, Double>, Object> docVectorsIndex;
+    private final IndexReader<Map<String, Set<Long>>, String> nextWordIndex;
     private long searchId = 0;
-    private IndexReader<TermData, Object> termIndex;
-    private IndexReader<Map<String, Double>, Object> docVectorsIndex;
 
     public Searcher(Configuration config) throws IOException {
         this.config = config;
@@ -31,6 +29,7 @@ public class Searcher {
         ranker = new Ranker(config);
         termIndex = new IndexReader<TermData, Object>(new TermIndexReadStrategy(config));
         docVectorsIndex = new IndexReader<Map<String, Double>, Object>(new DocVectorReader(config));
+        nextWordIndex = new IndexReader<Map<String, Set<Long>>, String>(new NextWordIndexReadStrategy(config));
     }
 
     public Set<RankedDocument> search(String text) {
@@ -42,13 +41,21 @@ public class Searcher {
             }
             Set<String> termsSet = terms.keySet();
             Map<String, TermData> termDataMap = retrieveTermData(termsSet);
-            Set<String> docs = merge(termsSet, termDataMap);
+            Set<String> docs;
+            if (!isQuotedQuery(text) || termsSet.size() == 1) {
+                docs = merge(termsSet, termDataMap);
+                if (docs.size() < 20) {
+                    docs.addAll(expandResults(docs.size(), termsSet, termDataMap));
+                }
+            } else {
+                docs = getQuotedDocs(terms);
+                if (docs.isEmpty()) {
+                    return Collections.emptySet();
+                }
+            }
             GetDocumentVectorsAndTexts documentVectorsAndTexts = new GetDocumentVectorsAndTexts(termDataMap, docs).invoke();
             Map<String, Map<String, Double>> docsVectors = documentVectorsAndTexts.getDocsVectors();
             Map<String, TermNode[]> recomposedDocs = documentVectorsAndTexts.getRecomposedTexts();
-            if (isQuotedQuery(text)) {
-                docs = filterIrrelevantDocs(terms, termDataMap, recomposedDocs);
-            }
             Map<String, List<List<TermNode>>> docsExpandedSpans = getExpandedSpans(docs, recomposedDocs);
             Map<String, Double> queryVector = DocumentVectorsFlushingStrategy.calculateDocumentVector(toTermDFMap(termDataMap), config.getDocumentsCount(), documentPostings);
             return ranker.rank(queryVector, docsVectors, docsExpandedSpans);
@@ -58,17 +65,51 @@ public class Searcher {
         }
     }
 
+    private Set<String> expandResults(int currentSize, Set<String> termsSet, Map<String, TermData> termDataMap) {
+        for (int i = termsSet.size(); i == 0; i--) {
+
+        }
+        return null;
+    }
+
+    private Set<String> getQuotedDocs(Map<String, Set<Long>> terms) throws IOException {
+        Set<String> res = new HashSet<String>();
+        TermNode[] recomposedText = TermProximity.recomposeText(terms);
+        Map<String, Set<Long>> relevantDocs = nextWordIndex.read(recomposedText[0].getTerm(), recomposedText[1].getTerm());
+        if (relevantDocs != null) {
+            for (int i = 1; i < recomposedText.length - 1; i++) {
+                Map<String, Set<Long>> loopRelevantDocs = nextWordIndex.read(recomposedText[i].getTerm(), recomposedText[i + 1].getTerm());
+                if (loopRelevantDocs != null) {
+                    relevantDocs.keySet().retainAll(loopRelevantDocs.keySet());
+                    Iterator<String> relDocsIterator = relevantDocs.keySet().iterator();
+                    while (relDocsIterator.hasNext()) {
+                        String docNo = relDocsIterator.next();
+                        Set<Long> relevantPostings = relevantDocs.get(docNo);
+                        Set<Long> loopPostings = loopRelevantDocs.get(docNo);
+                        Iterator<Long> iterator = relevantPostings.iterator();
+                        while (iterator.hasNext()) {
+                            Long posting = iterator.next();
+                            if (!loopPostings.contains(posting + i)) {
+                                iterator.remove();
+                            }
+                        }
+                        if (relevantPostings.isEmpty()) {
+                            relDocsIterator.remove();
+                        }
+                    }
+                }
+            }
+            res.addAll(relevantDocs.keySet());
+        }
+        return res;
+    }
+
     private Map<String, Long> toTermDFMap(Map<String, TermData> termDataMap) {
         Map<String, Long> res = new HashMap<String, Long>();
         for (String term : termDataMap.keySet()) {
             res.put(term, (long) termDataMap.get(term).getPostingsMap().size());
         }
         return res;
-    }
-
-    private Set<String> filterIrrelevantDocs(Map<String, Set<Long>> terms, Map<String, TermData> termDataMap, Map<String, TermNode[]> recomposedDocs) {
-
-        return recomposedDocs.keySet(); //TODO implement
     }
 
     private Map<String, List<List<TermNode>>> getExpandedSpans(Set<String> docs, Map<String, TermNode[]> recomposedDocs) {
@@ -130,7 +171,7 @@ public class Searcher {
         Searcher searcher = new Searcher(configuration);
         while (true) {
             long start = System.currentTimeMillis();
-            Set<RankedDocument> rankedDocumentSet = searcher.search("where intellectuals, like the bourgeois");
+            Set<RankedDocument> rankedDocumentSet = searcher.search("\"ftkkm sdsiii ddfkll ssikj\"");
             long end = System.currentTimeMillis();
             logger.info("Search took: " + (end - start) + " ms");
             for (RankedDocument docNo : rankedDocumentSet) {
