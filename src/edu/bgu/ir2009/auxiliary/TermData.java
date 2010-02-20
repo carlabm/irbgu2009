@@ -63,30 +63,6 @@ public class TermData implements Comparable<TermData> {
                 '}';
     }
 
-    /* public String getSavedString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(term).append(':').append(frequency).append(':').append(idf).append('[');
-        Iterator<String> docNoIterator = postingsMap.keySet().iterator();
-        while (docNoIterator.hasNext()) {
-            String docNo = docNoIterator.next();
-            builder.append(docNo).append('{');
-            Iterator<Long> iterator = postingsMap.get(docNo).iterator();
-            while (iterator.hasNext()) {
-                Long posting = iterator.next();
-                builder.append(posting);
-                if (iterator.hasNext()) {
-                    builder.append(',');
-                }
-            }
-            builder.append("}");
-            if (docNoIterator.hasNext()) {
-                builder.append('|');
-            }
-        }
-        builder.append(']');
-        return builder.toString();
-    }*/
-
     public String getSerializedPostings() {
         StringBuilder builder = new StringBuilder();
         for (String docNo : postingsMap.keySet()) {
@@ -103,12 +79,8 @@ public class TermData implements Comparable<TermData> {
         return (int) (frequency - o.frequency);
     }
 
-    public void setTotalDocs(long totalDocs) {
-        idf = Math.log10((double) totalDocs / postingsMap.size());
-    }
-
-    public double getIdf() {
-        return idf;
+    public double getIdf(Configuration config) {
+        return Math.log10((double) config.getDocumentsCount() / postingsMap.size());
     }
 
     public Map<String, Set<Long>> getPostingsMap() {

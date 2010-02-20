@@ -23,12 +23,12 @@ public class NextWordIndex {
 
 
     public NextWordIndex(Configuration config) throws IOException {
-        nwWriter = new FlushWriter<Map<String, Map<String, Map<String, Set<Long>>>>>(new NextWordFlushingStrategy(config), config);
+        nwWriter = new FlushWriter<Map<String, Map<String, Map<String, Set<Long>>>>>(new NextWordFlushingStrategy(config));
     }
 
     public synchronized void addWordPair(String doc, String first, String second, Long pos) {
         currentUnflushedCount++;
-        if (currentUnflushedCount > 1000000) {
+        if (currentUnflushedCount > 500000) {
             currentUnflushedCount = 0;
             try {
                 logger.info("Flushing next word records...");

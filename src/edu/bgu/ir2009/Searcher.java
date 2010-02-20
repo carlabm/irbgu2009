@@ -1,6 +1,10 @@
 package edu.bgu.ir2009;
 
 import edu.bgu.ir2009.auxiliary.*;
+import edu.bgu.ir2009.auxiliary.io.DocVectorReader;
+import edu.bgu.ir2009.auxiliary.io.DocumentVectorsFlushingStrategy;
+import edu.bgu.ir2009.auxiliary.io.IndexReader;
+import edu.bgu.ir2009.auxiliary.io.TermIndexReadStrategy;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
@@ -14,17 +18,19 @@ import java.util.*;
  */
 public class Searcher {
     private final static Logger logger = Logger.getLogger(Searcher.class);
-    private final InMemoryIndex index;
     private final Configuration config;
     private final Parser parser;
     private final Ranker ranker;
     private long searchId = 0;
+    private IndexReader<TermData, Object> termIndex;
+    private IndexReader<Map<String, Double>, Object> docVectorsIndex;
 
-    public Searcher(InMemoryIndex index, Configuration config) throws IOException {
-        this.index = index;
+    public Searcher(Configuration config) throws IOException {
         this.config = config;
         parser = new Parser(config, false);
-        ranker = new Ranker(index, config);
+        ranker = new Ranker(config);
+        termIndex = new IndexReader<TermData, Object>(new TermIndexReadStrategy(config));
+        docVectorsIndex = new IndexReader<Map<String, Double>, Object>(new DocVectorReader(config));
     }
 
     public Set<RankedDocument> search(String text) {
@@ -44,12 +50,20 @@ public class Searcher {
                 docs = filterIrrelevantDocs(terms, termDataMap, recomposedDocs);
             }
             Map<String, List<List<TermNode>>> docsExpandedSpans = getExpandedSpans(docs, recomposedDocs);
-            Map<String, Double> queryVector = Indexer.calculateDocumentVector(termDataMap, documentPostings);
+            Map<String, Double> queryVector = DocumentVectorsFlushingStrategy.calculateDocumentVector(toTermDFMap(termDataMap), config.getDocumentsCount(), documentPostings);
             return ranker.rank(queryVector, docsVectors, docsExpandedSpans);
         } catch (IOException e) {
             logger.error("Could not retrieve data from index file!!!!!");
             return null;
         }
+    }
+
+    private Map<String, Long> toTermDFMap(Map<String, TermData> termDataMap) {
+        Map<String, Long> res = new HashMap<String, Long>();
+        for (String term : termDataMap.keySet()) {
+            res.put(term, (long) termDataMap.get(term).getPostingsMap().size());
+        }
+        return res;
     }
 
     private Set<String> filterIrrelevantDocs(Map<String, Set<Long>> terms, Map<String, TermData> termDataMap, Map<String, TermNode[]> recomposedDocs) {
@@ -68,7 +82,7 @@ public class Searcher {
     private Map<String, TermData> retrieveTermData(Set<String> termsSet) throws IOException {
         Map<String, TermData> termDataMap = new HashMap<String, TermData>();
         for (String term : termsSet) {
-            TermData termData = index.getTermData(term);
+            TermData termData = termIndex.read(term, null);
             if (termData != null) {
                 termDataMap.put(term, termData);
             }
@@ -77,7 +91,7 @@ public class Searcher {
     }
 
     private boolean isQuotedQuery(String text) {
-        text = text.trim();
+        text = text.trim();     //todo change to regular expresion
         int start = text.indexOf('\"');
         int end = text.indexOf('\"', start + 1);
         return (start != -1 & end != -1) && start != end;
@@ -108,12 +122,12 @@ public class Searcher {
     public static void main(String[] args) throws IOException {
         BasicConfigurator.configure();
         Configuration configuration = new Configuration();
-        InMemoryIndex memoryIndex = new InMemoryIndex(configuration, true);
-        long loadStart = System.currentTimeMillis();
-        memoryIndex.load();
-        long loadEnd = System.currentTimeMillis();
-        logger.info("Load took: " + (loadEnd - loadStart) + " ms");
-        Searcher searcher = new Searcher(memoryIndex, configuration);
+//        InMemoryIndex memoryIndex = new InMemoryIndex(configuration, true);
+//        long loadStart = System.currentTimeMillis();
+//        memoryIndex.load();
+//        long loadEnd = System.currentTimeMillis();
+//        logger.info("Load took: " + (loadEnd - loadStart) + " ms");
+        Searcher searcher = new Searcher(configuration);
         while (true) {
             long start = System.currentTimeMillis();
             Set<RankedDocument> rankedDocumentSet = searcher.search("where intellectuals, like the bourgeois");
@@ -149,7 +163,7 @@ public class Searcher {
         public GetDocumentVectorsAndTexts invoke() throws IOException {
             for (String retrievedDoc : docs) {
                 Map<String, Set<Long>> termsPostings = new HashMap<String, Set<Long>>();
-                docsVectors.put(retrievedDoc, index.getDocumentVector(retrievedDoc));
+                docsVectors.put(retrievedDoc, docVectorsIndex.read(retrievedDoc, null));
                 for (String term : termDataMap.keySet()) {
                     termsPostings.put(term, termDataMap.get(term).getPostingsMap().get(retrievedDoc));
                 }

@@ -1,6 +1,9 @@
 package edu.bgu.ir2009;
 
-import edu.bgu.ir2009.auxiliary.*;
+import edu.bgu.ir2009.auxiliary.Configuration;
+import edu.bgu.ir2009.auxiliary.RankedDocument;
+import edu.bgu.ir2009.auxiliary.TermNode;
+import edu.bgu.ir2009.auxiliary.TermProximity;
 
 import java.util.List;
 import java.util.Map;
@@ -13,12 +16,10 @@ import java.util.TreeSet;
  * Time: 18:18:36
  */
 public class Ranker {
-    private final InMemoryIndex index;
     private final Configuration config;
     private final TermProximity proximity;
 
-    public Ranker(InMemoryIndex index, Configuration config) {
-        this.index = index;
+    public Ranker(Configuration config) {
         this.config = config;
         proximity = new TermProximity(config);
     }

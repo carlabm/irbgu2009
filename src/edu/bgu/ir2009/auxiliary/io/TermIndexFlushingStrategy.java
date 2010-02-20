@@ -54,4 +54,8 @@ public class TermIndexFlushingStrategy implements FlushingStrategy<Map<String, T
     public String getLineRefID(String line) {
         return line.substring(0, line.indexOf(':'));
     }
+
+    public Configuration getConfig() {
+        return config;
+    }
 }

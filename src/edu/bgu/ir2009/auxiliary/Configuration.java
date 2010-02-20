@@ -21,6 +21,7 @@ public class Configuration {
     private static final String NEXT_WORD_INDEX_REF_FILE_NAME = "nw_index_ref";
     private static final String STOP_WORDS_FILE_NAME = "stop_words.txt";
     private static final String CONF_FILE_NAME = "conf.txt";
+    private static final String POSTINGS_FILE_NAME = "postings";
 
     private final Properties config = new Properties();
     private final String docsDir;
@@ -41,6 +42,9 @@ public class Configuration {
     private final String nextWordIndexFileName;
     private final String nextWordRefIndexFileName;
     private final String workingDir;
+    private final String postingsFileName;
+    private String configFileName;
+    private Integer docsCount;
 
     public Configuration() {
         this(getBiggestDirNum() + "/" + CONF_FILE_NAME);
@@ -76,6 +80,7 @@ public class Configuration {
         nextWordIndexFileName = workingDir + "/" + NEXT_WORD_INDEX_FILE_NAME;
         nextWordRefIndexFileName = workingDir + "/" + NEXT_WORD_INDEX_REF_FILE_NAME;
         this.srcStopWordsFileName = workingDir + "/" + STOP_WORDS_FILE_NAME;
+        postingsFileName = workingDir + "/" + POSTINGS_FILE_NAME;
         copyStopWordsFile(stopWordsFile, this.srcStopWordsFileName);
         this.readerThreadsCount = readerThreadsCount;
         this.parserThreadsCount = parserThreadsCount;
@@ -104,6 +109,7 @@ public class Configuration {
         config.setProperty("indexRefFileName", indexReferenceFileName);
         config.setProperty("nextWordIndexFileName", nextWordIndexFileName);
         config.setProperty("nextWordRefIndexFileName", nextWordRefIndexFileName);
+        config.setProperty("postingsFileName", postingsFileName);
         config.setProperty("useStemmer", String.valueOf(useStemmer));
         config.setProperty("srcStopWordsFileName", srcStopWordsFileName);
         config.setProperty("readerThreadsCount", String.valueOf(readerThreadsCount));
@@ -117,12 +123,14 @@ public class Configuration {
         config.setProperty("workingDir", workingDir);
         try {
             config.store(new FileOutputStream(confFileName), "");
+            configFileName = confFileName;
         } catch (IOException e) {
             logger.error("Could not save configurations file");
         }
     }
 
     public Configuration(String configFileName) {
+        this.configFileName = configFileName;
         boolean exceptionThrown = false;
         try {
             config.load(new FileInputStream(configFileName));
@@ -133,14 +141,15 @@ public class Configuration {
         }
         workingDir = config.getProperty("workingDir", ".");
         docsDir = config.getProperty("docsDir", "docs");
-        savedDocsFileName = config.getProperty("savedDocsFileName", SAVED_DOCS_FILE_NAME);
-        savedDocsRefFileName = config.getProperty("savedDocsRefFileName", SAVED_DOCS_REF_FILE_NAME);
-        indexFileName = config.getProperty("indexFileName", INDEX_FILE_NAME);
-        indexReferenceFileName = config.getProperty("indexRefFileName", INDEX_REF_FILE_NAME);
-        nextWordIndexFileName = config.getProperty("nextWordIndexFileName", NEXT_WORD_INDEX_FILE_NAME);
-        nextWordRefIndexFileName = config.getProperty("nextWordRefIndexFileName", NEXT_WORD_INDEX_REF_FILE_NAME);
+        savedDocsFileName = config.getProperty("savedDocsFileName", workingDir + "/" + SAVED_DOCS_FILE_NAME);
+        savedDocsRefFileName = config.getProperty("savedDocsRefFileName", workingDir + "/" + SAVED_DOCS_REF_FILE_NAME);
+        indexFileName = config.getProperty("indexFileName", workingDir + "/" + INDEX_FILE_NAME);
+        indexReferenceFileName = config.getProperty("indexRefFileName", workingDir + "/" + INDEX_REF_FILE_NAME);
+        nextWordIndexFileName = config.getProperty("nextWordIndexFileName", workingDir + "/" + NEXT_WORD_INDEX_FILE_NAME);
+        nextWordRefIndexFileName = config.getProperty("nextWordRefIndexFileName", workingDir + "/" + NEXT_WORD_INDEX_REF_FILE_NAME);
+        postingsFileName = config.getProperty("postingsFileName", workingDir + "/" + POSTINGS_FILE_NAME);
         useStemmer = Boolean.parseBoolean(config.getProperty("useStemmer", "true"));
-        srcStopWordsFileName = config.getProperty("srcStopWordsFileName", STOP_WORDS_FILE_NAME);
+        srcStopWordsFileName = config.getProperty("srcStopWordsFileName", workingDir + "/" + STOP_WORDS_FILE_NAME);
         readerThreadsCount = Integer.parseInt(config.getProperty("readerThreadsCount", "2"));
         parserThreadsCount = Integer.parseInt(config.getProperty("parserThreadsCount", "2"));
         indexerThreadsCount = Integer.parseInt(config.getProperty("indexerThreadsCount", "2"));
@@ -149,6 +158,10 @@ public class Configuration {
         DMax = Integer.parseInt(config.getProperty("DMax", "10"));
         inMemoryIndexCacheSize = Integer.parseInt(config.getProperty("inMemoryIndexCacheSize", "200"));
         inMemoryDocsCacheSize = Integer.parseInt(config.getProperty("inMemoryDocsCacheSize", "100"));
+        docsCount = Integer.parseInt(config.getProperty("docsCount", "0"));
+        if (docsCount == 0) {
+            docsCount = null;
+        }
         if (exceptionThrown) {
             saveConfFile(configFileName);
         }
@@ -253,4 +266,21 @@ public class Configuration {
     }
 
 
+    public String getPostingsFileName() {
+        return postingsFileName;
+    }
+
+    public void setTotalDocuments(int docsCount) {
+        this.docsCount = docsCount;
+        config.setProperty("docsCount", String.valueOf(docsCount));
+        try {
+            config.store(new FileOutputStream(configFileName), "");
+        } catch (IOException e) {
+            logger.error("Could not save configurations file");
+        }
+    }
+
+    public Integer getDocumentsCount() {
+        return docsCount;
+    }
 }

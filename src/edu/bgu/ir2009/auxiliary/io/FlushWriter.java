@@ -21,9 +21,9 @@ public class FlushWriter<T> {
     private File flushFile;
     private int flushNum = 0;
 
-    public FlushWriter(FlushingStrategy<T> fs, Configuration config) {
+    public FlushWriter(FlushingStrategy<T> fs) {
         this.fs = fs;
-        this.config = config;
+        this.config = fs.getConfig();
     }
 
     public void flush(T toFlush) throws IOException {
