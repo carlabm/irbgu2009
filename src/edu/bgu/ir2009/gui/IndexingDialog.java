@@ -54,6 +54,7 @@ public class IndexingDialog extends JDialog implements Observer {
                 onCancel();
             }
         });
+        pack();
     }
 
     private void onCancel() {
@@ -68,11 +69,13 @@ public class IndexingDialog extends JDialog implements Observer {
         }
     }
 
+    public IndexerV2 getIndexer() {
+        return indexer;
+    }
+
     public static void main(String[] args) {
         IndexingDialog dialog = new IndexingDialog();
-        dialog.pack();
         dialog.setVisible(true);
-        System.exit(0);
     }
 
     public void update(Observable o, final Object arg) {

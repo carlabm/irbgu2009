@@ -12,16 +12,16 @@ import java.util.Properties;
  * Time: 16:01:15
  */
 public class Configuration {
+    public static final String SAVED_DOCS_FILE_NAME = "saved_docs";
+    public static final String SAVED_DOCS_REF_FILE_NAME = "saved_docs_ref";
+    public static final String INDEX_FILE_NAME = "index";
+    public static final String INDEX_REF_FILE_NAME = "index_ref";
+    public static final String NEXT_WORD_INDEX_FILE_NAME = "nw_index";
+    public static final String NEXT_WORD_INDEX_REF_FILE_NAME = "nw_index_ref";
+    public static final String STOP_WORDS_FILE_NAME = "stop_words.txt";
+    public static final String CONF_FILE_NAME = "conf.irc";
+    public static final String POSTINGS_FILE_NAME = "postings";
     private static final Logger logger = Logger.getLogger(Configuration.class);
-    private static final String SAVED_DOCS_FILE_NAME = "saved_docs";
-    private static final String SAVED_DOCS_REF_FILE_NAME = "saved_docs_ref";
-    private static final String INDEX_FILE_NAME = "index";
-    private static final String INDEX_REF_FILE_NAME = "index_ref";
-    private static final String NEXT_WORD_INDEX_FILE_NAME = "nw_index";
-    private static final String NEXT_WORD_INDEX_REF_FILE_NAME = "nw_index_ref";
-    private static final String STOP_WORDS_FILE_NAME = "stop_words.txt";
-    private static final String CONF_FILE_NAME = "conf.txt";
-    private static final String POSTINGS_FILE_NAME = "postings";
 
     private final Properties config = new Properties();
     private final String docsDir;
@@ -46,7 +46,7 @@ public class Configuration {
     private String configFileName;
     private Integer docsCount;
 
-    public Configuration() {
+    public Configuration() throws IOException {
         this(getBiggestDirNum() + "/" + CONF_FILE_NAME);
     }
 
@@ -122,22 +122,28 @@ public class Configuration {
         config.setProperty("inMemoryDocsCacheSize", String.valueOf(inMemoryDocsCacheSize));
         config.setProperty("workingDir", workingDir);
         try {
-            config.store(new FileOutputStream(confFileName), "");
-            configFileName = confFileName;
+            File file = new File(confFileName);
+            config.store(new FileOutputStream(file), "");
+            configFileName = file.getAbsolutePath();
         } catch (IOException e) {
             logger.error("Could not save configurations file");
         }
     }
 
-    public Configuration(String configFileName) {
-        this.configFileName = configFileName;
-        boolean exceptionThrown = false;
+    public Configuration(String configFileName) throws IOException {
+        this(configFileName, false);
+    }
+
+    public Configuration(String configFileName, boolean throwException) throws IOException {
+        IOException exceptionThrown = null;
         try {
-            config.load(new FileInputStream(configFileName));
+            File file = new File(configFileName);
+            config.load(new FileInputStream(file));
+            this.configFileName = file.getAbsolutePath();
             logger.debug("Loaded configurations file successfully: " + configFileName + "\n" + config);
         } catch (IOException e) {
             logger.warn("Could not load properties file: " + configFileName + "! Using defaults when possible...");
-            exceptionThrown = true;
+            exceptionThrown = e;
         }
         workingDir = config.getProperty("workingDir", ".");
         docsDir = config.getProperty("docsDir", "docs");
@@ -162,8 +168,12 @@ public class Configuration {
         if (docsCount == 0) {
             docsCount = null;
         }
-        if (exceptionThrown) {
-            saveConfFile(configFileName);
+        if (exceptionThrown != null) {
+            if (!throwException) {
+                saveConfFile(configFileName);
+            } else {
+                throw exceptionThrown;
+            }
         }
     }
 
@@ -278,6 +288,10 @@ public class Configuration {
         } catch (IOException e) {
             logger.error("Could not save configurations file");
         }
+    }
+
+    public String getConfigFileName() {
+        return configFileName;
     }
 
     public Integer getDocumentsCount() {

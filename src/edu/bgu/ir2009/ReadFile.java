@@ -3,8 +3,8 @@ package edu.bgu.ir2009;
 import edu.bgu.ir2009.auxiliary.Configuration;
 import edu.bgu.ir2009.auxiliary.UnParsedDocument;
 import edu.bgu.ir2009.auxiliary.UpFacade;
+import edu.bgu.ir2009.auxiliary.io.DocumentIndex;
 import edu.bgu.ir2009.auxiliary.io.DocumentInputStream;
-import edu.bgu.ir2009.auxiliary.io.DocumentWriter;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.impl.builder.StAXOMBuilder;
 import org.apache.log4j.Logger;
@@ -30,11 +30,10 @@ public class ReadFile {
     private final String dirName;
     private final ExecutorService executor;
     private final BlockingQueue<UnParsedDocument> docQueue = new LinkedBlockingQueue<UnParsedDocument>();
-
+    private final DocumentIndex docIndex;
     private boolean isStarted = false;
     private int totalFiles;
     private int filesRead = 0;
-    private DocumentWriter docWriter;
 
     public ReadFile(String docsDir, String srcStopWordsFileName, boolean useStemmer) {
         this(new Configuration(docsDir, srcStopWordsFileName, useStemmer));
@@ -43,11 +42,7 @@ public class ReadFile {
     public ReadFile(Configuration config) {
         this.dirName = config.getDocsDir();
         executor = Executors.newFixedThreadPool(config.getReaderThreadsCount());
-        try {
-            docWriter = new DocumentWriter(config);
-        } catch (IOException e) {
-            logger.error(e, e);
-        }
+        docIndex = new DocumentIndex(config);
     }
 
     public void start() {
@@ -73,9 +68,7 @@ public class ReadFile {
                         executor.shutdown();
                         try {
                             executor.awaitTermination(10, TimeUnit.DAYS);
-                            if (docWriter != null) {
-                                docWriter.close();
-                            }
+                            docIndex.close();
                             docQueue.put(EMPTY_DOC);
                             logger.info("Finished reading all file. Total files: " + totalFiles);
                         } catch (Exception e) {
@@ -85,10 +78,6 @@ public class ReadFile {
                 }).start();
             }
         });
-    }
-
-    public boolean isStarted() {
-        return isStarted;
     }
 
     public UnParsedDocument getNextDocument() {
@@ -121,32 +110,37 @@ public class ReadFile {
                 while (inDocElIterator.hasNext()) {
                     OMElement inDocEl = (OMElement) inDocElIterator.next();
                     String localName = inDocEl.getLocalName().trim();
+                    String relatedText = inDocEl.getText().trim();
                     if ("DOCNO".equals(localName)) {
-                        dr.setDocNo(inDocEl.getText().trim());
+                        dr.setDocNo(relatedText);
                     } else {
                         if ("TEXT".equals(localName)) {
                             dr.setText(inDocEl.getText());
                         } else {
                             if ("DATE".equals(localName)) {
-                                dr.setDate(Long.parseLong(inDocEl.getText().trim()));
+                                dr.setDate(Long.parseLong(relatedText));
                             } else {
                                 if ("BYLINE".equals(localName)) {
-                                    dr.setByLine(inDocEl.getText().trim());
+                                    dr.setByLine(relatedText);
                                 } else {
                                     if ("CN".equals(localName)) {
-                                        dr.setCn(inDocEl.getText().trim());
+                                        dr.setCn(relatedText);
                                     } else {
                                         if ("IN".equals(localName)) {
-                                            dr.setIn(inDocEl.getText().trim());
+                                            dr.setIn(relatedText);
                                         } else {
                                             if ("TP".equals(localName)) {
-                                                dr.setTp(inDocEl.getText().trim());
+                                                dr.setTp(relatedText);
                                             } else {
                                                 if ("PUB".equals(localName)) {
-                                                    dr.setPub(inDocEl.getText().trim());
+                                                    dr.setPub(relatedText);
                                                 } else {
                                                     if ("PAGE".equals(localName)) {
-                                                        dr.setPage(inDocEl.getText().trim());
+                                                        dr.setPage(relatedText);
+                                                    } else {
+                                                        if ("HEADLINE".equals(localName)) {
+                                                            dr.setHeadline(relatedText);
+                                                        }
                                                     }
                                                 }
                                             }
@@ -158,7 +152,7 @@ public class ReadFile {
                     }
                 }
                 try {
-                    docWriter.write(dr);
+                    docIndex.addDocument(dr);
                     docQueue.put(dr);
                 } catch (InterruptedException ignored) {
                     logger.debug("Interrupted while putting unparsed document in the docsQueue");

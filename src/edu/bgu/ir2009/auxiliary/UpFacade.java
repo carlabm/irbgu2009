@@ -53,8 +53,8 @@ public class UpFacade extends Observable {
     }
 
 
-    public void addIndexBindEvent(IndexerV2 indexEvent) {
+    public void addIndexBindEvent(IndexerV2 indexer) {
         setChanged();
-        notifyObservers(new IndexEvent(indexEvent));
+        notifyObservers(new IndexEvent(indexer));
     }
 }

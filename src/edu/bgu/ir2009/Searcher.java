@@ -32,12 +32,12 @@ public class Searcher {
         nextWordIndex = new IndexReader<Map<String, Set<Long>>, String>(new NextWordIndexReadStrategy(config));
     }
 
-    public Set<RankedDocument> search(String text) {
+    public TreeSet<RankedDocument> search(String text) {
         try {
             DocumentPostings documentPostings = parser.parse("query-" + String.valueOf(searchId++), text);
             Map<String, Set<Long>> terms = documentPostings.getTerms();
             if (terms.isEmpty()) {
-                return Collections.emptySet();
+                return new TreeSet<RankedDocument>();
             }
             Set<String> termsSet = terms.keySet();
             Map<String, TermData> termDataMap = retrieveTermData(termsSet);
@@ -50,7 +50,7 @@ public class Searcher {
             } else {
                 docs = getQuotedDocs(terms);
                 if (docs.isEmpty()) {
-                    return Collections.emptySet();
+                    return new TreeSet<RankedDocument>();
                 }
             }
             GetDocumentVectorsAndTexts documentVectorsAndTexts = new GetDocumentVectorsAndTexts(termDataMap, docs).invoke();
