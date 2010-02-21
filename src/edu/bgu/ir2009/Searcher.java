@@ -49,9 +49,9 @@ public class Searcher {
                 }
             } else {
                 docs = getQuotedDocs(terms);
-                if (docs.isEmpty()) {
-                    return new TreeSet<RankedDocument>();
-                }
+            }
+            if (docs.isEmpty()) {
+                return new TreeSet<RankedDocument>();
             }
             GetDocumentVectorsAndTexts documentVectorsAndTexts = new GetDocumentVectorsAndTexts(termDataMap, docs).invoke();
             Map<String, Map<String, Double>> docsVectors = documentVectorsAndTexts.getDocsVectors();
@@ -66,10 +66,18 @@ public class Searcher {
     }
 
     private Set<String> expandResults(int currentSize, Set<String> termsSet, Map<String, TermData> termDataMap) {
-        for (int i = termsSet.size(); i == 0; i--) {
-
+        Permutation permutation = new Permutation(termsSet);
+        Set<String> res = new HashSet<String>();
+        for (int i = termsSet.size() - 1; i > -1; i--) {
+            List<Set<String>> termPermutations = permutation.getPermutation(i);
+            for (Set<String> termPermutation : termPermutations) {
+                res.addAll(merge(termPermutation, termDataMap));
+            }
+            if (currentSize + res.size() > 20) {
+                break;
+            }
         }
-        return null;
+        return res;
     }
 
     private Set<String> getQuotedDocs(Map<String, Set<Long>> terms) throws IOException {
