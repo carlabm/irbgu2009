@@ -19,6 +19,7 @@ public class UnParsedDocument {
     private String page = "";
 
     private String text;
+    private String headline;
 
     public UnParsedDocument() {
     }
@@ -30,6 +31,9 @@ public class UnParsedDocument {
         start = end + 1;
         end = serialized.indexOf('|', start);
         date = Long.parseLong(serialized.substring(start, end));
+        start = end + 1;
+        end = serialized.indexOf('|', start);
+        headline = serialized.substring(start, end);
         start = end + 1;
         end = serialized.indexOf('|', start);
         byLine = serialized.substring(start, end);
@@ -56,6 +60,7 @@ public class UnParsedDocument {
         StringBuilder builder = new StringBuilder();
         builder.append(docNo.replace('|', ' ')).append('|')
                 .append(date).append('|')
+                .append(headline.replace('|', ' ')).append('|')
                 .append(byLine.replace('|', ' ')).append('|')
                 .append(cn.replace('|', ' ')).append('|')
                 .append(in.replace('|', ' ')).append('|')
@@ -155,5 +160,13 @@ public class UnParsedDocument {
                 ", byLine='" + byLine + '\'' +
                 ", date=" + date +
                 '}';
+    }
+
+    public void setHeadline(String headline) {
+        this.headline = headline;
+    }
+
+    public String getHeadline() {
+        return headline;
     }
 }

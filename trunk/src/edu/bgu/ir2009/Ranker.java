@@ -7,7 +7,6 @@ import edu.bgu.ir2009.auxiliary.TermProximity;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeSet;
 
 /**
@@ -24,8 +23,8 @@ public class Ranker {
         proximity = new TermProximity(config);
     }
 
-    public Set<RankedDocument> rank(Map<String, Double> queryVector, Map<String, Map<String, Double>> toBeRankedVectors, Map<String, List<List<TermNode>>> docsExpandedSpans) {
-        Set<RankedDocument> res = new TreeSet<RankedDocument>();
+    public TreeSet<RankedDocument> rank(Map<String, Double> queryVector, Map<String, Map<String, Double>> toBeRankedVectors, Map<String, List<List<TermNode>>> docsExpandedSpans) {
+        TreeSet<RankedDocument> res = new TreeSet<RankedDocument>();
         for (String docNo : toBeRankedVectors.keySet()) {
             double score = 0.0;
             Map<String, Double> currDocVector = toBeRankedVectors.get(docNo);

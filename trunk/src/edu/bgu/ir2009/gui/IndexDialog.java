@@ -2,6 +2,7 @@ package edu.bgu.ir2009.gui;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import edu.bgu.ir2009.IndexerV2;
 import edu.bgu.ir2009.auxiliary.DownFacade;
 import org.apache.log4j.BasicConfigurator;
 
@@ -18,6 +19,7 @@ public class IndexDialog extends JDialog {
     private JButton moreButton;
     private JButton buttonOK;
     private JButton buttonCancel;
+    private IndexerV2 indexer;
 
     public IndexDialog() {
         setContentPane(contentPane);
@@ -72,6 +74,8 @@ public class IndexDialog extends JDialog {
                 }
             }
         });
+        setTitle("Index Documents");
+        pack();
     }
 
     private void onOK() {
@@ -79,11 +83,18 @@ public class IndexDialog extends JDialog {
         try {
             DownFacade.getInstance().startIndexing(sourceDocumentsDirectoryTextField.getText(), stopWordsFileTextField.getText(), useStemmerCheckBox.isSelected());
         } catch (Exception e) {
-            //TODO error dialog
+            JOptionPane.showMessageDialog(IndexDialog.this, e.getMessage(), "Index Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
-        dispose();
         dialog.pack();
+        dialog.setLocationRelativeTo(dialog);
+        dispose();
         dialog.setVisible(true);
+        indexer = dialog.getIndexer();
+    }
+
+    public IndexerV2 getIndexer() {
+        return indexer;
     }
 
     private void onCancel() {
@@ -94,7 +105,6 @@ public class IndexDialog extends JDialog {
     public static void main(String[] args) {
         BasicConfigurator.configure();
         IndexDialog dialog = new IndexDialog();
-        dialog.pack();
         dialog.setVisible(true);
 //        System.exit(0);
     }

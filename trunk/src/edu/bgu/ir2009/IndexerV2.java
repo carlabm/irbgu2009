@@ -116,6 +116,10 @@ public class IndexerV2 {
         parser = null;
     }
 
+    public Configuration getConfig() {
+        return config;
+    }
+
     private class IndexerWorker implements Runnable {
         private final DocumentPostings docPostings;
 
