@@ -15,8 +15,11 @@ public class TermProximity {
     public static TermNode[] recomposeText(Map<String, Set<Long>> termsPostings) {
         Set<TermNode> resSet = new TreeSet<TermNode>();
         for (String term : termsPostings.keySet()) {
-            for (Long position : termsPostings.get(term)) {
-                resSet.add(new TermNode(term, position));
+            Set<Long> postings = termsPostings.get(term);
+            if (postings != null) {
+                for (Long position : postings) {
+                    resSet.add(new TermNode(term, position));
+                }
             }
         }
         TermNode[] res = new TermNode[resSet.size()];

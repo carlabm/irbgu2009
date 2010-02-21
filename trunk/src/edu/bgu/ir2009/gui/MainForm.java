@@ -3,12 +3,14 @@ package edu.bgu.ir2009.gui;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import edu.bgu.ir2009.IndexerV2;
+import edu.bgu.ir2009.Searcher;
 import edu.bgu.ir2009.auxiliary.Configuration;
 import edu.bgu.ir2009.auxiliary.RankedDocument;
 import edu.bgu.ir2009.auxiliary.UnParsedDocument;
 import edu.bgu.ir2009.auxiliary.io.DocumentReadStrategy;
 import edu.bgu.ir2009.auxiliary.io.IndexReader;
 import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -23,21 +25,49 @@ import java.util.TreeSet;
  * Time: 23:53:01
  */
 public class MainForm {
+    private static final Logger logger = Logger.getLogger(MainForm.class);
     private JPanel root;
     private JTextField searchTextField;
     private JButton GOButton;
     private JTable table1;
     private JLabel searchLabel;
+    private JLabel lastSearchLabel;
     private JMenuBar menuBar;
     private JMenu fileMenu;
     private JMenuItem indexDirMenuItem;
     private JMenuItem loadConfMenuItem;
     private ResultsTableModel tableModel;
     private final JFrame frame;
+    private Searcher searcher;
 
     public MainForm(JFrame frame) {
         this.frame = frame;
         initMenuBar();
+        searchTextField.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                doSearch();
+            }
+        });
+        GOButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                doSearch();
+            }
+        });
+        try {
+            setConfiguration(new Configuration());
+        } catch (IOException ignored) {
+        }
+    }
+
+    private void doSearch() {
+        String searchString = searchTextField.getText().trim();
+        TreeSet<RankedDocument> rankedDocumentTreeSet = searcher.search(searchString);
+        logger.info("Got results: " + rankedDocumentTreeSet.size());
+        try {
+            tableModel.setResultDocuments(rankedDocumentTreeSet);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(root, e.getMessage(), "Error Searching", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public static void main(String[] args) {
@@ -103,6 +133,7 @@ public class MainForm {
     }
 
     private void setConfiguration(Configuration configuration) throws IOException {
+        searcher = new Searcher(configuration);
         tableModel = new ResultsTableModel(configuration);
         table1.setModel(tableModel);
         tableModel.fireTableDataChanged();
@@ -133,7 +164,7 @@ public class MainForm {
      */
     private void $$$setupUI$$$() {
         root = new JPanel();
-        root.setLayout(new FormLayout("fill:d:noGrow,left:4dlu:noGrow,fill:d:grow,left:4dlu:noGrow,fill:max(d;4px):noGrow", "center:d:noGrow,top:4dlu:noGrow,fill:d:grow"));
+        root.setLayout(new FormLayout("fill:d:noGrow,left:4dlu:noGrow,fill:d:grow,left:4dlu:noGrow,fill:max(d;4px):noGrow", "center:d:noGrow,top:4dlu:noGrow,center:d:noGrow,top:4dlu:noGrow,center:max(d;4px):noGrow,top:4dlu:noGrow,fill:d:grow"));
         searchLabel = new JLabel();
         searchLabel.setEnabled(false);
         searchLabel.setText("Search:");
@@ -148,9 +179,19 @@ public class MainForm {
         root.add(GOButton, cc.xy(5, 1));
         final JPanel panel1 = new JPanel();
         panel1.setLayout(new FormLayout("fill:d:grow", "fill:d:grow"));
-        root.add(panel1, cc.xyw(1, 3, 5));
+        root.add(panel1, cc.xyw(1, 7, 5));
+        final JScrollPane scrollPane1 = new JScrollPane();
+        panel1.add(scrollPane1, cc.xy(1, 1, CellConstraints.FILL, CellConstraints.FILL));
         table1 = new JTable();
-        panel1.add(table1, cc.xy(1, 1, CellConstraints.FILL, CellConstraints.FILL));
+        scrollPane1.setViewportView(table1);
+        final JLabel label1 = new JLabel();
+        label1.setText("Last Search:");
+        root.add(label1, cc.xy(1, 5));
+        final JSeparator separator1 = new JSeparator();
+        root.add(separator1, cc.xyw(1, 3, 5, CellConstraints.FILL, CellConstraints.FILL));
+        lastSearchLabel = new JLabel();
+        lastSearchLabel.setText("");
+        root.add(lastSearchLabel, cc.xyw(3, 5, 3));
     }
 
     /**

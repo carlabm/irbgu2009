@@ -47,7 +47,7 @@ public class Configuration {
     private Integer docsCount;
 
     public Configuration() throws IOException {
-        this(getBiggestDirNum() + "/" + CONF_FILE_NAME);
+        this(getBiggestDirNum() + "/" + CONF_FILE_NAME, true);
     }
 
     public Configuration(String docsDir, String srcStopWordsFileName, boolean useStemmer) {

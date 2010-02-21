@@ -5,6 +5,7 @@ import edu.bgu.ir2009.auxiliary.RankedDocument;
 import edu.bgu.ir2009.auxiliary.TermNode;
 import edu.bgu.ir2009.auxiliary.TermProximity;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
@@ -36,7 +37,12 @@ public class Ranker {
             }
             res.add(new RankedDocument(docNo, score));
         }
-        return res;
+        Iterator<RankedDocument> rankedDocumentIterator = res.descendingIterator();
+        TreeSet<RankedDocument> finalRes = new TreeSet<RankedDocument>();
+        for (int i = 0; i < res.size() && i < 20; i++) {
+            finalRes.add(rankedDocumentIterator.next());
+        }
+        return finalRes;
     }
 
 }
