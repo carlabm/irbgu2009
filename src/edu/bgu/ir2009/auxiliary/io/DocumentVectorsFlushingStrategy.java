@@ -99,7 +99,11 @@ public class DocumentVectorsFlushingStrategy implements FlushingStrategy {
     }
 
     private static double calculateTF_IDF(int termFreq, Long termDFreq, long totalDocs) {
-        return termFreq * Math.log10((double) totalDocs / termDFreq);
+        double res = 0.0;
+        if (termDFreq != null) {
+            res = termFreq * Math.log10((double) totalDocs / termDFreq);
+        }
+        return res;
     }
 
     public String getFinalFileName() {

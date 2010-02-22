@@ -103,15 +103,15 @@ public class Configuration {
 
     private void saveConfFile(String confFileName) {
         config.setProperty("docsDir", docsDir);
-        config.setProperty("savedDocsFileName", savedDocsFileName);
-        config.setProperty("savedDocsRefFileName", savedDocsRefFileName);
-        config.setProperty("indexFileName", indexFileName);
-        config.setProperty("indexRefFileName", indexReferenceFileName);
-        config.setProperty("nextWordIndexFileName", nextWordIndexFileName);
-        config.setProperty("nextWordRefIndexFileName", nextWordRefIndexFileName);
-        config.setProperty("postingsFileName", postingsFileName);
+        config.setProperty("savedDocsFileName", getAbsolutePath(savedDocsFileName));
+        config.setProperty("savedDocsRefFileName", getAbsolutePath(savedDocsRefFileName));
+        config.setProperty("indexFileName", getAbsolutePath(indexFileName));
+        config.setProperty("indexRefFileName", getAbsolutePath(indexReferenceFileName));
+        config.setProperty("nextWordIndexFileName", getAbsolutePath(nextWordIndexFileName));
+        config.setProperty("nextWordRefIndexFileName", getAbsolutePath(nextWordRefIndexFileName));
+        config.setProperty("postingsFileName", getAbsolutePath(postingsFileName));
         config.setProperty("useStemmer", String.valueOf(useStemmer));
-        config.setProperty("srcStopWordsFileName", srcStopWordsFileName);
+        config.setProperty("srcStopWordsFileName", getAbsolutePath(srcStopWordsFileName));
         config.setProperty("readerThreadsCount", String.valueOf(readerThreadsCount));
         config.setProperty("parserThreadsCount", String.valueOf(parserThreadsCount));
         config.setProperty("indexerThreadsCount", String.valueOf(indexerThreadsCount));
@@ -120,7 +120,7 @@ public class Configuration {
         config.setProperty("gamma", String.valueOf(gamma));
         config.setProperty("inMemoryIndexCacheSize", String.valueOf(inMemoryIndexCacheSize));
         config.setProperty("inMemoryDocsCacheSize", String.valueOf(inMemoryDocsCacheSize));
-        config.setProperty("workingDir", workingDir);
+        config.setProperty("workingDir", getAbsolutePath(workingDir));
         try {
             File file = new File(confFileName);
             config.store(new FileOutputStream(file), "");
@@ -128,6 +128,11 @@ public class Configuration {
         } catch (IOException e) {
             logger.error("Could not save configurations file");
         }
+    }
+
+    private String getAbsolutePath(String fileName) {
+        File file = new File(fileName);
+        return file.getAbsolutePath();
     }
 
     public Configuration(String configFileName) throws IOException {

@@ -42,7 +42,7 @@ public class Searcher {
             Set<String> termsSet = terms.keySet();
             Map<String, TermData> termDataMap = retrieveTermData(termsSet);
             Set<String> docs;
-            if (!isQuotedQuery(text) || termsSet.size() == 1) {
+            if (!isQuotedQuery(text) || (termsSet.size() == 1 && terms.values().iterator().next().size() == 1)) {
                 docs = merge(termsSet, termDataMap);
                 if (docs.size() < 20) {
                     docs.addAll(expandResults(docs.size(), termsSet, termDataMap));
